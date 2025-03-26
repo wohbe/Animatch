@@ -7,9 +7,27 @@ function AnimeNews() {
     useEffect(() => {
         const fetchAnimes = async () => {
             try {
-                const response = await fetch('https://api.jikan.moe/v4/seasons/now');
-                const data = await response.json();
-                setAnimes(data.data);
+                const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+                // Asegurarnos de usar http:// en lugar de https://
+                const response = await fetch(`${backendUrl}/api/anime/sync`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const getResponse = await fetch(`${backendUrl}/api/anime`);
+                if (!getResponse.ok) {
+                    throw new Error(`HTTP error! status: ${getResponse.status}`);
+                }
+
+                const data = await getResponse.json();
+                setAnimes(data);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching anime:', error);
@@ -36,7 +54,7 @@ function AnimeNews() {
                     <div key={anime.mal_id} className="col">
                         <div className="card h-100">
                             <img
-                                src={anime.images.jpg.image_url}
+                                src={anime.image_url}
                                 className="card-img-top"
                                 alt={anime.title}
                                 style={{ height: '300px', objectFit: 'cover' }}
