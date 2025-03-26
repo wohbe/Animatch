@@ -12,18 +12,9 @@ api = Blueprint('api', __name__)
 CORS(api, resources={r"/api/*": {"origins": "*"}})
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
-
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
-    }
-
-    return jsonify(response_body), 200
-
 # endpoint para almacenar datos de api esterna
 
-
+#anime
 @api.route('/anime', methods=['GET'])
 def get_animes():
     animes = Anime.query.all()

@@ -3,34 +3,44 @@ import { useState, useEffect } from 'react';
 function AnimeNews() {
     const [animes, setAnimes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchAnimes = async () => {
             try {
-                const backendUrl = import.meta.env.VITE_BACKEND_URL;
+                const backendUrl = "https://zany-fishstick-qww9jggw95phw9v-3001.app.github.dev";
 
-                // Asegurarnos de usar http:// en lugar de https://
                 const response = await fetch(`${backendUrl}/api/anime/sync`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
-                    }
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    mode: 'cors'
                 });
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
-                const getResponse = await fetch(`${backendUrl}/api/anime`);
+                const getResponse = await fetch(`${backendUrl}/api/anime`, {
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    mode: 'cors'
+                });
+
                 if (!getResponse.ok) {
                     throw new Error(`HTTP error! status: ${getResponse.status}`);
                 }
 
                 const data = await getResponse.json();
+                console.log("Datos recibidos:", data); // Para debug
                 setAnimes(data);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching anime:', error);
+                setError(`Error: ${error.message}`);
                 setLoading(false);
             }
         };
@@ -43,6 +53,12 @@ function AnimeNews() {
             <div className="spinner-border" role="status">
                 <span className="visually-hidden">Loading...</span>
             </div>
+        </div>
+    );
+
+    if (error) return (
+        <div className="alert alert-danger" role="alert">
+            Error: {error}
         </div>
     );
 
