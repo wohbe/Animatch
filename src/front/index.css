@@ -1,0 +1,446 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.anime-buttons{
+margin-left: 30rem;
+}
+
+.watch-later-button{
+ margin-left: 1rem;
+ margin-right: 1rem;
+}
+anime-buttons button,
+.watched-button,
+.favorite-button,
+.watch-later-button { /* Se aplica a los botones y al label del checkbox */
+  background-color: #4bc4ec; /* Azul claro */
+  color: #333; /* Color del texto */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Transición suave */
+}
+
+.anime-buttons button:hover,
+.watched-button:hover {
+  background-color: #72c8eb; /* Azul claro un poco más oscuro al pasar el ratón */
+}
+
+.anime-buttons button:active,
+.watched-button:active {
+  background-color: #6495ED; /* Azul claro más oscuro al hacer clic */
+}
+
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 1rem;
+  color: white;
+  background: #121212;
+}
+
+img, svg {
+  max-width: 100%;
+  display: block;
+}
+
+svg {
+  height: 23.8rem;
+  width: 20rem;
+}
+
+/* Barra de navegación */
+.NavBar {
+  background-color: black;
+  padding: 1rem;
+}
+
+/* Navbar text color */
+.NavBar .navbar-brand.Home,
+.NavBar .navbar-nav .nav-link {
+  color: #ff6f61;
+}
+
+.navbar-brand.Home {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ff6f61;
+}
+
+.navbar-nav .nav-link {
+  color: white;
+  margin: 0 0.5rem;
+  font-size: 1rem;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #ff6f61;
+}
+
+.navbar-toggler-icon {
+  background-color: white;
+}
+
+/* Tarjeta de perfil */
+.profile-card {
+  background-color: #1a1a1a;
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+  margin: 1rem 0;
+  height: 18rem;
+}
+
+.profile-card img {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1rem;
+}
+
+.profile-card .card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: white;
+}
+
+.profile-card .Gender {
+  font-size: 1rem;
+  color: #888;
+  margin-bottom: 1rem;
+}
+
+.profile-card .btn-secondary {
+  background-color: #ff6f61;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  color: white;
+}
+
+.profile-card .btn-secondary:hover {
+  background-color: #e65a50;
+}
+
+/* Sección "About Me" */
+.abtMe {
+  background-color: #1a1a1a;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem 0;
+  height: 18rem;
+  overflow: hidden;
+}
+
+.abtMe h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.abtMe h6 {
+  font-size: 1rem;
+  color: #ccc;
+  line-height: 1.5;
+}
+
+/* Logros (Achievements) */
+.archieve-container {
+  background-color: #1a1a1a;
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.archieve-container h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.archieve-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+}
+
+.archieve-list li {
+  flex: 0 0 calc(10% - 10px);
+}
+
+.archieveIcons {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Media Scroller */
+.mediaContainer {
+  --slider-padding: 3.1rem; /* Usando tu margen existente */
+  position: relative;
+  width: 100%;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+
+.mediaScroller {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 2rem;
+  padding: 10px;
+  margin-left: 3.1rem;
+}
+
+.mediaElement {
+  flex: 0 0 15%;
+  border-radius: 8px;
+}
+
+.mediaElement img {
+  width: 100%;
+  height: 35rem;
+  object-fit: cover;
+}
+
+.mediaElement:hover {
+  transition: transform 0.3s ease-in-out;
+  transform: scale(1.1);
+}
+
+.next, .previous {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(30, 30, 30, 0.9);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 20;
+  display: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  height: 40rem;
+}
+
+.previous {
+  left: 0;
+  border-radius: 0 5px 5px 0;
+}
+
+.next {
+  right: 0;
+  border-radius: 5px 0 0 5px;
+}
+
+
+/* Tarjetas */
+.list-card {
+  background-color: #1a1a1a;
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.list-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+
+.image-card {
+  background-color: #1a1a1a;
+}
+
+.image-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/* Media Queries */
+@media (min-width: 135em) {
+  .mediaElement img {
+      width: 70%;
+      height: 40rem;
+  }
+}
+
+@media (min-width: 107.5em) {
+  .mediaElement img {
+      width: 75%;
+      height: 30rem;
+  }
+}
+
+@media (min-width: 64em) {
+  .mediaElement img {
+      width: 80%;
+      height: 25rem;
+  }
+}
+
+@media (min-width: 50em) {
+  .mediaElement img {
+      width: 85%;
+      height: 22rem;
+  }
+}
+
+@media (min-width: 35.5em) {
+  .mediaElement img {
+      width: 90%;
+      height: 18rem;
+  }
+}
+
+@media (min-width: 30em) {
+  .mediaElement img {
+      width: 100%;
+      height: 40rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-nav {
+      flex-direction: column;
+  }
+  
+  .abtMe h6 {
+      font-size: 0.9rem;
+      overflow-wrap: break-word;
+  }
+  
+  .archieve-list li {
+      flex: 0 0 calc(33% - 10px);
+  }
+  
+  .mediaElement {
+      width: 10rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .mediaElement {
+      width: 8rem;
+  }
+}
+
+.componente {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+body .image-cards.container-fluid,
+body .mediaContainer,
+body .mediaScroller {
+  max-width: none;
+  padding-left: 0px;
+  padding-right: 0;
+  margin-left: 0;
+}
+
+/* Añade esto al final de tu CSS */
+.mediaScroller.scrolled {
+  margin-left: 0 !important;
+  transition: margin 0.5s ease-in-out;
+}
+
+
+
+/* Transición para el margen izquierdo */
+/* Transición para el margen izquierdo */
+.mediaScroller {
+  transition: margin-left 0.3s ease-out;
+}
+
+/* Estado cuando se ha hecho scroll a la derecha */
+.mediaScroller.scrolled {
+  margin-left: 0 !important;
+}
+
+/* Asegura que las flechas permanezcan visibles */
+.previous, .next {
+  transition: opacity 0.2s ease;
+}
+
+.mediaContainer:hover .previous,
+.mediaContainer:hover .next {
+  opacity: 1 !important;
+  display: block;
+}
+
+/* Añade esto al final de tu CSS */
+.image-cards.container-fluid {
+  max-width: none;
+  padding-right: 0;
+  margin-left: 0;
+  transition: padding 0.3s ease !important;
+}
+
+.mediaScroller {
+  margin-left: 3.1rem;
+}
+
+/* Clase cuando está scrolleado */
+.image-cards.container-fluid.scrolled {
+  padding-left: 0 !important;
+}
+
+.scroller-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.scroller {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  padding: 1rem 0;
+  scrollbar-width: none;
+}
+
+.scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.slide {
+  flex: 0 0 auto;
+  width: 80%;
+}
+
+.arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.left { left: 1rem; }
+.right { right: 1rem;}
