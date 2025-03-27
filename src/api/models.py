@@ -30,6 +30,7 @@ class Anime(db.Model):
     episodes: Mapped[int] = mapped_column(Integer, nullable=True)
     score: Mapped[float] = mapped_column(nullable=True)
     favorites: Mapped[List["Favorites"]] = relationship(back_populates="anime")
+    on_air: Mapped[List["On_Air"]] = relationship(back_populates="anime")
 
     def serialize(self):
         return {
@@ -60,5 +61,18 @@ class Favorites(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "anime_id": self.anime_id
+        }
+    
+class On_Air(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    # Estos dato se reciben de otra tabla y se mandan de vuelta
+    anime_id: Mapped[int] = mapped_column(ForeignKey('anime.id'), nullable=False)
+    anime: Mapped["Anime"] = relationship(back_populates="on_air")
+
+    # Devuelve un diccionario para el ENDPOINT de animes en emisión (no requiere el user_id)
+    def serialize(self):
+        return {
+            "id": self.id,
             "anime_id": self.anime_id
         }
