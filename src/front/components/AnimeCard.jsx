@@ -73,6 +73,7 @@ function AnimeCard() {
           <p>Estudio: {anime.studio}</p>
           <p>Director: {anime.director}</p>
 
+
           <div className="anime-buttons d-flex justify-content-around">
             <button
               className="favorite-button btn btn-primary"
