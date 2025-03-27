@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Anime, Favorites, Category
+from api.models import db, User, Anime, Favorites, Category, On_Air
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
@@ -44,39 +44,78 @@ def sync_animes():
         
         db.session.commit()
 
-        # Fetch anime for each category
-        for category in Category.query.all():
-            wait_for_rate_limit()  # Respect rate limits
-            
-            # Fetch anime by genre
-            response = requests.get(f'https://api.jikan.moe/v4/anime?genres={category.mal_id}&limit=25')
-            data = response.json()
+        # Fetch current season anime (On Air)
+        wait_for_rate_limit()
+        on_air_response = requests.get('https://api.jikan.moe/v4/seasons/now')
+        on_air_data = on_air_response.json()
 
-            if 'data' in data:
-                for anime_data in data['data']:
-                    existing_anime = Anime.query.filter_by(
-                        mal_id=anime_data['mal_id']).first()
-                    
-                    if not existing_anime:
-                        new_anime = Anime(
-                            mal_id=anime_data['mal_id'],
-                            title=anime_data['title'],
-                            synopsis=anime_data['synopsis'],
-                            image_url=anime_data['images']['jpg']['image_url'],
-                            episodes=anime_data['episodes'],
-                            score=anime_data['score']
-                        )
-                        db.session.add(new_anime)
-                        db.session.flush()  # Get the ID of the new anime
-                        new_anime.categories.append(category)
-                    else:
-                        # If anime exists but doesn't have this category, add it
-                        if category not in existing_anime.categories:
+        # Clear existing On_Air entries
+        On_Air.query.delete()
+
+        # Add current season anime to On_Air and store their categories
+        if 'data' in on_air_data:
+            for anime_data in on_air_data['data']:
+                # First ensure the anime exists in our database
+                existing_anime = Anime.query.filter_by(mal_id=anime_data['mal_id']).first()
+                if not existing_anime:
+                    existing_anime = Anime(
+                        mal_id=anime_data['mal_id'],
+                        title=anime_data['title'],
+                        synopsis=anime_data['synopsis'],
+                        image_url=anime_data['images']['jpg']['image_url'],
+                        episodes=anime_data['episodes'],
+                        score=anime_data['score']
+                    )
+                    db.session.add(existing_anime)
+                    db.session.flush()
+
+                # Add to On_Air
+                on_air = On_Air(anime_id=existing_anime.id)
+                db.session.add(on_air)
+
+                # Add categories from the anime
+                if 'genres' in anime_data:
+                    for genre in anime_data['genres']:
+                        category = Category.query.filter_by(mal_id=genre['mal_id']).first()
+                        if category and category not in existing_anime.categories:
                             existing_anime.categories.append(category)
 
-            db.session.commit()
+        db.session.commit()
 
-        return jsonify({"message": "Animes and categories synchronized successfully"}), 200
+        # For each category that has on-air anime, fetch more anime
+        for category in Category.query.all():
+            if len(category.animes) > 0:  # Only fetch for categories that have on-air anime
+                wait_for_rate_limit()  # Respect rate limits
+                
+                # Fetch anime by genre
+                response = requests.get(f'https://api.jikan.moe/v4/anime?genres={category.mal_id}&limit=25')
+                data = response.json()
+
+                if 'data' in data:
+                    for anime_data in data['data']:
+                        existing_anime = Anime.query.filter_by(
+                            mal_id=anime_data['mal_id']).first()
+                        
+                        if not existing_anime:
+                            new_anime = Anime(
+                                mal_id=anime_data['mal_id'],
+                                title=anime_data['title'],
+                                synopsis=anime_data['synopsis'],
+                                image_url=anime_data['images']['jpg']['image_url'],
+                                episodes=anime_data['episodes'],
+                                score=anime_data['score']
+                            )
+                            db.session.add(new_anime)
+                            db.session.flush()  # Get the ID of the new anime
+                            new_anime.categories.append(category)
+                        else:
+                            # If anime exists but doesn't have this category, add it
+                            if category not in existing_anime.categories:
+                                existing_anime.categories.append(category)
+
+                db.session.commit()
+
+        return jsonify({"message": "Animes, categories and on-air status synchronized successfully"}), 200
 
     except Exception as e:
         db.session.rollback()

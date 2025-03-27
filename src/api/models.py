@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Boolean, Integer, Text, ForeignKey, Table
+from sqlalchemy import String, Boolean, Integer, Text, ForeignKey, Table, Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 db = SQLAlchemy()
@@ -7,8 +7,8 @@ db = SQLAlchemy()
 # Association table for anime-category many-to-many relationship
 anime_categories = Table('anime_categories',
     db.Model.metadata,
-    mapped_column('anime_id', Integer, ForeignKey('anime.id'), primary_key=True),
-    mapped_column('category_id', Integer, ForeignKey('category.id'), primary_key=True)
+    Column('anime_id', Integer, ForeignKey('anime.id'), primary_key=True),
+    Column('category_id', Integer, ForeignKey('category.id'), primary_key=True)
 )
 
 class User(db.Model):
@@ -34,7 +34,7 @@ class Category(db.Model):
     name: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     mal_id: Mapped[int] = mapped_column(Integer, unique=True, nullable=False)
     
-    # Relationship with Anime
+    # Relaciones 
     animes: Mapped[list["Anime"]] = relationship(
         secondary=anime_categories,
         back_populates="categories"
@@ -56,7 +56,7 @@ class Anime(db.Model):
     episodes: Mapped[int] = mapped_column(Integer, nullable=True)
     score: Mapped[float] = mapped_column(nullable=True)
     
-    # Add relationships
+    # Relaciones
     favorites: Mapped[list["Favorites"]] = relationship(back_populates="anime")
     on_air: Mapped[list["On_Air"]] = relationship(back_populates="anime")
     categories: Mapped[list["Category"]] = relationship(
