@@ -11,8 +11,7 @@ api = Blueprint('api', __name__)
 # Permite todas las origenes en desarrollo
 CORS(api, resources={r"/api/*": {"origins": "*"}})
 
-
-# endpoint para almacenar datos de api esterna
+# endpoint para almacenar datos de api externa
 
 #anime
 @api.route('/anime', methods=['GET'])
