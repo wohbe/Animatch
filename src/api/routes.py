@@ -33,7 +33,7 @@ def get_animes():
 @api.route('/anime/sync/top', methods=['POST'])
 def sync_anime():
     try:
-        response = requests.get('https://api.jikan.moe/v4/top/anime?limit=150')
+        response = requests.get('https://api.jikan.moe/v4/top/anime')
         data = response.json()
 
         anime_data = data['data'][:150]
@@ -69,6 +69,7 @@ def sync_anime():
         return jsonify({"error": str(e)}), 500
 
 # favorites
+
 
 @api.route('/favorites', methods=['GET'])
 def get_favorites():
