@@ -73,8 +73,7 @@ def sync_anime():
 
         db.session.commit()
         return jsonify({
-            "message": f"{len(top_anime)} animes sincronizados",
-            "animes": top_anime
+            "message": f"animes sincronizados"
         })
 
     except Exception as e:
