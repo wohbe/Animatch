@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../index.css';
+import Recommendations from "./Recommendations.jsx";
 
 function AnimeCard() {
   const anime = {
@@ -20,8 +21,7 @@ function AnimeCard() {
   };
 
   const [isFavorite, setIsFavorite] = useState(false);
-  const [isWatchLater, setIsWatchLater] = useState(false);
-  const [isWatched, setIsWatched] = useState(false);
+  const [isWatching, setIsWatching] = useState(false);
 
   const handleFavoriteClick = () => {
     setIsFavorite(!isFavorite);
@@ -32,38 +32,50 @@ function AnimeCard() {
     }
   };
 
-  const handleWatchLaterClick = () => {
-    setIsWatchLater(!isWatchLater);
-    if (isWatchLater) {
+  const handleWatchingClick = () => {
+    setIsWatching(!isWatching);
+    if (isWatching) {
       console.log('Eliminado de ver más tarde:', anime.title);
     } else {
       console.log('Añadido a ver más tarde:', anime.title);
     }
   };
-
-  const handleWatchedClick = () => {
-    setIsWatched(!isWatched);
-    if (isWatched) {
-      console.log('Marcado como no visto:', anime.title);
-    } else {
-      console.log('Marcado como visto:', anime.title);
-    }
+  
+  const trailerUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'; // Reemplazar con la URL del anime
+  
+  const handleTrailerClick = () => {
+    window.open(trailerUrl, '_blank'); 
   };
 
   return (
     <div className='container'>
       <div className="anime-card d-flex m-2">
-        <img src={anime.coverImage} alt={anime.title} className="cover-image" />
+        <div className='container-image w-100'>
+          <img src={anime.coverImage} alt={anime.title} className="cover-image w-auto" />
+          <button className={`favorite-button ${isFavorite ? 'active' : ''}`} onClick={handleFavoriteClick} title={isFavorite ? 'Eliminar de favoritos' : 'Añadir a Favoritos'}>
+            <i className={`fa-solid fa-heart ${isFavorite ? 'text-danger' : ''}`}></i>
+          </button>
+          <button
+            className={`watching-button ${isWatching ? 'active' : ''} `} onClick={handleWatchingClick}
+            title={isWatching ? 'Dejar de ver' : 'Añadir a viendo'} // Mensaje al pasar el ratón
+          >
+            <i className={`fa-solid ${isWatching ? 'fa-eye-slash' : 'fa-eye'} ${isWatching ? 'text-primary' : ''}`}></i>
+          </button>
+          <button className="trailer-button" onClick={handleTrailerClick} title='Trailer'>
+            <i className="fa-solid fa-clapperboard"></i>
+          </button>
+        </div>
+
         <div className='card-body px-3'>
           <h1>{anime.title}</h1>
-          <p>{anime.synopsis}</p>
-          <div className="genres">Genre:&nbsp;
-    {anime.genres.map((genre, index) => (
-        <span key={genre} className="genre">
-            {genre}{index < anime.genres.length - 1 ? ', ' : ''}
-        </span>
-    ))}
-</div>
+          <p>{anime.synopsis}</p><br />
+          <div className="genres">Género:&nbsp;
+            {anime.genres.map((genre, index) => (
+              <span key={genre} className="genre">
+                {genre}{index < anime.genres.length - 1 ? ', ' : ''}
+              </span>
+            ))}
+          </div><br />
           <p>Estado: {anime.status}</p>
           <p>Puntuación: {anime.score}</p>
           <p>Episodios: {anime.episodes}</p>
@@ -72,31 +84,9 @@ function AnimeCard() {
           <p>Fecha de fin: {anime.endDate}</p>
           <p>Estudio: {anime.studio}</p>
           <p>Director: {anime.director}</p>
-
-
-          <div className="anime-buttons d-flex justify-content-around">
-            <button
-              className="favorite-button btn btn-primary"
-              onClick={handleFavoriteClick}
-            >
-              {isFavorite ? 'Quitar de favoritos' : 'Favoritos'}
-            </button>
-            <button
-              className="watch-later-button btn btn-primary"
-              onClick={handleWatchLaterClick}
-            >
-              {isWatchLater ? 'Quitar de ver más tarde' : 'Ver más tarde'}
-            </button>
-            <label className="watched-button btn btn-primary">
-            <input
-              type="checkbox"
-              checked={isWatched}
-              onChange={handleWatchedClick}
-             />Visto
-            </label>
-          </div>
         </div>
       </div>
+<Recommendations/>
     </div>
   );
 }

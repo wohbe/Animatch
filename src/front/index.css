@@ -3,26 +3,55 @@
   padding: 0;
   box-sizing: border-box;
 }
-/*botones de animecard*/
-.anime-buttons{
-margin-left: 30rem;
+/* .recommendations-list{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6rem;
+} */
+.recommendations-container {
+  padding: 20px;
 }
 
-.watch-later-button{
- margin-left: 1rem;
- margin-right: 1rem;
+.recommendations-list {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.recommendation-card {
+  width: 200px; /* Aumenta el ancho de las tarjetas */
+  margin-right: 10px;
+  text-align: center;
+  display: inline-block;
+  
+}
+
+.recommendation-card img {
+  max-width: 100%;
+  height: 80%;
+}
+
+.title-anime {
+  font-size: 14px; /* Reduce el tamaño de la fuente */
+  margin: 5px 0; /* Ajusta el margen */
+  white-space: nowrap; /* Evita que el texto se envuelva */
+  overflow:hidden; /* Oculta el texto que se desborda */
+  text-overflow: ellipsis; /* Muestra puntos suspensivos */
 }
 anime-buttons button,
-.watched-button,
+.watching-button,
 .favorite-button,
-.watch-later-button { 
-  background-color: #4bc4ec; 
+.trailer-button { 
+  background-color: #050505; 
   color: #333; 
   border: none;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease; 
+  font-size:2rem;
+  
 }
 
 @media (max-width: 768px) {
@@ -31,19 +60,12 @@ anime-buttons button,
   }
   .cover-image {
     width: 100%;
+    
   }
   .card-body {
     width: 100%;
   }
-}
-.anime-buttons button:hover,
-.watched-button:hover {
-  background-color: #72c8eb; 
-}
 
-.anime-buttons button:active,
-.watched-button:active {
-  background-color: #6495ED; 
 }
 
 

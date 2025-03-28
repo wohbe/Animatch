@@ -6,8 +6,8 @@ const Navbar = () => {
 		<section>
 			<div className="NavBar">
 				<nav className="navbar navbar-expand-lg">
-					<a class="navbar-brand" href="#">
-						<img src="/src/front/assets/img/logo.jpg" width="30" height="30" class="d-inline-block align-top" alt="" />
+					<a className="navbar-brand" href="#">
+						<img src="/src/front/assets/img/logo.jpg" width="30" height="30" className="d-inline-block align-top" alt="" />
 					</a>
 					<div className="container-fluid">
 						<a className="navbar-brand Home" href="/">Animatch</a>
@@ -26,9 +26,9 @@ const Navbar = () => {
 							</div>
 						</div>
 					</div>
-					<form class="form-inline  my-lg-0 d-flex">
-						<input class="form-control mr-sm-3 "type="search" placeholder="Search" aria-label="Search" />
-						<button class="btn btn-outline-success  my-sm-0 m-2" type="submit">Search</button>
+					<form className="form-inline  my-lg-0 d-flex">
+						<input className="form-control mr-sm-3 "type="search" placeholder="Search" aria-label="Search" />
+						<button className="btn btn-outline-success  my-sm-0 m-2" type="submit">Search</button>
 					</form>
 				</nav>
 			</div>
