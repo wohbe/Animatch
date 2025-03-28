@@ -32,37 +32,50 @@ def get_animes():
 
 @api.route('/anime/sync/top', methods=['POST'])
 def sync_anime():
+    anime_api = 'https://api.jikan.moe/v4/anime'
     try:
-        response = requests.get('https://api.jikan.moe/v4/top/anime')
-        data = response.json()
+        page = 1
+        max_page = 10
 
-        anime_data = data['data'][:150]
+        while page <= max_page:
+            response = requests.get(anime_api, params={'page': page})
+            if response.status_code != 200:
+                break
 
-        for anime_item in anime_data:
-            existing_anime = Anime.query.filter_by(
-                mal_id=anime_item['mal_id']).first()
+            anime_item = response.json()
+            anime_list = anime_item.get('data', [])
 
-            if not existing_anime:
-                genres = [genre['name']
-                          for genre in anime_item.get('genres', [])]
+            for anime in anime_list:
+                if anime.get('score') and anime['score'] >= 8:
+                    exists = Anime.query.filter_by(
+                        mal_id=anime['mal_id']).first()
+                    if not exists:
+                        genres = [genre['name']
+                                  for genre in anime.get('genres', [])]
 
-                new_anime = Anime(
-                    mal_id=anime_item['mal_id'],
-                    title=anime_item['title'],
-                    synopsis=anime_item['synopsis'],
-                    image_url=anime_item['images']['jpg']['image_url'],
-                    episodes=anime_item['episodes'],
-                    score=anime_item['score'],
-                    airing=anime_item['airing'],
-                    genres=json.dumps(genres)
+                    new_anime = Anime(
+                        mal_id=anime['mal_id'],
+                        title=anime['title'],
+                        synopsis=anime['synopsis'],
+                        image_url=anime['images']['jpg']['image_url'],
+                        episodes=anime['episodes'],
+                        score=anime['score'],
+                        airing=anime['airing'],
+                        genres=json.dumps(genres)
+                    )
 
-                )
+                exists = Anime.query.filter_by(mal_id=anime['mal_id']).first()
+                if not exists:
 
-                db.session.add(new_anime)
+                    db.session.add(new_anime)
 
-                db.session.commit()
+            page += 1
 
-                return jsonify({"message": "Anime syncronized"})
+        db.session.commit()
+        return jsonify({
+            "message": f"{len(top_anime)} animes sincronizados",
+            "animes": top_anime
+        })
 
     except Exception as e:
         db.session.rollback()
@@ -123,6 +136,10 @@ def get_anime_by_category(category_id):
 @api.route('/categories/sync', methods=['POST'])
 def sync_categories():
     try:
+        best_anime = []
+
+        for best in best_anime:
+            response = requests.get('')
         # Obtiene las categorias de la API
         genres_response = requests.get('https://api.jikan.moe/v4/genres/anime')
         genres_data = genres_response.json()
