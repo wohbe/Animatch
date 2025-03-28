@@ -3,11 +3,11 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Anime, Favorites, Category, On_Air
-from api.models import db, User, Anime, Favorites, Category, On_Air
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
 import time
+import json
 
 api = Blueprint('api', __name__)
 # Permite todas las origenes en desarrollo
@@ -30,107 +30,43 @@ def get_animes():
     return jsonify([anime.serialize() for anime in animes]), 200
 
 
-@api.route('/anime/sync', methods=['POST'])
-def sync_animes():
+@api.route('/anime/sync/top', methods=['POST'])
+def sync_anime():
     try:
-        genres_response = requests.get('https://api.jikan.moe/v4/genres/anime')
-        genres_data = genres_response.json()
+        response = requests.get('https://api.jikan.moe/v4/top/anime?limit=150')
+        data = response.json()
 
-        # Guarda las categorias en la base de datos
-        for genre in genres_data['data']:
-            existing_category = Category.query.filter_by(
-                mal_id=genre['mal_id']).first()
-            if not existing_category:
-                new_category = Category(
-                    name=genre['name'],
-                    mal_id=genre['mal_id']
+        anime_data = data['data'][:150]
+
+        for anime_item in anime_data:
+            existing_anime = Anime.query.filter_by(
+                mal_id=anime_item['mal_id']).first()
+
+            if not existing_anime:
+                genres = [genre['name']
+                          for genre in anime_item.get('genres', [])]
+
+                new_anime = Anime(
+                    mal_id=anime_item['mal_id'],
+                    title=anime_item['title'],
+                    synopsis=anime_item['synopsis'],
+                    image_url=anime_item['images']['jpg']['image_url'],
+                    episodes=anime_item['episodes'],
+                    score=anime_item['score'],
+                    airing=anime_item['airing'],
+                    genres=json.dumps(genres)
+
                 )
-                db.session.add(new_category)
 
-        db.session.commit()
-
-        # Obtiene los animes en emision actual
-        wait_for_rate_limit()
-        on_air_response = requests.get('https://api.jikan.moe/v4/seasons/now')
-        on_air_data = on_air_response.json()
-
-        # Elimina las entradas existentes de On_Air
-        On_Air.query.delete()
-
-        # Agrega los animes en emision actual a On_Air y almacena sus categorias
-        if 'data' in on_air_data:
-            for anime_data in on_air_data['data']:
-                # Primero asegura que el anime exista en nuestra base de datos
-                existing_anime = Anime.query.filter_by(
-                    mal_id=anime_data['mal_id']).first()
-                if not existing_anime:
-                    existing_anime = Anime(
-                        mal_id=anime_data['mal_id'],
-                        title=anime_data['title'],
-                        synopsis=anime_data['synopsis'],
-                        image_url=anime_data['images']['jpg']['image_url'],
-                        episodes=anime_data['episodes'],
-                        score=anime_data['score']
-                    )
-                    db.session.add(existing_anime)
-                    db.session.flush()
-
-                # Agrega a On_Air
-                on_air = On_Air(anime_id=existing_anime.id)
-                db.session.add(on_air)
-
-                # Agrega las categorias del anime
-                if 'genres' in anime_data:
-                    for genre in anime_data['genres']:
-                        category = Category.query.filter_by(
-                            mal_id=genre['mal_id']).first()
-                        if category and category not in existing_anime.categories:
-                            existing_anime.categories.append(category)
-
-        db.session.commit()
-
-        # Para cada categoria que tiene animes en emision, obtiene mas animes
-        for category in Category.query.all():
-            if len(category.animes) > 0:  # Solo obtiene para categorias que tienen animes en emision
-                wait_for_rate_limit()  # Respetar los limites de la API
-
-                # Obtiene los animes por genero
-                response = requests.get(
-                    f'https://api.jikan.moe/v4/anime?genres={category.mal_id}&limit=25')
-                data = response.json()
-
-                if 'data' in data:
-                    for anime_data in data['data']:
-                        existing_anime = Anime.query.filter_by(
-                            mal_id=anime_data['mal_id']).first()
-
-                        if not existing_anime:
-                            new_anime = Anime(
-                                mal_id=anime_data['mal_id'],
-                                title=anime_data['title'],
-                                synopsis=anime_data['synopsis'],
-                                image_url=anime_data['images']['jpg']['image_url'],
-                                episodes=anime_data['episodes'],
-                                score=anime_data['score']
-                            )
-                            db.session.add(new_anime)
-                            db.session.flush()  # Get the ID of the new anime
-                            new_anime.categories.append(category)
-                        else:
-                            # Si el anime existe pero no tiene esta categoria, agrégala
-                            if category not in existing_anime.categories:
-                                existing_anime.categories.append(category)
+                db.session.add(new_anime)
 
                 db.session.commit()
-                db.session.commit()
 
-        return jsonify({"message": "Animes, categories and on-air status synchronized successfully"}), 200
-        return jsonify({"message": "Animes, categories and on-air status synchronized successfully"}), 200
+                return jsonify({"message": "Anime syncronized"})
 
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
-
 
 # favorites
 
