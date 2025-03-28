@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String, Boolean, Integer, Text, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
+import json
 
 db = SQLAlchemy()
 
@@ -29,6 +30,8 @@ class Anime(db.Model):
     image_url: Mapped[str] = mapped_column(String(500), nullable=True)
     episodes: Mapped[int] = mapped_column(Integer, nullable=True)
     score: Mapped[float] = mapped_column(nullable=True)
+    genres: Mapped[str] = mapped_column(String, nullable=True)
+    airing: Mapped[bool] = mapped_column(Boolean, nullable=False)
     favorites: Mapped[List["Favorites"]] = relationship(back_populates="anime")
     on_air: Mapped[List["On_Air"]] = relationship(back_populates="anime")
 
@@ -41,6 +44,7 @@ class Anime(db.Model):
             "image_url": self.image_url,
             "episodes": self.episodes,
             "score": self.score,
+            "genres": json.loads(self.genres)
            # "favorited_by": [fav.user_id for fav in self.favorites]
            # Se podría plantear si nos interesa poder acceder para ver la popularidad interna
         }
@@ -76,3 +80,15 @@ class On_Air(db.Model):
             "id": self.id,
             "anime_id": self.anime_id
         }
+    
+class Watching(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    anime_id: Mapped[int] = mapped_column(ForeignKey('anime.id'), nullable=False)
+    anime: Mapped["Anime"] = relationship(back_populates="on_air")
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "anime_id": self.anime_id
+        }
+    
