@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Anime, Favorites, Category, On_Air
+from api.models import db, User, Anime, Favorites, On_Air
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
@@ -80,6 +80,40 @@ def sync_anime():
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
+
+@api.route('/anime/on-air', methods=['GET'])
+def get_on_air_anime():
+    try:
+        api_url = 'https://api.jikan.moe/v4/seasons/now'
+
+        response = requests.get(api_url)
+        season_now = response.json()
+
+        for data in season_now['data']:
+            check_exist = On_Air.query.filter_by(mal_id=data['mal_id']).first()
+            if not check_exist:
+                genres = [genre['name'] for genre in data.get('genres', [])]
+
+                new_on_air = On_Air(
+                    mal_id=data['mal_id'],
+                    title=data['title'],
+                    synopsis=data.get('synopsis'),
+                    image_url=data['images']['jpg']['image_url'],
+                    score=data.get('score'),
+                    airing=data['airing', False],
+                    genres=json.dumps(genres),
+
+                )
+
+                db.session.add(new_on_air)
+            db.session.commit()
+            return jsonify({"message": "perfecto"}), 200
+
+    except Exception as er:
+        db.session.rollback()
+        return jsonify({'error': f'ha habido un error str{er}'}), 500
+
+
 # favorites
 
 
@@ -109,54 +143,3 @@ def delete_favorite(favorite_id):
     db.session.delete(favorite)
     db.session.commit()
     return jsonify({"message": "Favorite deleted successfully"}), 200
-
-
-# endpoint para categorias de anime
-@api.route('/categories', methods=['GET'])
-def get_categories():
-    categories = Category.query.all()
-    return jsonify([{
-        "id": category.id,
-        "name": category.name,
-        "mal_id": category.mal_id,
-        "anime_count": len(category.animes)
-    } for category in categories]), 200
-
-
-@api.route('/categories/<int:category_id>/anime', methods=['GET'])
-def get_anime_by_category(category_id):
-    category = Category.query.get(category_id)
-    if not category:
-        return jsonify({"message": "Category not found"}), 404
-
-    return jsonify([anime.serialize() for anime in category.animes]), 200
-
-
-@api.route('/categories/sync', methods=['POST'])
-def sync_categories():
-    try:
-        best_anime = []
-
-        for best in best_anime:
-            response = requests.get('')
-        # Obtiene las categorias de la API
-        genres_response = requests.get('https://api.jikan.moe/v4/genres/anime')
-        genres_data = genres_response.json()
-
-        # Guarda las categorias en la base de datos
-        for genre in genres_data['data']:
-            existing_category = Category.query.filter_by(
-                mal_id=genre['mal_id']).first()
-            if not existing_category:
-                new_category = Category(
-                    name=genre['name'],
-                    mal_id=genre['mal_id']
-                )
-                db.session.add(new_category)
-
-        db.session.commit()
-        return jsonify({"message": "Categories synchronized successfully"}), 200
-
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 500
