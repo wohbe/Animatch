@@ -60,12 +60,9 @@ def sync_anime():
                         image_url=anime['images']['jpg']['image_url'],
                         episodes=anime['episodes'],
                         score=anime['score'],
-                        airing=anime['airing'],
+                        airing=anime.get('airing', False),
                         genres=json.dumps(genres)
                     )
-
-                exists = Anime.query.filter_by(mal_id=anime['mal_id']).first()
-                if not exists:
 
                     db.session.add(new_anime)
 
