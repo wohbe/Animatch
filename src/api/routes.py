@@ -78,7 +78,7 @@ def sync_anime():
         return jsonify({"error": str(e)}), 500
 
 
-@api.route('/anime/on-air', methods=['GET'])
+@api.route('/anime/on-air', methods=['POST'])
 def get_on_air_anime():
     try:
         api_url = 'https://api.jikan.moe/v4/seasons/now'
@@ -97,7 +97,7 @@ def get_on_air_anime():
                     synopsis=data.get('synopsis'),
                     image_url=data['images']['jpg']['image_url'],
                     score=data.get('score'),
-                    airing=data['airing', False],
+                    airing=data.get('airing', False),
                     genres=json.dumps(genres),
 
                 )
@@ -110,6 +110,11 @@ def get_on_air_anime():
         db.session.rollback()
         return jsonify({'error': f'ha habido un error str{er}'}), 500
 
+
+@api.route('/anime/on-air/list', methods=['GET'])
+def get_on_air_list():
+    on_air_animes = On_Air.query.all()
+    return jsonify([anime.serialize() for anime in on_air_animes]), 200
 
 # favorites
 
