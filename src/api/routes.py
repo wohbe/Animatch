@@ -103,8 +103,8 @@ def get_on_air_anime():
                 )
 
                 db.session.add(new_on_air)
-            db.session.commit()
-            return jsonify({"message": "perfecto"}), 200
+        db.session.commit()
+        return jsonify({"message": "perfecto"}), 200
 
     except Exception as er:
         db.session.rollback()
