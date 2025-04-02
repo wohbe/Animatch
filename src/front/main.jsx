@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './FinalProject.css' // Estilos CSS personalizados desde index.js
-import '../../public/Scroller.css'
 import './index.css' // Global styles for your application
 import { RouterProvider } from "react-router-dom"  // Import RouterProvider to use the router
 import { router } from "./routes" // Import the router configuration

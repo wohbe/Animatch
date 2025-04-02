@@ -1,3 +1,4 @@
+//pretty straight forward... 
 import React from "react";
 
 const UserInfo = () => {

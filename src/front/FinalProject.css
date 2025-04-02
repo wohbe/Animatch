@@ -1,4 +1,4 @@
-/* Estilos generales */
+/* General Styles */
 * {
     margin: 0;
     padding: 0;
@@ -12,67 +12,51 @@ body {
     background: #121212;
 }
 
-img, svg {
+img {
     max-width: 100%;
     display: block;
 }
 
-svg {
-    height: 23.8rem;
-    width: 20rem;
-}
-
-/* Barra de navegación */
+/* Navbar */
 .NavBar {
-    background-color: ##ff6f61;
+    background-color: black;
     padding: 1rem;
 }
 
-/* Navbar text color */
 .NavBar .navbar-brand.Home,
 .NavBar .navbar-nav .nav-link {
-    color: #ff6f61;
-}
-
-.navbar-brand.Home {
+    margin: 0 0.5rem;
     font-size: 1.5rem;
     font-weight: bold;
     color: #ff6f61;
 }
 
-.navbar-nav .nav-link {
-    color: white;
-    margin: 0 0.5rem;
+.NavBar .navbar-nav .nav-link {
     font-size: 1rem;
 }
 
-.navbar-nav .nav-link:hover {
-    color: #ff6f61;
-}
-
 .navbar-toggler-icon {
-    background-color: white;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%23ff6f61' stroke-width='3' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
-/* Tarjeta de perfil */
+/* Profile Card */
 .profile-card {
     background-color: #1a1a1a;
-    border-radius: 10px;
+    border-radius: 0.625rem;
     padding: 1rem;
     text-align: center;
     margin: 1rem 0;
-    height: 18rem;
+    max-height: 18rem;
 }
 
 .profile-card img {
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 6.25rem;
+    height: 6.25rem;
     margin: 0 auto 1rem;
 }
 
 .profile-card .card-title {
-    font-size: 1.25rem;
     font-weight: bold;
     color: white;
 }
@@ -87,22 +71,18 @@ svg {
     background-color: #ff6f61;
     border: none;
     padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border-radius: 5px;
-    color: white;
 }
 
 .profile-card .btn-secondary:hover {
     background-color: #e65a50;
 }
 
-/* Sección "About Me" */
+/* About Me */
 .abtMe {
     background-color: #1a1a1a;
-    border-radius: 10px;
     padding: 1rem;
-    margin: 1rem 0;
-    height: 18rem;
+    margin: 1rem;
+    max-height: 18rem;
     overflow: hidden;
 }
 
@@ -119,107 +99,40 @@ svg {
     line-height: 1.5;
 }
 
-/* Logros (Achievements) */
+/* Achievements */
 .archieve-container {
     background-color: #1a1a1a;
-    border-radius: 10px;
+    border-radius: 0.625rem;
     padding: 1rem;
     text-align: center;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
+    margin: 1rem 0;
+    max-height: 18rem;
+    overflow: hidden;
 }
 
 .archieve-container h2 {
     font-size: 1.5rem;
     font-weight: bold;
     color: white;
-    margin-bottom: 1rem;
+    padding-left: 1rem;
+    margin-bottom: 2rem;
 }
 
 .archieve-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap:3rem;
     list-style: none;
     padding: 0;
 }
 
 .archieve-list li {
-    flex: 0 0 calc(10% - 10px);
+    flex: 1 1 calc(13% - 0.5rem);
 }
 
-.archieveIcons {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-}
-
-/* Media Scroller */
-.mediaContainer {
-    --slider-padding: 3.1rem; /* Usando tu margen existente */
-    position: relative;
-    width: 100%;
-    margin-bottom: 2rem;
-    display: flex;
-    justify-content: center;
-}
-
-
-.mediaScroller {
-    display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    gap: 2rem;
-    padding: 10px;
-    margin-left: 3.1rem;
-}
-
-.mediaElement {
-    flex: 0 0 15%;
-    border-radius: 8px;
-}
-
-.mediaElement img {
-    width: 100%;
-    height: 35rem;
-    object-fit: cover;
-}
-
-.mediaElement:hover {
-    transition: transform 0.3s ease-in-out;
-    transform: scale(1.1);
-}
-
-.next, .previous {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(30, 30, 30, 0.9);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 20;
-    display: none;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    height: 40rem;
-}
-
-.previous {
-    left: 0;
-    border-radius: 0 5px 5px 0;
-}
-
-.next {
-    right: 0;
-    border-radius: 5px 0 0 5px;
-}
-
-
-/* Tarjetas */
+/* Cards */
 .list-card {
     background-color: #1a1a1a;
-    border-radius: 10px;
     padding: 1rem;
     text-align: center;
     margin-bottom: 1rem;
@@ -232,184 +145,218 @@ svg {
     margin: 0;
 }
 
-.image-card {
-    background-color: #1a1a1a;
-}
-
-.image-card img {
+/* Info Bar */
+.categorieBar {
     width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-}
-
-/* Media Queries */
-@media (min-width: 135em) {
-    .mediaElement img {
-        width: 70%;
-        height: 40rem;
-    }
-}
-
-@media (min-width: 107.5em) {
-    .mediaElement img {
-        width: 75%;
-        height: 30rem;
-    }
-}
-
-@media (min-width: 64em) {
-    .mediaElement img {
-        width: 80%;
-        height: 25rem;
-    }
-}
-
-@media (min-width: 50em) {
-    .mediaElement img {
-        width: 85%;
-        height: 22rem;
-    }
-}
-
-@media (min-width: 35.5em) {
-    .mediaElement img {
-        width: 90%;
-        height: 18rem;
-    }
-}
-
-@media (min-width: 30em) {
-    .mediaElement img {
-        width: 100%;
-        height: 40rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .navbar-nav {
-        flex-direction: column;
-    }
-    
-    .abtMe h6 {
-        font-size: 0.9rem;
-        overflow-wrap: break-word;
-    }
-    
-    .archieve-list li {
-        flex: 0 0 calc(33% - 10px);
-    }
-    
-    .mediaElement {
-        width: 10rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .mediaElement {
-        width: 8rem;
-    }
-}
-
-.componente {
-    width: 100%;
-    max-width: 1200px;
+    max-width: 75rem;
     margin: 0 auto;
-    padding: 0 1rem;
+    margin-top: 4rem;
+    padding: 0rem 1rem;
 }
 
-body .image-cards.container-fluid,
-body .mediaContainer,
-body .mediaScroller {
-    max-width: none;
-    padding-left: 0px;
-    padding-right: 0;
-    margin-left: 0;
+/* Media Scroller */
+.scroller-container {
+    width: 100vw;
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
 }
 
-/* Añade esto al final de tu CSS */
-.mediaScroller.scrolled {
-    margin-left: 0 !important;
-    transition: margin 0.5s ease-in-out;
-}
-
-
-
-/* Transición para el margen izquierdo */
-/* Transición para el margen izquierdo */
-.mediaScroller {
-    transition: margin-left 0.3s ease-out;
-}
-
-/* Estado cuando se ha hecho scroll a la derecha */
-.mediaScroller.scrolled {
-    margin-left: 0 !important;
-}
-
-/* Asegura que las flechas permanezcan visibles */
-.previous, .next {
-    transition: opacity 0.2s ease;
-}
-
-.mediaContainer:hover .previous,
-.mediaContainer:hover .next {
-    opacity: 1 !important;
-    display: block;
-}
-
-/* Añade esto al final de tu CSS */
-.image-cards.container-fluid {
-    max-width: none;
-    padding-right: 0;
-    margin-left: 0;
-    transition: padding 0.3s ease !important;
-}
-
-.mediaScroller {
-    margin-left: 3.1rem;
-}
-
-/* Clase cuando está scrolleado */
-.image-cards.container-fluid.scrolled {
-    padding-left: 0 !important;
-}
-
-.scroller-wrapper {
+.slider-container {
     position: relative;
     width: 100%;
-  }
-  
-  .scroller {
+    margin: 0 auto;
+}
+
+.slider {
+    --items-per-screen: 3;
+    --slider-index: 0;
+    --slider-padding: 3rem; 
+    --img-gap: .5rem;
     display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    gap: 1rem;
-    padding: 1rem 0;
-    scrollbar-width: none;
-  }
-  
-  .scroller::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .slide {
-    flex: 0 0 auto;
-    width: 80%;
-  }
-  
-  .arrow {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 1.5rem;
+    width: 100%;
+    transform: translateX(calc(var(--slider-index) * -100%));
+    transition: transform 0.7s ease-in-out;
+    will-change: transform;
+    padding-bottom: 1rem;
+}
+
+.slide-item {
+    flex: 0 0 calc(100% / var(--items-per-screen));
+    max-width: calc(100% / var(--items-per-screen));
+    padding: 0 var(--img-gap);
+    box-sizing: border-box;
+    overflow: hidden; /* Esto arregla el problema del borde */
+    border-radius:1rem;
+}
+
+/* Change size of img here with aspect-ratio */
+.slide-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 3/4;
+    display: block;
+    border-radius:1rem;
+}
+
+
+/* Arrow styles (hidden by default in here o.o) */
+.arrow {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 3rem;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s ease-in-out;
+}
+
+.slider-container:hover .arrow {
+    opacity: 1;
+    visibility: visible;
+    z-index: 10;
+}
+
+.arrow:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.arrow svg {
+    width: 4rem;
+    height: 4rem;
+    transition: transform 0.3s ease;
+}
+
+.arrow svg:hover {
+    transform: scale(1.2);
+}
+
+.left-arrow {
+    left: 0;
+}
+
+.right-arrow {
+    right: 0;
+}
+
+/* Responsive breakpoints */
+@media (min-width: 2160px) {
+    .slider { --items-per-screen: 6; }
+}
+
+@media (max-width: 1720px) {
+    .slider { --items-per-screen: 5; }
+}
+
+@media (max-width: 1024px) {
+    .slider { --items-per-screen: 4; }
+}
+
+@media (max-width: 800px) {
+    .slider { --items-per-screen: 3; }
+}
+
+@media (max-width: 568px) {
+    .slider { --items-per-screen: 2; }
+    .arrow svg {
+        width: 3rem;
+        height: 3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .slider { --items-per-screen: 1; }
+    .arrow {
+        width: 2rem;
+    }
+}
+
+/*INTERACTION BUTTONS*/
+
+/* Icons inside every image*/
+.slide-item {
+    position: relative;
   }
   
-  .left { left: 1rem; }
-  .right { right: 1rem; }
+  /*Organization of buttons*/
+  .button-overlay {
+    position: absolute;
+    bottom: 0; 
+    left: 0;
+    width: 100%;
+    padding: 1rem 0; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  
+  /*Show buttons on hover*/
+  .slide-item:hover .button-overlay {
+    opacity: 1;
+  }
+  
+  .boton {
+    padding: 10px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    pointer-events: auto;
+  }
+  
+  .boton:hover {
+    transform: scale(1.2);
+  }
+  
+  /* Button Colors */
+  #favoritos { background-color: red; }
+  #ver-mas-tarde { background-color: orange; }
+  #viendo { background-color: purple; }
+  #terminado { background-color: #2ecc71; }
+
+  
+.slide-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 3/4;
+    transition: transform 0.3s ease;
+}
+
+/* Overlay del gradiente (inicialmente oculto) */
+.image-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease; 
+    pointer-events: none;
+}
+
+/* To show on hover the gradient */
+.image-container:hover .slide-image,
+.image-container:hover::after {
+    transform: scale(1.03);
+    opacity: 1;
+}

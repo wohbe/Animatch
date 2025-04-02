@@ -1,3 +1,4 @@
+//Pretty straigth forward
 import React from "react";
 
 const NavBar = () => {
