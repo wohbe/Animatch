@@ -11,6 +11,7 @@
 } */
 .recommendations-container {
   padding: 20px;
+  margin-top: 40px;
 }
 
 .recommendations-list {
@@ -26,15 +27,19 @@
   display: inline-block;
   
 }
-
+.recommendations-container h2{
+  color: #ff6f61;
+  text-decoration:underline;
+}
 .recommendation-card img {
   max-width: 100%;
-  height: 80%;
+  height: 60%;
 }
 
 .title-anime {
   font-size: 14px; /* Reduce el tamaño de la fuente */
-  margin: 5px 0; /* Ajusta el margen */
+  margin: 5px; /* Ajusta el margen */
+  margin-right: 5rem;
   white-space: nowrap; /* Evita que el texto se envuelva */
   overflow:hidden; /* Oculta el texto que se desborda */
   text-overflow: ellipsis; /* Muestra puntos suspensivos */
@@ -88,7 +93,7 @@ svg {
 
 /* Barra de navegación */
 .NavBar {
-  background-color: black;
+  background-color: rgb(0, 0, 0);
   padding: 1rem;
 }
 
@@ -101,7 +106,7 @@ svg {
 .navbar-brand.Home {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #ff6f61;
+  color: #d35c51;
 }
 
 .navbar-nav .nav-link {
@@ -111,7 +116,7 @@ svg {
 }
 
 .navbar-nav .nav-link:hover {
-  color: #ff6f61;
+  color: #e92c1b;
 }
 
 .navbar-toggler-icon {

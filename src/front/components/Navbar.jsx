@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import SearchBar from "./SearchBar";
 const Navbar = () => {
 	return (
 		<section>
@@ -26,10 +26,7 @@ const Navbar = () => {
 							</div>
 						</div>
 					</div>
-					<form className="form-inline  my-lg-0 d-flex">
-						<input className="form-control mr-sm-3 "type="search" placeholder="Search" aria-label="Search" />
-						<button className="btn btn-outline-success  my-sm-0 m-2" type="submit">Search</button>
-					</form>
+					<SearchBar />
 				</nav>
 			</div>
 		</section>

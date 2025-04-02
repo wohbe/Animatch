@@ -13,7 +13,7 @@ export const Home = () => {
     useEffect(() => {
         const fetchAnimes = async () => {
             try {
-                const response = await fetch("https://api.jikan.moe/v4/top/anime");
+                const response = await fetch("https://api.jikan.moe/v4/anime");
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -94,8 +94,8 @@ export const Home = () => {
             <main>
                 <Slider {...settings}>
                     {animes.map((anime) => (
-                        <div key={anime.mal_id}>
-                            <Link to="/AnimeCard" className="anime-card">
+                        <div key={anime.id}>
+                            <Link to="/animeCard" className="anime-card">
                                 <img src={anime.images.jpg.image_url} alt={anime.title} />
                                 <h3>{anime.title}</h3>
                                 </Link>

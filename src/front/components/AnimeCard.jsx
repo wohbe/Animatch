@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import '../index.css';
-import Recommendations from "./Recommendations.jsx";
 
 function AnimeCard() {
   const anime = {
@@ -41,7 +40,7 @@ function AnimeCard() {
     }
   };
   
-  const trailerUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'; // Reemplazar con la URL del anime
+  const trailerUrl = 'https://www.youtube.com/watch?v=K9Gnl0VeIVI'; 
   
   const handleTrailerClick = () => {
     window.open(trailerUrl, '_blank'); 
@@ -49,10 +48,10 @@ function AnimeCard() {
 
   return (
     <div className='container'>
-      <div className="anime-card d-flex m-2">
-        <div className='container-image w-100'>
+      <div className="anime-card d-flex m-2 ">
+        <div className='container-image w-100 '>
           <img src={anime.coverImage} alt={anime.title} className="cover-image w-auto" />
-          <button className={`favorite-button ${isFavorite ? 'active' : ''}`} onClick={handleFavoriteClick} title={isFavorite ? 'Eliminar de favoritos' : 'Añadir a Favoritos'}>
+          <button className= {`favorite-button ${isFavorite ? 'active' : ''}`} onClick={handleFavoriteClick} title={isFavorite ? 'Eliminar de favoritos' : 'Añadir a Favoritos'} >
             <i className={`fa-solid fa-heart ${isFavorite ? 'text-danger' : ''}`}></i>
           </button>
           <button
@@ -86,7 +85,6 @@ function AnimeCard() {
           <p>Director: {anime.director}</p>
         </div>
       </div>
-<Recommendations/>
     </div>
   );
 }
