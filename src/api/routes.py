@@ -2,6 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from api.models import db, User, Anime, Favorites, On_Air
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
@@ -125,9 +126,10 @@ def get_favorites():
 
 @api.route('/favorites', methods=['POST'])
 def add_favorite():
+    current_user_id = get_jwt_identity()
     data = request.json
     favorite = Favorites(
-        user_id=data['user_id'],
+        user_id=current_user_id,
         anime_id=data['anime_id']
     )
     db.session.add(favorite)
@@ -143,3 +145,50 @@ def delete_favorite(favorite_id):
     db.session.delete(favorite)
     db.session.commit()
     return jsonify({"message": "Favorite deleted successfully"}), 200
+
+## ESTA PARTE CORRESPONDE A LA PARTE DE LOGIN, SIGNUP Y TOKEN.
+
+@api.route('/signup', methods=['POST'])
+def register_user():
+    data = request.get_json()
+    if data is None:
+        return jsonify({"message": "Email and password are required"}), 400
+    email = data['email']
+    password = data['password']
+    if User.query.filter_by(email=email).first():
+        return jsonify({"message": "User already exists"}), 400
+    bytes = password.encode('utf-8') # Convertimos la contraseña en un array de bytes.
+    salt = bcrypt.gensalt() # Generamos la sal
+    hashed_password = bcrypt.hashpw(bytes, salt) # Sacamos la contraseña ya hasheada.
+    new_user = User( # Creamos al nuevo usuario con su email y la contraseña hasheada.
+        email = email,
+        password = hashed_password.decode('utf-8'), # Era esto o guardarlo en el modelo como bytes, pero así es mas fácil de leer.
+        is_active = True
+    )
+    db.session.add(new_user) # Se prepara para añadir el nuevo usuario a la base de datos.
+    db.session.commit() # Se añade al usuario a la base de datos.
+    return jsonify({"message": "User created successfully"}), 201
+
+@api.route('/login', methods=['POST'])
+def login():
+    data=request.get_json()
+    if not data or 'email' not in data or 'password' not in data:
+        return jsonify({"message": "Email and password are required"}), 400
+    email = data['email']
+    password = data['password']
+    user = User.query.filter_by(email=email).first()
+    if not user or not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')): # Esto compara la contraseña introducida con la del usuario
+        return jsonify({"message": "Invalid user or password"}), 401
+    access_token = create_access_token(identity=user.id) ## Aquí se crea el token.
+    return jsonify({
+        "message": "Login successful",
+        "access_token": access_token,
+        "user_id": user.id
+    }), 200
+
+@api.route("/protected", methods=["GET"])
+@jwt_required()
+def protected():
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    return jsonify(user.serialize()), 200
