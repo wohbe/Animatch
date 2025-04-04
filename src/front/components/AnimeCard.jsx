@@ -21,6 +21,8 @@ function AnimeCard() {
 
   const [isFavorite, setIsFavorite] = useState(false);
   const [isWatching, setIsWatching] = useState(false);
+  const [isWatchLater, setIsWatchLater] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
 
   const handleFavoriteClick = () => {
     setIsFavorite(!isFavorite);
@@ -30,6 +32,14 @@ function AnimeCard() {
       console.log('Añadido a favoritos:', anime.title);
     }
   };
+  const handlewatchLaterClick = () => {
+    setIsWatchLater(!isWatchLater);
+    if (isWatchLater) {
+      console.log('Eliminado de ver mas tarde:', anime.title);
+    } else {
+      console.log('Añadido a ver mas tarde:', anime.title);
+    }
+  };
 
   const handleWatchingClick = () => {
     setIsWatching(!isWatching);
@@ -37,6 +47,14 @@ function AnimeCard() {
       console.log('Eliminado de ver más tarde:', anime.title);
     } else {
       console.log('Añadido a ver más tarde:', anime.title);
+    }
+  };
+  const handleFinishedClick = () => {
+    setIsFinished(!isFinished);
+    if (isFinished) {
+      console.log('Eliminado de terminados:', anime.title);
+    } else {
+      console.log('Añadido a terminados:', anime.title);
     }
   };
   
@@ -51,14 +69,26 @@ function AnimeCard() {
       <div className="anime-card d-flex m-2 ">
         <div className='container-image w-100 '>
           <img src={anime.coverImage} alt={anime.title} className="cover-image w-auto" />
+
           <button className= {`favorite-button ${isFavorite ? 'active' : ''}`} onClick={handleFavoriteClick} title={isFavorite ? 'Eliminar de favoritos' : 'Añadir a Favoritos'} >
             <i className={`fa-solid fa-heart ${isFavorite ? 'text-danger' : ''}`}></i>
           </button>
           <button
+            className={`watchLater-button ${isWatchLater ? 'active' : ''} `} onClick={handlewatchLaterClick}
+            title={isWatchLater ? 'Quitar de ver mas tarde' : 'Añadir a ver mas tarde'} >
+            <i className={`fa-regular ${isWatchLater ? 'fa-clock' : 'fa-clock'} ${isWatchLater ? 'text-warning' : ''}`}></i>
+          </button>
+          <button
             className={`watching-button ${isWatching ? 'active' : ''} `} onClick={handleWatchingClick}
-            title={isWatching ? 'Dejar de ver' : 'Añadir a viendo'} // Mensaje al pasar el ratón
-          >
-            <i className={`fa-solid ${isWatching ? 'fa-eye-slash' : 'fa-eye'} ${isWatching ? 'text-primary' : ''}`}></i>
+            title={isWatching ? 'Dejar de ver' : 'Añadir a viendo'} >
+            <i className={`fa-solid ${isWatching ? 'fa-eye-slash' : 'fa-eye'}`}
+            style={{ color: isWatching ? 'purple' : '' }}></i>
+          </button>
+          <button
+            className={`finished-button ${isFinished ? 'active' : ''} `} onClick={handleFinishedClick}
+            title={isFinished ? 'Quitar de terminados' : 'Añadir a terminados'} >
+            <i className={`fa-regular ${isFinished ? 'fa-check-circle' : 'fa-check-circle'} ${isFinished ? 'text-success' : ''}`}></i>
+            
           </button>
           <button className="trailer-button" onClick={handleTrailerClick} title='Trailer'>
             <i className="fa-solid fa-clapperboard"></i>
