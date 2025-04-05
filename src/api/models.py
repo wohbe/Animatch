@@ -1,7 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Boolean, Integer, Text, ForeignKey, DateTime, Float, Table
+from sqlalchemy import String, Boolean, Integer, Text, ForeignKey, Float, func, Table, Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
+from datetime import datetime
 
 # Inicializar la DB
 db = SQLAlchemy()
@@ -27,13 +28,13 @@ class User(db.Model):
 
 
 class UserPreference(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    genre = db.Column(db.String(100))
-    duration = db.Column(db.String(100))
-    theme = db.Column(db.String(50))
-    tone = db.Column(db.String(50))
-    created_at = db.Column(DateTime, default=db.func.current_timestamp())
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable=False)
+    genre: Mapped[str] = mapped_column(String(100))
+    duration: Mapped[str] = mapped_column(String(100))
+    theme: Mapped[str] = mapped_column(String(50))
+    tone: Mapped[str] = mapped_column(String(50))
+    created_at: Mapped[datetime] = mapped_column(datetime, default=func.current_timestamp())
 
     def serialize(self):
         return {
@@ -142,19 +143,19 @@ class Watching(db.Model):
 # TABLAS INTERMEDIAS
 
 
-anime_genre = db.Table(
+anime_genre = Table(
     'anime_genre',
-    db.Column('anime_id', db.Integer, db.ForeignKey(
+    Column('anime_id', Integer, ForeignKey(
         'anime.id'), primary_key=True),
-    db.Column('genre_id', db.Integer, db.ForeignKey(
+    Column('genre_id', Integer, ForeignKey(
         'genre.id'), primary_key=True)
 )
 
-onair_genre = db.Table(
+onair_genre = Table(
     'onair_genre',
-    db.Column('onair_id', db.Integer, db.ForeignKey(
+    Column('onair_id', Integer, ForeignKey(
         'on_air.id'), primary_key=True),
-    db.Column('genre_id', db.Integer, db.ForeignKey(
+    Column('genre_id', Integer, ForeignKey(
         'genre.id'), primary_key=True)
 )
 
