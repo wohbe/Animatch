@@ -6,108 +6,50 @@ import "slick-carousel/slick/slick-theme.css";
 import "../index.css";
 
 export const Home = () => {
-    const [animes, setAnimes] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchAnimes = async () => {
-            try {
-                const response = await fetch("https://api.jikan.moe/v4/anime");
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                setAnimes(data.data);
-                setLoading(false);
-            } catch (err) {
-                setError(err.message);
-                setLoading(false);
-            }
-        };
+	const { store, dispatch } = useGlobalReducer()
 
-        fetchAnimes();
-    }, []);
+	const loadMessage = async () => {
+		try {
+			const backendUrl = import.meta.env.VITE_BACKEND_URL
 
-	if (loading) {
-        return <div className="text-center mt-5">Cargando animes...</div>;
-    }
+			if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
 
-    if (error) {
-        return <div className="text-center mt-5 text-danger">Error: {error}</div>;
-    }
+			const response = await fetch(backendUrl + "/api/hello")
+			const data = await response.json()
 
-	const settings = {
-        infinite: true,
-        speed: 500,
-        slidesToShow: 6,
-        slidesToScroll: 3,
-        rows: 3,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 2,
-                },
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                },
-            },
-        ],
-        prevArrow: <SamplePrevArrow />,
-        nextArrow: <SampleNextArrow />,
-    };
+			if (response.ok) dispatch({ type: "set_hello", payload: data.message })
 
-    function SampleNextArrow(props) {
-        const { className, style, onClick } = props;
-        return (
-            <div
-                className={className}
-                style={{ ...style, display: "block", background: "gray", width: "50px", height: "50px", borderRadius: "50%", textAlign: "center", lineHeight: "30px", color: "white", marginRight: "40px" }}
-                onClick={onClick}>
-                {">"}
-            </div>
-        );
-    }
+			return data
 
-    function SamplePrevArrow(props) {
-        const { className, style, onClick } = props;
-        return (
-            <div
-                className={className}
-                style={{ ...style, display: "block", background: "gray", width: "30px", height: "30px", borderRadius: "50%", textAlign: "center", lineHeight: "30px", color: "white" }}
-                onClick={onClick}
-            >
-                {"<"}
-            </div>
-        );
-    }
+		} catch (error) {
+			if (error.message) throw new Error(
+				`Could not fetch the message from the backend.
+				Please check if the backend is running and the backend port is public.`
+			);
+		}
 
-    return (
-        <div>
-           
-            <main>
-                <Slider {...settings}>
-                    {animes.map((anime) => (
-                        <div key={anime.id}>
-                            <Link to="/animeCard" className="anime-card">
-                                <img src={anime.images.jpg.image_url} alt={anime.title} />
-                                <h3>{anime.title}</h3>
-                                </Link>
-                        </div>
-                    ))}
-                </Slider>
-            </main>
-            <footer>
-                {/* Pie de página */}
-            </footer>
-        </div>
-    );
-};
+	}
 
-export default Home;
+	useEffect(() => {
+		loadMessage()
+	}, [])
+
+	return (
+		<div className="text-center mt-5">
+			<h1 className="display-4">Hello Rigo!!</h1>
+			<p className="lead">
+				<img src={rigoImageUrl} className="img-fluid rounded-circle mb-3" alt="Rigo Baby" />
+			</p>
+			<div className="alert alert-info">
+				{store.message ? (
+					<span>{store.message}</span>
+				) : (
+					<span className="text-danger">
+						Loading message from the backend (make sure your python 🐍 backend is running)...
+					</span>
+				)}
+			</div>
+		</div>
+	);
+}; 
