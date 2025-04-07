@@ -136,13 +136,14 @@ img {
     padding: 1rem;
     text-align: center;
     margin-bottom: 1rem;
+    margin-top: 1rem;
 }
 
 .list-text {
     font-size: 1.5rem;
     font-weight: bold;
     color: white;
-    margin: 0;
+    margin: 2;
 }
 
 /* Info Bar */
@@ -150,7 +151,6 @@ img {
     width: 100%;
     max-width: 75rem;
     margin: 0 auto;
-    margin-top: 4rem;
     padding: 0rem 1rem;
 }
 
