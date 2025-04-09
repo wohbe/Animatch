@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import ButtonAnimatch from "./AniMatchButton";
-import ImageList from "./ImageList";
+import AnimatchCard from "./AnimatchCard";
+
 
 const Animatch = ({ userId }) => {
     const [answers, setAnswers] = useState([]);
@@ -202,19 +203,15 @@ const Animatch = ({ userId }) => {
             )}
 
             {!loading && !generating && recommendation && (
-                <div style={{ marginTop: "40px" }}>
-                    <h3>{recommendation.title}</h3>
-                    <img
-                        src={recommendation.image_url}
-                        alt={recommendation.title}
-                        style={{ maxWidth: "100%", borderRadius: "12px", margin: "20px 0" }}
-                    />
-                    <p>{recommendation.synopsis}</p>
-                    <button onClick={restartTest} style={{ marginTop: "20px" }}>
-                        Start Over
-                    </button>
-                </div>
+                <AnimatchCard
+                    title={recommendation.title}
+                    synopsis={recommendation.synopsis}
+                    image={recommendation.image_url}
+                    url={'https://www.google.com'} />
             )}
+            <button onClick={restartTest} className="btn btn-light" style={{ marginTop: "20px" }}>
+                Start Over
+            </button>
         </div>
     );
 };
