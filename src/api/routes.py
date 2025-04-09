@@ -32,7 +32,7 @@ def sync_anime():
     anime_api = 'https://api.jikan.moe/v4/anime'
     try:
         page = 1
-        max_page = 100
+        max_page = 1000
         while page <= max_page:
             response = requests.get(anime_api, params={'page': page})
             if response.status_code != 200:
@@ -40,7 +40,7 @@ def sync_anime():
 
             anime_list = response.json().get('data', [])
             for anime in anime_list:
-                if anime.get('score') and anime['score'] >= 7:
+                if anime.get('score') and anime['score'] >= 6.5:
                     exists = Anime.query.filter_by(
                         mal_id=anime['mal_id']).first()
                     if not exists:

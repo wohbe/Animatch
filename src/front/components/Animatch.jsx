@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import React from "react";
+import ButtonAnimatch from "./AniMatchButton";
+import ImageList from "./ImageList";
 
 const Animatch = ({ userId }) => {
     const [answers, setAnswers] = useState([]);
@@ -176,7 +178,7 @@ const Animatch = ({ userId }) => {
 
     return (
         <div style={{ maxWidth: "600px", margin: "auto", textAlign: "center" }}>
-            <h2>🎌 Animatch</h2>
+            <h2 className="abtMe">🎌 Animatch</h2>
             {loading && <p>Loading anime list...</p>}
 
             {!loading && generating && (
@@ -187,13 +189,11 @@ const Animatch = ({ userId }) => {
                 <div>
                     <h3>{questions[currentQuestion].pregunta}</h3>
                     {questions[currentQuestion].opciones.map((option, index) => (
-                        <button
+                        <ButtonAnimatch
                             key={index}
+                            text={option}
                             onClick={() => manageReply(option)}
-                            style={{ margin: "10px", padding: "10px 20px", cursor: "pointer" }}
-                        >
-                            {option}
-                        </button>
+                        />
                     ))}
                     <p>
                         Question {currentQuestion + 1} of {questions.length}
@@ -203,8 +203,12 @@ const Animatch = ({ userId }) => {
 
             {!loading && !generating && recommendation && (
                 <div style={{ marginTop: "40px" }}>
-                    <h2>🎯 Recommendation:</h2>
                     <h3>{recommendation.title}</h3>
+                    <img
+                        src={recommendation.image_url}
+                        alt={recommendation.title}
+                        style={{ maxWidth: "100%", borderRadius: "12px", margin: "20px 0" }}
+                    />
                     <p>{recommendation.synopsis}</p>
                     <button onClick={restartTest} style={{ marginTop: "20px" }}>
                         Start Over

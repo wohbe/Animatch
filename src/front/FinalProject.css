@@ -1,0 +1,405 @@
+/* General Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 1rem;
+  color: white;
+  background: #121212;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Navbar */
+.NavBar {
+  background-color: black;
+  padding: 1rem;
+}
+
+.NavBar .navbar-brand.Home,
+.NavBar .navbar-nav .nav-link {
+  margin: 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ff6f61;
+}
+
+.NavBar .navbar-nav .nav-link {
+  font-size: 1rem;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%23ff6f61' stroke-width='3' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Profile Card */
+.profile-card {
+  background-color: #1a1a1a;
+  border-radius: 0.625rem;
+  padding: 1rem;
+  text-align: center;
+  margin: 1rem 0;
+  max-height: 18rem;
+}
+
+.profile-card img {
+  border-radius: 50%;
+  width: 6.25rem;
+  height: 6.25rem;
+  margin: 0 auto 1rem;
+}
+
+.profile-card .card-title {
+  font-weight: bold;
+  color: white;
+}
+
+.profile-card .Gender {
+  font-size: 1rem;
+  color: #888;
+  margin-bottom: 1rem;
+}
+
+.profile-card .btn-secondary {
+  background-color: #ff6f61;
+  border: none;
+  padding: 0.5rem 1rem;
+}
+
+.profile-card .btn-secondary:hover {
+  background-color: #e65a50;
+}
+
+/* About Me */
+.abtMe {
+  background-color: #1a1a1a;
+  padding: 1rem;
+  margin: 1rem;
+  max-height: 18rem;
+  overflow: hidden;
+}
+
+.abtMe h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.abtMe h6 {
+  font-size: 1rem;
+  color: #ccc;
+  line-height: 1.5;
+}
+
+/* Achievements */
+.archieve-container {
+  background-color: #1a1a1a;
+  border-radius: 0.625rem;
+  padding: 1rem;
+  text-align: center;
+  margin: 1rem 0;
+  max-height: 18rem;
+  overflow: hidden;
+}
+
+.archieve-container h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  padding-left: 1rem;
+  margin-bottom: 2rem;
+}
+
+.archieve-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+  list-style: none;
+  padding: 0;
+}
+
+.archieve-list li {
+  flex: 1 1 calc(13% - 0.5rem);
+}
+
+/* Cards */
+.list-card {
+  background-color: #1a1a1a;
+  padding: 1rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.list-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+
+/* Info Bar */
+.categorieBar {
+  width: 100%;
+  max-width: 75rem;
+  margin: 0 auto;
+  margin-top: 4rem;
+  padding: 0rem 1rem;
+}
+
+/* Media Scroller */
+.scroller-container {
+  width: 100vw;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.slider-container {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.slider {
+  --items-per-screen: 3;
+  --slider-index: 0;
+  --slider-padding: 3rem;
+  --img-gap: 0.5rem;
+  display: flex;
+  width: 100%;
+  transform: translateX(calc(var(--slider-index) * -100%));
+  transition: transform 0.7s ease-in-out;
+  will-change: transform;
+  padding-bottom: 1rem;
+}
+
+.slide-item {
+  flex: 0 0 calc(100% / var(--items-per-screen));
+  max-width: calc(100% / var(--items-per-screen));
+  padding: 0 var(--img-gap);
+  box-sizing: border-box;
+  overflow: hidden; /* Esto arregla el problema del borde */
+  border-radius: 1rem;
+}
+
+/* Change size of img here with aspect-ratio */
+.slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 3/4;
+  display: block;
+  border-radius: 1rem;
+}
+
+/* Arrow styles (hidden by default in here o.o) */
+.arrow {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 3rem;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s ease-in-out;
+}
+
+.slider-container:hover .arrow {
+  opacity: 1;
+  visibility: visible;
+  z-index: 10;
+}
+
+.arrow:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.arrow svg {
+  width: 4rem;
+  height: 4rem;
+  transition: transform 0.3s ease;
+}
+
+.arrow svg:hover {
+  transform: scale(1.2);
+}
+
+.left-arrow {
+  left: 0;
+}
+
+.right-arrow {
+  right: 0;
+}
+
+/* Responsive breakpoints */
+@media (min-width: 2160px) {
+  .slider {
+    --items-per-screen: 6;
+  }
+}
+
+@media (max-width: 1720px) {
+  .slider {
+    --items-per-screen: 5;
+  }
+}
+
+@media (max-width: 1024px) {
+  .slider {
+    --items-per-screen: 4;
+  }
+}
+
+@media (max-width: 800px) {
+  .slider {
+    --items-per-screen: 3;
+  }
+}
+
+@media (max-width: 568px) {
+  .slider {
+    --items-per-screen: 2;
+  }
+  .arrow svg {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .slider {
+    --items-per-screen: 1;
+  }
+  .arrow {
+    width: 2rem;
+  }
+}
+
+/*INTERACTION BUTTONS*/
+
+/* Icons inside every image*/
+.slide-item {
+  position: relative;
+}
+
+/*Organization of buttons*/
+.button-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/*Show buttons on hover*/
+.slide-item:hover .button-overlay {
+  opacity: 1;
+}
+
+.boton {
+  padding: 10px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  pointer-events: auto;
+}
+
+.boton:hover {
+  transform: scale(1.2);
+}
+
+/* Button Colors */
+#favoritos {
+  background-color: red;
+}
+#ver-mas-tarde {
+  background-color: orange;
+}
+#viendo {
+  background-color: purple;
+}
+#terminado {
+  background-color: #2ecc71;
+}
+
+.slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 3/4;
+  transition: transform 0.3s ease;
+}
+
+/* Overlay del gradiente (inicialmente oculto) */
+.image-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+/* To show on hover the gradient */
+.image-container:hover .slide-image,
+.image-container:hover::after {
+  transform: scale(1.03);
+  opacity: 1;
+}
+
+.button-animatch {
+  bottom: 0;
+  background-color: #fffffff;
+  border:none;
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+.button-animatch:hover {
+    background-color: #f0f0f0;
+    transform:  scale(1.02);
+    box-shadow: 0 6px 12px rgba(0,0,0,0, 0.15);
+}
+
+.button-animatch:active{
+    transform: scale(0.98);
+}
