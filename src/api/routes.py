@@ -7,7 +7,6 @@ from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
 import time
-import json
 
 api = Blueprint('api', __name__)
 # Permite todas las origenes en desarrollo
@@ -32,7 +31,7 @@ def sync_anime():
     anime_api = 'https://api.jikan.moe/v4/anime'
     try:
         page = 1
-        max_page = 1000
+        max_page = 15
         while page <= max_page:
             response = requests.get(anime_api, params={'page': page})
             if response.status_code != 200:
@@ -40,7 +39,7 @@ def sync_anime():
 
             anime_list = response.json().get('data', [])
             for anime in anime_list:
-                if anime.get('score') and anime['score'] >= 6.5:
+                if anime.get('score') and anime['score'] >= 7:
                     exists = Anime.query.filter_by(
                         mal_id=anime['mal_id']).first()
                     if not exists:
@@ -66,13 +65,19 @@ def sync_anime():
                         )
                         db.session.add(new_anime)
             db.session.commit()
+
             page += 1
+            time.sleep(1)
+
+            print(f"{page}")
 
         return jsonify({"message": "animes sincronizados"}), 200
 
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+    print("He añadido animes")
 
 
 @api.route('/anime/on-air', methods=['POST'])
