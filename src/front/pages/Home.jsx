@@ -1,55 +1,49 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import "../index.css";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';const Home = () => {
+  const [animes, setAnimes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-export const Home = () => {
+  useEffect(() => {
+    const fetchAnimes = async () => {
+      try {
+        const response = await fetch("https://miniature-space-telegram-x5vqjw9w7v643vxqj-3001.app.github.dev/api/anime"); 
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setAnimes(data);
+        setLoading(false);
+      } catch (e) {
+        setError(e);
+        setLoading(false);
+      }
+    };
 
-	const { store, dispatch } = useGlobalReducer()
+    fetchAnimes();
+  }, []); 
 
-	const loadMessage = async () => {
-		try {
-			const backendUrl = import.meta.env.VITE_BACKEND_URL
+  if (loading) {
+    return <div>Cargando animes...</div>;
+  }
 
-			if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
+  if (error) {
+    return <div>Error al cargar los animes: {error.message}</div>;
+  }
 
-			const response = await fetch(backendUrl + "/api/hello")
-			const data = await response.json()
+  return (
+    <div className="anime-grid-container">
+      {animes.map((anime) => (
+      <Link key={anime.id} to={`/anime/${anime.id}`} className="anime-link"> 
+          <div className="anime-card">
+            <img src={anime.image_url} alt={anime.title} className="anime-image" />
+            <h3 className="anime-title">{anime.title}</h3>
+            {anime.score && <p className="anime-score">Puntuación: {anime.score}</p>}
+          </div>
+        </Link>
+      ))}
+    </div>
+  );
+};
 
-			if (response.ok) dispatch({ type: "set_hello", payload: data.message })
-
-			return data
-
-		} catch (error) {
-			if (error.message) throw new Error(
-				`Could not fetch the message from the backend.
-				Please check if the backend is running and the backend port is public.`
-			);
-		}
-
-	}
-
-	useEffect(() => {
-		loadMessage()
-	}, [])
-
-	return (
-		<div className="text-center mt-5">
-			<h1 className="display-4">Hello Rigo!!</h1>
-			<p className="lead">
-				<img src={rigoImageUrl} className="img-fluid rounded-circle mb-3" alt="Rigo Baby" />
-			</p>
-			<div className="alert alert-info">
-				{store.message ? (
-					<span>{store.message}</span>
-				) : (
-					<span className="text-danger">
-						Loading message from the backend (make sure your python 🐍 backend is running)...
-					</span>
-				)}
-			</div>
-		</div>
-	);
-}; 
+export default Home;

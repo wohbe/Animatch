@@ -1,5 +1,6 @@
 import React from 'react';
 import '../index.css';
+
 const getRandomElementsSimple = (array, n) => {
   const result = [];
   for (let i = 0; i < n; i++) {

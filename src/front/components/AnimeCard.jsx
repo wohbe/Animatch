@@ -1,120 +1,120 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom'; // ¡Añade esta línea!
+import GenreRecommendations from './GenreRecommendations';
 import '../index.css';
 
 function AnimeCard() {
-  const anime = {
-    title: 'Chainsaw Man',
-    synopsis:
-      'Denji es un adolescente que vive con un demonio motosierra llamado Pochita. Para pagar la deuda que le dejó su padre tras su muerte, ha tenido que ganarse el pan como puede matando demonios y vendiendo sus cadáverse a la mafia, aunque su vida siempre ha sido miserable.',
-    coverImage:
-      'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx127230-NuHM32a3VJsb.png',
-    genres: ['Acción', 'Aventura', 'Fantasía'],
-    status: 'En emisión',
-    score: 8.5,
-    episodes: 12,
-    seasons: 1,
-    startDate: '2023-10-26',
-    endDate: 'En emisión',
-    studio: 'Estudio',
-    director: 'Director',
-  };
+  const { animeId } = useParams();
+  const [animeDetails, setAnimeDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isFavorite, setIsFavorite] = useState(false); // TODO: Implementar lógica real de favoritos
+  const [isWatching, setIsWatching] = useState(false); // TODO: Implementar lógica real de viendo
 
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isWatching, setIsWatching] = useState(false);
-  const [isWatchLater, setIsWatchLater] = useState(false);
-  const [isFinished, setIsFinished] = useState(false);
+  useEffect(() => {
+    const fetchAnimeDetails = async () => {
+      setLoading(true);
+      setError(null);
+      setAnimeDetails(null);
+
+      try {
+        const response = await fetch(`https://miniature-space-telegram-x5vqjw9w7v643vxqj-3001.app.github.dev/api/anime/${animeId}`);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`HTTP error! status: ${response.status} - ${errorData?.message || 'Error al cargar los detalles del anime'}`);
+        }
+        const data = await response.json();
+        setAnimeDetails(data);
+        setLoading(false);
+      } catch (e) {
+        setError(e);
+        setLoading(false);
+      }
+    };
+
+    fetchAnimeDetails();
+  }, [animeId]);
 
   const handleFavoriteClick = () => {
     setIsFavorite(!isFavorite);
+    // lógica para añadir/eliminar de favoritos en el backend
     if (isFavorite) {
-      console.log('Eliminado de favoritos:', anime.title);
+      console.log('Eliminado de favoritos:', animeDetails?.title);
     } else {
-      console.log('Añadido a favoritos:', anime.title);
-    }
-  };
-  const handlewatchLaterClick = () => {
-    setIsWatchLater(!isWatchLater);
-    if (isWatchLater) {
-      console.log('Eliminado de ver mas tarde:', anime.title);
-    } else {
-      console.log('Añadido a ver mas tarde:', anime.title);
+      console.log('Añadido a favoritos:', animeDetails?.title);
     }
   };
 
   const handleWatchingClick = () => {
     setIsWatching(!isWatching);
+    // lógica para añadir/eliminar de viendo en el backend
     if (isWatching) {
-      console.log('Eliminado de ver más tarde:', anime.title);
+      console.log('Eliminado de ver más tarde:', animeDetails?.title);
     } else {
-      console.log('Añadido a ver más tarde:', anime.title);
+      console.log('Añadido a ver más tarde:', animeDetails?.title);
     }
   };
-  const handleFinishedClick = () => {
-    setIsFinished(!isFinished);
-    if (isFinished) {
-      console.log('Eliminado de terminados:', anime.title);
-    } else {
-      console.log('Añadido a terminados:', anime.title);
-    }
-  };
-  
-  const trailerUrl = 'https://www.youtube.com/watch?v=K9Gnl0VeIVI'; 
-  
+
   const handleTrailerClick = () => {
-    window.open(trailerUrl, '_blank'); 
+    
+    const trailerUrl = animeDetails?.trailer?.url || 'https://www.youtube.com/watch?v=K9Gnl0VeIVI';
+    window.open(trailerUrl, '_blank');
   };
+
+  if (loading) {
+    return <div>Cargando detalles del anime...</div>;
+  }
+
+  if (error) {
+    return <div>Error al cargar los detalles del anime: {error.message}</div>;
+  }
+
+  if (!animeDetails) {
+    return <div>No se encontraron detalles para este anime.</div>;
+  }
 
   return (
     <div className='container'>
       <div className="anime-card d-flex m-2 ">
         <div className='container-image w-100 '>
-          <img src={anime.coverImage} alt={anime.title} className="cover-image w-auto" />
+          <img src={animeDetails.image_url} alt={animeDetails.title} className="cover-image w-auto" />
 
-          <button className= {`favorite-button ${isFavorite ? 'active' : ''}`} onClick={handleFavoriteClick} title={isFavorite ? 'Eliminar de favoritos' : 'Añadir a Favoritos'} >
+          <button className={`favorite-button ${isFavorite ? 'active' : ''}`} onClick={handleFavoriteClick} title={isFavorite ? 'Eliminar de favoritos' : 'Añadir a Favoritos'} >
             <i className={`fa-solid fa-heart ${isFavorite ? 'text-danger' : ''}`}></i>
           </button>
-          <button
-            className={`watchLater-button ${isWatchLater ? 'active' : ''} `} onClick={handlewatchLaterClick}
-            title={isWatchLater ? 'Quitar de ver mas tarde' : 'Añadir a ver mas tarde'} >
-            <i className={`fa-regular ${isWatchLater ? 'fa-clock' : 'fa-clock'} ${isWatchLater ? 'text-warning' : ''}`}></i>
-          </button>
+
           <button
             className={`watching-button ${isWatching ? 'active' : ''} `} onClick={handleWatchingClick}
             title={isWatching ? 'Dejar de ver' : 'Añadir a viendo'} >
             <i className={`fa-solid ${isWatching ? 'fa-eye-slash' : 'fa-eye'}`}
-            style={{ color: isWatching ? 'purple' : '' }}></i>
+              style={{ color: isWatching ? 'purple' : '' }}></i>
           </button>
-          <button
-            className={`finished-button ${isFinished ? 'active' : ''} `} onClick={handleFinishedClick}
-            title={isFinished ? 'Quitar de terminados' : 'Añadir a terminados'} >
-            <i className={`fa-regular ${isFinished ? 'fa-check-circle' : 'fa-check-circle'} ${isFinished ? 'text-success' : ''}`}></i>
-            
-          </button>
-          <button className="trailer-button" onClick={handleTrailerClick} title='Trailer'>
-            <i className="fa-solid fa-clapperboard"></i>
-          </button>
+          {console.log("URL del tráiler:", animeDetails?.trailer?.url)}
+          {animeDetails?.trailer?.url && (
+            <button className="trailer-button" onClick={handleTrailerClick} title='Trailer'>
+              <i className="fa-solid fa-clapperboard"></i>
+            </button>
+          )}
         </div>
 
         <div className='card-body px-3'>
-          <h1>{anime.title}</h1>
-          <p>{anime.synopsis}</p><br />
-          <div className="genres">Género:&nbsp;
-            {anime.genres.map((genre, index) => (
-              <span key={genre} className="genre">
-                {genre}{index < anime.genres.length - 1 ? ', ' : ''}
+          <h1>{animeDetails.title}</h1>
+          <p>{animeDetails.synopsis}</p><br />
+          <div className="genres">Género:
+            {animeDetails.genres && animeDetails.genres.map((genre) => (
+              <span key={genre.id} className="genre">
+                {genre.name}{animeDetails.genres.indexOf(genre) < animeDetails.genres.length - 1 ? ', ' : ''}
               </span>
             ))}
           </div><br />
-          <p>Estado: {anime.status}</p>
-          <p>Puntuación: {anime.score}</p>
-          <p>Episodios: {anime.episodes}</p>
-          <p>Temporadas: {anime.seasons}</p>
-          <p>Fecha de inicio: {anime.startDate}</p>
-          <p>Fecha de fin: {anime.endDate}</p>
-          <p>Estudio: {anime.studio}</p>
-          <p>Director: {anime.director}</p>
+          <p>Estado: {animeDetails.airing ? 'En emisión' : 'Finalizado'}</p>
+          <p>Puntuación: {animeDetails.score}</p>
+          <p>Episodios: {animeDetails.episodes}</p>
+       
         </div>
       </div>
+      
+
     </div>
   );
 }

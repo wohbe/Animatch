@@ -1,8 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Boolean, Integer, Text, ForeignKey, Float, func, Table, Column
+from sqlalchemy import String, Boolean, Integer, Text, ForeignKey, Float, func, Table, Column, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
-from datetime import datetime
 
 # Inicializar la DB
 db = SQLAlchemy()
@@ -34,7 +33,7 @@ class UserPreference(db.Model):
     duration: Mapped[str] = mapped_column(String(100))
     theme: Mapped[str] = mapped_column(String(50))
     tone: Mapped[str] = mapped_column(String(50))
-    created_at: Mapped[datetime] = mapped_column(datetime, default=func.current_timestamp())
+    created_at: Mapped[DateTime] = mapped_column(DateTime, default=func.current_timestamp())
 
     def serialize(self):
         return {
@@ -59,7 +58,8 @@ class Anime(db.Model):
     airing: Mapped[bool] = mapped_column(Boolean, nullable=False)
     favorites: Mapped[List["Favorites"]] = relationship(back_populates="anime")
     watching: Mapped[List["Watching"]] = relationship(back_populates="anime")
-
+    genres: Mapped[List["Genre"]] = relationship(secondary="anime_genre", back_populates="animes")
+    trailer_url: Mapped[str] = mapped_column(String(500), nullable=True)
     def serialize(self):
         return {
             "id": self.id,
@@ -70,7 +70,8 @@ class Anime(db.Model):
             "episodes": self.episodes,
             "score": self.score,
             "genres": [genre.serialize() for genre in self.genres],
-            "airing": self.airing
+            "airing": self.airing,
+            "trailer": {"url": self.trailer_url} if self.trailer_url else None
         }
 
 
@@ -83,6 +84,7 @@ class On_Air(db.Model):
     image_url: Mapped[str] = mapped_column(String(500), nullable=True)
     score: Mapped[float] = mapped_column(Float, nullable=True)
     airing: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    genres: Mapped[List["Genre"]] = relationship(secondary="onair_genre", back_populates="on_airs")
 
     def serialize(self):
         return {
@@ -95,12 +97,13 @@ class On_Air(db.Model):
             "genres": [genre.serialize() for genre in self.genres],
             "airing": self.airing
         }
-
-
+    
 class Genre(db.Model):
     __tablename__ = 'genre'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+    animes: Mapped[List["Anime"]] = relationship(secondary="anime_genre", back_populates="genres")
+    on_airs: Mapped[List["On_Air"]] = relationship(secondary="onair_genre", back_populates="genres")
 
     def serialize(self):
         return {
@@ -145,28 +148,14 @@ class Watching(db.Model):
 
 anime_genre = Table(
     'anime_genre',
-    Column('anime_id', Integer, ForeignKey(
-        'anime.id'), primary_key=True),
-    Column('genre_id', Integer, ForeignKey(
-        'genre.id'), primary_key=True)
+    db.metadata,
+    Column('anime_id', Integer, ForeignKey('anime.id'), primary_key=True),
+    Column('genre_id', Integer, ForeignKey('genre.id'), primary_key=True)
 )
 
 onair_genre = Table(
     'onair_genre',
-    Column('onair_id', Integer, ForeignKey(
-        'on_air.id'), primary_key=True),
-    Column('genre_id', Integer, ForeignKey(
-        'genre.id'), primary_key=True)
+    db.metadata,
+    Column('onair_id', Integer, ForeignKey('on_air.id'), primary_key=True),
+    Column('genre_id', Integer, ForeignKey('genre.id'), primary_key=True)
 )
-
-# RELACIONES MANY-TO-MANY
-
-Anime.genres = relationship(
-    'Genre', secondary=anime_genre, back_populates='animes')
-Genre.animes = relationship(
-    'Anime', secondary=anime_genre, back_populates='genres')
-
-On_Air.genres = relationship(
-    'Genre', secondary=onair_genre, back_populates='on_airs')
-Genre.on_airs = relationship(
-    'On_Air', secondary=onair_genre, back_populates='genres')

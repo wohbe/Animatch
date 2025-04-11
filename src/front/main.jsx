@@ -5,17 +5,18 @@ import { RouterProvider } from "react-router-dom";  // Import RouterProvider to 
 import { router } from "./routes";  // Import the router configuration
 import { StoreProvider } from './hooks/useGlobalReducer';  // Import the StoreProvider for global state management
 import { BackendURL } from './components/BackendURL';
-import { UserContext } from './context/UserContext';
+import { UserContextProvider } from './context/UserContext';
 
 const Main = () => {
-    
-    if(! import.meta.env.VITE_BACKEND_URL ||  import.meta.env.VITE_BACKEND_URL == "") return (
+    console.log("Valor de VITE_BACKEND_URL:", import.meta.env.VITE_BACKEND_URL); // Añade esta línea aquí
+
+    if(! import.meta.env.VITE_BACKEND_URL ||  import.meta.env.VITE_BACKEND_URL == '') return (
         <React.StrictMode>
               <BackendURL/ >
         </React.StrictMode>
         );
-    return (
-        <React.StrictMode>  
+        return (
+            <React.StrictMode>  
             {/* Provide global state to all components */}
             <UserContextProvider>
             <StoreProvider> 
@@ -27,6 +28,6 @@ const Main = () => {
         </React.StrictMode>
     );
 }
-
 // Render the Main component into the root DOM element.
-ReactDOM.createRoot(document.getElementById('root')).render(<Main />)
+ReactDOM.createRoot(document.getElementById('root')).render(<Main /> )
+

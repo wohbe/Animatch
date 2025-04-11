@@ -31,12 +31,7 @@ const Navbar = () => {
 								<Link className="nav-link active Match" to="#">Match <i className="fa-regular fa-heart"></i></Link>
 								<Link className="nav-link active Profile" to="#">Profile</Link>
 							</div>
-							<form className="d-flex ms-lg-auto position-relative" role="search"> {/* Añadido position-relative */}
-								<input className="form-control me-2 rounded-pill ps-5" id="buscar" type="search" placeholder="Buscar..." aria-label="Buscar" /> {/* Añadido ps-5 */}
-								<button className="btn btn-outline-light rounded-circle position-absolute top-50 start-0 translate-middle-y ms-2" title="Buscar" type="submit" style={{ border: 'none', background: 'none' }}> {/* Modificado el botón */}
-									<i className="fa fa-search"></i>
-								</button>
-							</form>
+							<SearchBar/>
 						</div>
 					</div>
 					<div className="d-flex align-items-center order-lg-3 ms-2">
