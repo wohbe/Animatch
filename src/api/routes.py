@@ -77,7 +77,15 @@ def sync_anime():
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
-    print("He añadido animes")
+
+# Get anime by id - for individual page and searchbar
+
+@api.route('/anime/<int:id>', methods=['GET'])
+def get_animeId():
+    anime = Anime.query.get(id)
+    if not anime:
+        return jsonify({"error": "Anime no disponible"}), 404
+    return jsonify(anime.serialize()), 200
 
 
 @api.route('/anime/on-air', methods=['POST'])
