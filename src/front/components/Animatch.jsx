@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import React from "react";
 import ButtonAnimatch from "./AniMatchButton";
 import AnimatchCard from "./AnimatchCard";
+import '/workspaces/spain-fs-pt-95-g1/src/css/Animatch.css'
+
 
 
 const Animatch = ({ userId }) => {
@@ -178,8 +180,15 @@ const Animatch = ({ userId }) => {
     };
 
     return (
+
         <div style={{ maxWidth: "600px", margin: "auto", textAlign: "center" }}>
-            <h2 className="abtMe">🎌 Animatch</h2>
+
+            <h2><div className="split-text-container">
+                <span className="text-part left">🎌 Ani</span>
+                <span className="text-part right">Match</span>
+            </div></h2>
+            <p>Get your perfect Animatch in 5 Steps</p>
+            <img src="public/animatch-logo.png" className="image-logo-animatch" />
             {loading && <p>Loading anime list...</p>}
 
             {!loading && generating && (
@@ -196,9 +205,22 @@ const Animatch = ({ userId }) => {
                             onClick={() => manageReply(option)}
                         />
                     ))}
-                    <p>
-                        Question {currentQuestion + 1} of {questions.length}
-                    </p>
+                    <div className="progress-dragonballs">
+                        {questions.map((_, index) => (
+                            <img
+                                key={index}
+                                src="public/dragonball1star.png"
+                                alt={`Dragon Ball ${index + 1}`}
+                                className={`dragonball-icon ${index < currentQuestion
+                                    ? "db-completed"
+                                    : index === currentQuestion
+                                        ? "db-current"
+                                        : "db-pending"
+                                    }`}
+                            />
+                        ))}
+                    </div>
+
                 </div>
             )}
 
@@ -207,9 +229,9 @@ const Animatch = ({ userId }) => {
                     title={recommendation.title}
                     synopsis={recommendation.synopsis}
                     image={recommendation.image_url}
-                    url={'https://www.google.com'} />
+                    url={"https://www.google.com"} />
             )}
-            <button onClick={restartTest} className="btn btn-light" style={{ marginTop: "20px" }}>
+            <button onClick={restartTest} className="button-anime" style={{ marginTop: "20px" }}>
                 Start Over
             </button>
         </div>
