@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
-import { UserContext } from './UserContext';
+import { UserContext } from '../context/UserContext';
 
-const IdentityModal = () => {
+const IdentityModal = ({ closeModal }) => {
 
   const { user, setUser, isLogged, setIsLogged, token, setToken } = useContext(UserContext);
 
@@ -104,7 +104,8 @@ const IdentityModal = () => {
 
   return (
     <div className="modal-container position-fixed d-flex justify-content-center align-items-center">
-      <div className="container">
+      <div className="container position-relative">
+        <button type="button" className="btn-close position-absolute top-0 end-0 m-3" onClick={closeModal}></button>
         <div className="row">
           <div className="col-md-6">
             <h5 className="mb-3">Register</h5>
@@ -115,8 +116,7 @@ const IdentityModal = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="InputPasswordRegister" className="form-label">Password</label>
-                <input type="password" className="form-control" name="password" id="InputPasswordRegister" value={registerData.password} aria-describedby="passwordHelp" onChange={handleRegisterChange} />
-                <div id="passwordHelp" className="form-text">Password must be at least 8 characters long.</div>
+                <input type="password" className="form-control" name="password" id="InputPasswordRegister" value={registerData.password} placeholder='Password must be at least 8 characters long.' onChange={handleRegisterChange} />
               </div>
               <button type="submit" className="btn btn-primary">Submit</button>
             </form>
