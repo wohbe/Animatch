@@ -179,7 +179,7 @@ def register_user():
     )
     db.session.add(new_user) # Se prepara para añadir el nuevo usuario a la base de datos.
     db.session.commit() # Se añade al usuario a la base de datos.
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity=new_user.id)
     return jsonify({
         "message": "User created successfully",
         "access_token": access_token,
@@ -211,3 +211,8 @@ def protected():
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
     return jsonify(user.serialize()), 200
+
+@api.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    return jsonify([user.serialize() for user in users]), 200
