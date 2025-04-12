@@ -9,6 +9,7 @@ from flask_cors import CORS
 import requests
 import time
 import json
+import bcrypt
 
 api = Blueprint('api', __name__)
 # Permite todas las origenes en desarrollo
