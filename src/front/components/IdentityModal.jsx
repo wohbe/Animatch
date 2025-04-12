@@ -29,6 +29,78 @@ const IdentityModal = () => {
     });
   }
 
+  const handleRegisterSubmit = async (e) => {
+    e.preventDefault()
+
+    if (!registerData.email || !registerData.password) {
+      alert('Please fill in all fields')
+      return
+    }
+
+    if (registerData.password.length < 8) {
+      alert('Password must be at least 8 characters long')
+      return
+    }
+    
+    const response = await fetch('/api/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(registerData)
+    })
+
+    const data = await response.json()
+    if (!response.ok) {
+      alert('Something went wrong')
+    }
+
+    if (response.ok) {
+      setUser(data.user)
+      setIsLogged(true)
+      setToken(data.access_token)
+      localStorage.setItem('token', data.access_token)
+    }
+
+    setRegisterData({
+      email: '',
+      password: ''
+    })
+  }
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault()
+
+    if (!loginData.email || !loginData.password) {
+      alert('Please fill in all fields')
+      return
+    }
+    
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(loginData)
+    })
+
+    const data = await response.json()
+    if (!response.ok) {
+      alert('Something went wrong')
+    }
+
+    if (response.ok) {
+      setUser(data.user)
+      setIsLogged(true)
+      setToken(data.access_token)
+      localStorage.setItem('token', data.access_token)
+    }
+    
+    setLoginData({
+      email: '',
+      password: ''
+    })
+  }
 
   return (
     <div className="modal-container position-fixed d-flex justify-content-center align-items-center">
@@ -50,6 +122,7 @@ const IdentityModal = () => {
             </form>
           </div>
           <div className="col-md-6">
+          <h5 className="mb-3">Login</h5>
           <form>
               <div className="mb-3">
                 <label htmlFor="InputEmailLogin" className="form-label">Email address</label>
@@ -57,7 +130,7 @@ const IdentityModal = () => {
               </div>
               <div className="mb-3">
                 <label htmlFor="InputPasswordLogin" className="form-label">Password</label>
-                <input type="password" className="form-control" id="InputPasswordLogin" />
+                <input type="password" className="form-control" name="password" id="InputPasswordLogin" value={loginData.password} onChange={handleLoginChange} />
               </div>
               <button type="submit" className="btn btn-primary">Submit</button>
             </form>
