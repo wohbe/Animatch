@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Boolean, Integer, Text, ForeignKey, Float, func, Table, Column
+from sqlalchemy import String, Boolean, Integer, Text, ForeignKey, Float, func, Table, Column, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
 from datetime import datetime
@@ -34,7 +34,7 @@ class UserPreference(db.Model):
     duration: Mapped[str] = mapped_column(String(100))
     theme: Mapped[str] = mapped_column(String(50))
     tone: Mapped[str] = mapped_column(String(50))
-    created_at: Mapped[datetime] = mapped_column(datetime, default=func.current_timestamp())
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=func.current_timestamp())
 
     def serialize(self):
         return {
@@ -145,6 +145,7 @@ class Watching(db.Model):
 
 anime_genre = Table(
     'anime_genre',
+    db.metadata,
     Column('anime_id', Integer, ForeignKey(
         'anime.id'), primary_key=True),
     Column('genre_id', Integer, ForeignKey(
@@ -153,6 +154,7 @@ anime_genre = Table(
 
 onair_genre = Table(
     'onair_genre',
+    db.metadata,
     Column('onair_id', Integer, ForeignKey(
         'on_air.id'), primary_key=True),
     Column('genre_id', Integer, ForeignKey(
