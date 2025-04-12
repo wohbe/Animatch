@@ -321,7 +321,14 @@ def register_user():
     )
     db.session.add(new_user) # Se prepara para añadir el nuevo usuario a la base de datos.
     db.session.commit() # Se añade al usuario a la base de datos.
-    return jsonify({"message": "User created successfully"}), 201
+    access_token = create_access_token(identity=user.id)
+    return jsonify({
+        "message": "User created successfully",
+        "access_token": access_token,
+        "user": {
+            "id": new_user.id,
+            "email": new_user.email,
+        }}), 201
 
 @api.route('/login', methods=['POST'])
 def login():
