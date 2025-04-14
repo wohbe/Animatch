@@ -158,7 +158,7 @@ def delete_favorite(favorite_id):
     db.session.commit()
     return jsonify({"message": "Favorite deleted successfully"}), 200
 
-## ESTA PARTE CORRESPONDE A LA PARTE DE LOGIN, SIGNUP Y TOKEN.
+## ESTA PARTE CORRESPONDE A LA PARTE DE LOGIN, SIGNUP, DELETEUSER Y TOKEN.
 
 @api.route('/signup', methods=['POST'])
 def register_user():
@@ -202,7 +202,10 @@ def login():
     return jsonify({
         "message": "Login successful",
         "access_token": access_token,
-        "user_id": user.id
+        "user": {
+            "id": user.id,
+            "email": user.email,
+        }
     }), 200
 
 @api.route("/protected", methods=["GET"])
@@ -216,3 +219,17 @@ def protected():
 def get_users():
     users = User.query.all()
     return jsonify([user.serialize() for user in users]), 200
+
+@api.route('/users/<int:user_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user(user_id):
+    current_user_id = get_jwt_identity()
+    current_user_id = User.query.get(current_user_id)
+    user_to_delete = User.query.get(user_id)
+    if not user_to_delete:
+        return jsonify({"message": "User not found"}), 404
+    if current_user_id != user_id:
+        return jsonify({"message": "You can only delete your own account"}), 403
+    db.session.delete(user_to_delete)
+    db.session.commit()
+    return jsonify({"message": "User deleted successfully"}), 200
