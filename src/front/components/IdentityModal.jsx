@@ -42,7 +42,7 @@ const IdentityModal = ({ closeModal }) => {
       return
     }
     
-    const response = await fetch('/api/signup', {
+    const response = await fetch('https://congenial-doodle-wrgj95gr6756fg4jj-3001.app.github.dev/api/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -60,6 +60,7 @@ const IdentityModal = ({ closeModal }) => {
       setIsLogged(true)
       setToken(data.access_token)
       localStorage.setItem('token', data.access_token)
+      closeModal()
     }
 
     setRegisterData({
@@ -76,7 +77,7 @@ const IdentityModal = ({ closeModal }) => {
       return
     }
     
-    const response = await fetch('/api/login', {
+    const response = await fetch('https://congenial-doodle-wrgj95gr6756fg4jj-3001.app.github.dev/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -94,6 +95,7 @@ const IdentityModal = ({ closeModal }) => {
       setIsLogged(true)
       setToken(data.access_token)
       localStorage.setItem('token', data.access_token)
+      closeModal()
     }
     
     setLoginData({
@@ -109,7 +111,7 @@ const IdentityModal = ({ closeModal }) => {
         <div className="row">
           <div className="col-md-6">
             <h5 className="mb-3">Register</h5>
-            <form>
+            <form onSubmit={handleRegisterSubmit}>
               <div className="mb-3">
                 <label htmlFor="InputEmailRegister" className="form-label">Email address</label>
                 <input type="email" className="form-control" name="email" id="InputEmailRegister" value={registerData.email} onChange={handleRegisterChange} />
@@ -123,7 +125,7 @@ const IdentityModal = ({ closeModal }) => {
           </div>
           <div className="col-md-6">
           <h5 className="mb-3">Login</h5>
-          <form>
+          <form onSubmit={handleLoginSubmit}>
               <div className="mb-3">
                 <label htmlFor="InputEmailLogin" className="form-label">Email address</label>
                 <input type="email" className="form-control" name="email" id="InputEmailLogin" value={loginData.email} onChange={handleLoginChange} />
