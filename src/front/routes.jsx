@@ -9,6 +9,7 @@ import { Layout } from "./pages/Layout";
 import  Home  from "./pages/Home";
 import SearchResults from "./components/SearchResults";
 import AnimeCardContainer from "./components/AnimeCardContainer";
+import UserProfileLink from "./components/UserProfileLink";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,10 +24,9 @@ export const router = createBrowserRouter(
 
         {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
         <Route path= "/" element={<Home />} />
-        <Route path="/animeCard" element={<AnimeCardContainer/>}/>
-        <Route path="/anime/:animeId" element={<AnimeCardContainer />} /> {/* Nueva ruta dinámica */}
+{/*         <Route path="/animeCard" element={<AnimeCardContainer/>}/>
+ */}        <Route path="/anime/:animeId" element={<AnimeCardContainer />} /> 
         <Route path="/search-results" element={<SearchResults />} />
-
       </Route>
     )
 );

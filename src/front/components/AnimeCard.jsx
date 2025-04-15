@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; // ¡Añade esta línea!
-import GenreRecommendations from './GenreRecommendations';
+import { useParams } from 'react-router-dom';
 import '../index.css';
 
 function AnimeCard() {
@@ -8,8 +7,10 @@ function AnimeCard() {
   const [animeDetails, setAnimeDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isFavorite, setIsFavorite] = useState(false); // TODO: Implementar lógica real de favoritos
-  const [isWatching, setIsWatching] = useState(false); // TODO: Implementar lógica real de viendo
+  const [isFavorite, setIsFavorite] = useState(false); 
+  const [isWatching, setIsWatching] = useState(false); 
+  const [likes, setLikes] = useState(0); 
+  const [hasLiked, setHasLiked] = useState(false); 
 
   useEffect(() => {
     const fetchAnimeDetails = async () => {
@@ -56,9 +57,21 @@ function AnimeCard() {
   };
 
   const handleTrailerClick = () => {
-    
+
     const trailerUrl = animeDetails?.trailer?.url || 'https://www.youtube.com/watch?v=K9Gnl0VeIVI';
     window.open(trailerUrl, '_blank');
+  };
+
+  const handleLikeClick = () => {
+    if (!hasLiked) {
+      setLikes(likes + 1);
+      setHasLiked(true);
+      // Integrar con el backend para registrar el like del usuario
+    } else {
+      setLikes(likes - 1);
+      setHasLiked(false);
+      // Integrar con el backend para eliminar el like del usuario
+    }
   };
 
   if (loading) {
@@ -75,10 +88,10 @@ function AnimeCard() {
 
   return (
     <div className='container'>
-      <div className="anime-card d-flex m-2 ">
-        <div className='container-image w-100 '>
-          <img src={animeDetails.image_url} alt={animeDetails.title} className="cover-image w-auto" />
-
+      <div className="anime-card d-flex ">
+        <div className='container-image'>
+          <img src={animeDetails.image_url} alt={animeDetails.title} id='imagen_anime' className="cover-image w-auto" />
+            <div className='buttons-card'>
           <button className={`favorite-button ${isFavorite ? 'active' : ''}`} onClick={handleFavoriteClick} title={isFavorite ? 'Eliminar de favoritos' : 'Añadir a Favoritos'} >
             <i className={`fa-solid fa-heart ${isFavorite ? 'text-danger' : ''}`}></i>
           </button>
@@ -95,25 +108,42 @@ function AnimeCard() {
               <i className="fa-solid fa-clapperboard"></i>
             </button>
           )}
+          </div>
+          <div className="likes-container">ME GUSTA! &nbsp; 
+            <button className={`like-button ${hasLiked ? 'liked' : ''}`} onClick={handleLikeClick} title={hasLiked ? 'Quitar me gusta' : 'Me gusta'}>
+              <i className="fa-solid fa-thumbs-up"></i>
+            </button>
+            <span className="like-count">{likes}</span>
+          </div>
         </div>
 
         <div className='card-body px-3'>
           <h1>{animeDetails.title}</h1>
-          <p>{animeDetails.synopsis}</p><br />
-          <div className="genres">Género:
-            {animeDetails.genres && animeDetails.genres.map((genre) => (
-              <span key={genre.id} className="genre">
-                {genre.name}{animeDetails.genres.indexOf(genre) < animeDetails.genres.length - 1 ? ', ' : ''}
-              </span>
-            ))}
-          </div><br />
-          <p>Estado: {animeDetails.airing ? 'En emisión' : 'Finalizado'}</p>
-          <p>Puntuación: {animeDetails.score}</p>
-          <p>Episodios: {animeDetails.episodes}</p>
-       
+          <p className="synopsis">{animeDetails.synopsis}</p>
+          <div className="anime-details-info">
+            <ul className="anime-details-list">
+              <li className="genres-list-item">
+                <strong>Género:&nbsp;</strong>
+                {animeDetails.genres && animeDetails.genres.map((genre) => (
+                  <span key={genre.id} className="genre">
+                 {genre.name} {animeDetails.genres.indexOf(genre) < animeDetails.genres.length - 1 ?', ' : ''}
+                  </span>
+                ))}
+              </li>
+              <li className="estado-list-item">
+                <strong>Estado:</strong> {animeDetails.airing ? 'En emisión' : 'Finalizado'}
+              </li>
+              <li className="puntuacion-list-item">
+                <strong>Puntuación:</strong> {animeDetails.score !== null ? animeDetails.score : 'No disponible'}
+              </li>
+              <li className="episodios-list-item">
+                <strong>Episodios:</strong> {animeDetails.episodes !== null ? animeDetails.episodes : 'No disponible'}
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-      
+
 
     </div>
   );

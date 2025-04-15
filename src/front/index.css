@@ -5,64 +5,154 @@
 } 
 
 
+.likes-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  background: #d35c51;
+}
+
+.like-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
+  margin-right: 5px;
+  color: #aaa; /* Color por defecto */
+}
+
+.like-button.liked {
+  color: #007bff; /* Color cuando se ha dado like */
+}
+
+.like-button:focus {
+  outline: none;
+}
+
+.like-count {
+  font-size: 1em;
+  color: #555;
+}
+.anime-card div{
+  margin-top: 2rem;  
+}
+.genres-list-item{
+  margin-bottom: 1rem;
+}
+.estado-list-item{
+  margin-bottom: 1rem;
+}
+.puntuacion-list-item{
+  margin-bottom: 1rem;
+}
 
 .recommendations-container {
-  padding: 20px;
-  margin-top: 40px;
+  /* Otros estilos que ya tengas */
+  margin-top: 40px; /* Puedes mantener o ajustar este margen superior */
+  margin-bottom: 3rem; /* Puedes mantener o ajustar este margen inferior */
+
+  /* Nuevos estilos para centrar horizontalmente */
+  display: flex; /* Usamos flexbox para centrar el contenido */
+  flex-direction: column; /* Alineamos los elementos internos verticalmente */
+  align-items: center; /* Centra los elementos hijos horizontalmente */
 }
 
 .recommendations-list {
   display: flex;
   overflow-x: auto;
   white-space: nowrap;
+  background: #1a1a1a;
+  /* Elimina o ajusta los márgenes laterales si los tenías */
+  /* margin-left: auto;
+  margin-right: auto; */
+  padding: 1.5rem; /* Ajusta el relleno si es necesario */
+  border-radius: 8px; /* Opcional: para darle un borde redondeado al fondo */
 }
 
 .recommendation-card {
-  width: 200px; /* Aumenta el ancho de las tarjetas */
+  width: 200px;
+  margin: 35px; /* Reducir el margen general */
+  text-align: center;
+  display: inline-block;
+  padding: 5px; /*  relleno */
+}
+  
+.recommendation-card img {
+  max-width: 100%;
+  height: auto; /* Para mantener la proporción */
+  border-radius: 8px; /* bordes redondeados para las imágenes */
+}
+
+.recommendations-container h2 {
+  color: #ff6f61;
+  text-decoration: underline;
+  margin-bottom: 20px; /* Añade un poco de espacio entre el título y la lista */
+  text-align: center; /* Centra el título también */
+}
+.recommendation-card {
+  width: 200px;
   margin-right: 10px;
   text-align: center;
   display: inline-block;
-  
 }
-.recommendations-container h2{
-  color: #ff6f61;
-  text-decoration:underline;
-}
-.recommendation-card img {
-  max-width: 100%;
-  height: 60%;
+.recommendation-card:last-child {
+  margin-right: 0; /* Elimina el margen derecho del último elemento */
 }
 
 .title-anime {
-  font-size: 14px; /* Reduce el tamaño de la fuente */
-  margin: 15px; /* Ajusta el margen */
-  margin-right: 5rem;
-  white-space: nowrap; /* Evita que el texto se envuelva */
-  overflow:hidden; /* Oculta el texto que se desborda */
-  text-overflow: ellipsis; /* Muestra puntos suspensivos */
+  font-size: 12px;
+  margin: 10px 0; /* Ajusta el margen superior e inferior */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+/* .buttons-card div{
+  border-radius: 25px;
+} */
 anime-buttons button,
 .watching-button,
 .favorite-button,
-.trailer-button,
-.watchLater-button,
-.finished-button { 
-  background-color: #050505; 
-  color: #333; 
+.trailer-button{ 
+  background-color:#121212; 
+  color: #0a95c0bb; 
   border: none;
   padding: 10px 20px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-radius: 10px;
+  /* border-bottom-right-radius: 10px; */
   cursor: pointer;
   font-size:2rem;
+  margin-left:8px;
 }
 .watching-button::after:active{
   background-color: purple ;
 }
+.card-body{
+  background: #1a1a1a;
+  border-radius: 2%;
+  padding-top: 10px;
+  margin-bottom: 20px;
+}
+.container-image{
+  background: #1a1a1a;
+  margin: 20px;
+  padding: 10px;
+  justify-items: center;
+  border-radius: 2%;
+  
+
+}
+#imagen_anime{
+  height: 25rem;
+  
+ }
 
 @media (max-width: 768px) {
   .anime-card {
     flex-direction: column;
+    
+    
+    
   }
   .cover-image {
     width: 100%;
@@ -70,6 +160,7 @@ anime-buttons button,
   }
   .card-body {
     width: 100%;
+    
   }
 
 }

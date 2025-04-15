@@ -34,7 +34,7 @@ import { Link } from 'react-router-dom';const Home = () => {
   return (
     <div className="anime-grid-container">
       {animes.map((anime) => (
-      <Link key={anime.id} to={`/anime/${anime.id}`} className="anime-link"> 
+        <Link key={anime.mal_id} to={`/anime/${anime.mal_id}`} className="anime-link"> 
           <div className="anime-card">
             <img src={anime.image_url} alt={anime.title} className="anime-image" />
             <h3 className="anime-title">{anime.title}</h3>
