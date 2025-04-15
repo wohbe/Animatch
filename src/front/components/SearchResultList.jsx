@@ -1,6 +1,8 @@
 import React from "react";
 import '/workspaces/spain-fs-pt-95-g1/src/css/SearchBar.css';
 import { Navigate, useNavigate } from "react-router-dom";
+import { SearchResult } from "./SearchResult";
+
 
 export const SearchResultList = ({ result }) => {
     const navigate = useNavigate();

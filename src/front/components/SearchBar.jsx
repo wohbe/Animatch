@@ -3,10 +3,11 @@ import '/workspaces/spain-fs-pt-95-g1/src/css/SearchBar.css';
 
 
 export const SearchBar = ({ setResult }) => {
+    const API_URL = import.meta.env.VITE_API_URL;
     const [input, setInput] = useState("")
 
     const fetchData = (value) => {
-        fetch('https://special-cod-qww9jggw4vv29jq5-3001.app.github.dev/api/anime').then((response) => response.json()).then((json) => {
+        fetch(`${API_URL}/api/anime`).then((response) => response.json()).then((json) => {
             const result = json.filter((anime) => {
                 return value && anime && anime.title && anime.title.toLowerCase().includes(value.toLowerCase());
             });

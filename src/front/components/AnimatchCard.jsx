@@ -2,6 +2,7 @@ import React from "react";
 import '/workspaces/spain-fs-pt-95-g1/src/css/AnimatchCard.css'
 
 const AnimatchCard = ({ title, synopsis, url, image }) => {
+    
 
     return (
         <div className="animatch-card">

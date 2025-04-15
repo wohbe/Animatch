@@ -4,10 +4,13 @@ import ButtonAnimatch from "./AniMatchButton";
 import AnimatchCard from "./AnimatchCard";
 import '/workspaces/spain-fs-pt-95-g1/src/css/Animatch.css'
 import { useParams } from 'react-router-dom';
+import { SearchResultList } from "./SearchResultList";
 
 
 
 const Animatch = ({ userId }) => {
+    const [result, setResult] = useState([]);
+    const API_URL = import.meta.env.VITE_API_URL;
     const [answers, setAnswers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [animeList, setAnimeList] = useState([]);
@@ -48,7 +51,7 @@ const Animatch = ({ userId }) => {
         const apiCall = async () => {
             try {
                 setLoading(true);
-                const response = await fetch("https://special-cod-qww9jggw4vv29jq5-3001.app.github.dev/api/anime");
+                const response = await fetch(`${API_URL}/api/anime`);
                 if (!response.ok) throw new Error("Failed to load anime list");
                 const anime = await response.json();
                 setAnimeList(anime);
