@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Home from "./pages/Home";
 import { AniPage } from "./pages/AnimatchPage";
+import { SearchPage } from "./pages/SearchPage";
 
 
 export const router = createBrowserRouter(
@@ -22,11 +23,13 @@ export const router = createBrowserRouter(
       {/* Ruta principal / */}
       <Route path="/" element={<Home />} />
 
+
       {/* Ruta independiente /animatch */}
       <Route path="/animatch" element={<AniPage />} />
 
-      {/* Ruta por defecto si no se encuentra ninguna */}
+
       <Route path="*" element={<h1>Not found!</h1>} />
+      <Route path="/search" element={<SearchPage />} />
     </>
   )
 );

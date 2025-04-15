@@ -24,7 +24,7 @@ const AnimatchCard = ({ title, synopsis, url, image }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    ▶ VER ANIME
+                    ▶ VER MÁS
                 </a>
             </div>
         </div>

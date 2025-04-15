@@ -138,6 +138,8 @@
 .image-logo-animatch {
   width: 30%;
   display: inline-block;
+}
+.image-logo-animatch:hover {
   transform: scale(1.2);
   animation: pulse 1.5s infinite;
 }

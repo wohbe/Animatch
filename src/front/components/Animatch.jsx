@@ -188,7 +188,7 @@ const Animatch = ({ userId }) => {
                 <span className="text-part right">Match</span>
             </div></h2>
             <p>Get your perfect Animatch in 5 Steps</p>
-            <img src="public/animatch-logo.png" className="image-logo-animatch" />
+            {!recommendation && <img src="public/animatch-logo.png" className="image-logo-animatch" />}
             {loading && <p>Loading anime list...</p>}
 
             {!loading && generating && (
