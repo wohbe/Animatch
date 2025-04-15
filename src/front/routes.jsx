@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import Home from "./pages/Home";
 import { AniPage } from "./pages/AnimatchPage";
-import { SearchPage } from "./pages/SearchPage";
+import AnimeCard from "./components/AnimeCard";
 
 
 export const router = createBrowserRouter(
@@ -29,7 +29,7 @@ export const router = createBrowserRouter(
 
 
       <Route path="*" element={<h1>Not found!</h1>} />
-      <Route path="/search" element={<SearchPage />} />
+      <Route path="/anime/:id" element={<AnimeCard />} />
     </>
   )
 );

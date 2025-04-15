@@ -81,7 +81,7 @@ def sync_anime():
 # Get anime by id - for individual page and searchbar
 
 @api.route('/anime/<int:id>', methods=['GET'])
-def get_animeId():
+def get_animeId(id):
     anime = Anime.query.get(id)
     if not anime:
         return jsonify({"error": "Anime no disponible"}), 404

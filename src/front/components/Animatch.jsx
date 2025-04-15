@@ -3,6 +3,7 @@ import React from "react";
 import ButtonAnimatch from "./AniMatchButton";
 import AnimatchCard from "./AnimatchCard";
 import '/workspaces/spain-fs-pt-95-g1/src/css/Animatch.css'
+import { useParams } from 'react-router-dom';
 
 
 
@@ -13,6 +14,7 @@ const Animatch = ({ userId }) => {
     const [recommendation, setRecommendation] = useState(null);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [generating, setGenerating] = useState(false);
+    const { id } = useParams();
 
     const questions = [
         {
@@ -229,7 +231,7 @@ const Animatch = ({ userId }) => {
                     title={recommendation.title}
                     synopsis={recommendation.synopsis}
                     image={recommendation.image_url}
-                    url={"https://www.google.com"} />
+                    url={`anime/${recommendation.id}`} />
             )}
             <button onClick={restartTest} className="button-anime" style={{ marginTop: "20px" }}>
                 Start Over

@@ -1,13 +1,18 @@
 import React from "react";
 import '/workspaces/spain-fs-pt-95-g1/src/css/SearchBar.css';
-import { SearchResult } from "./SearchResults";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export const SearchResultList = ({ result }) => {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate(`/anime/${result.id}`);
+    };
 
     return (
-        <div className="result-list">
+        <div className="result-list" >
             {result.map((result, id) => {
-                return <SearchResult result={result} key={id} />;
+                return <SearchResult result={result} key={id} onClick={handleClick} />;
             })}
         </div>
     );
