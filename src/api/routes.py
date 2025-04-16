@@ -12,6 +12,7 @@ import json
 import bcrypt
 
 api = Blueprint('api', __name__)
+character_encoding = 'utf-8'
 # Permite todas las origenes en desarrollo
 CORS(api, resources={r"/api/*": {"origins": "*"}})
 
@@ -169,12 +170,12 @@ def register_user():
     password = data['password']
     if User.query.filter_by(email=email).first():
         return jsonify({"message": "User already exists"}), 400
-    bytes = password.encode('utf-8') # Convertimos la contraseña en un array de bytes.
+    bytes = password.encode(character_encoding) # Convertimos la contraseña en un array de bytes.
     salt = bcrypt.gensalt() # Generamos la sal
     hashed_password = bcrypt.hashpw(bytes, salt) # Sacamos la contraseña ya hasheada.
     new_user = User( # Creamos al nuevo usuario con su email y la contraseña hasheada.
         email = email,
-        password = hashed_password.decode('utf-8'), # Era esto o guardarlo en el modelo como bytes, pero así es mas fácil de leer.
+        password = hashed_password.decode(character_encoding), # Era esto o guardarlo en el modelo como bytes, pero así es mas fácil de leer.
         is_active = True
     )
     db.session.add(new_user) # Se prepara para añadir el nuevo usuario a la base de datos.
@@ -196,7 +197,7 @@ def login():
     email = data['email']
     password = data['password']
     user = User.query.filter_by(email=email).first()
-    if not user or not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')): # Esto compara la contraseña introducida con la del usuario
+    if not user or not bcrypt.checkpw(password.encode(character_encoding), user.password.encode(character_encoding)): # Esto compara la contraseña introducida con la del usuario
         return jsonify({"message": "Invalid user or password"}), 401
     access_token = create_access_token(identity=user.id) ## Aquí se crea el token.
     return jsonify({
