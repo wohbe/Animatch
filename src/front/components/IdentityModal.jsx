@@ -5,15 +5,17 @@ const IdentityModal = ({ closeModal }) => {
 
   const { user, setUser, isLogged, setIsLogged, token, setToken } = useContext(UserContext);
 
+  const baseURL = process.env.APP_URL;
+
   const [registerData, setRegisterData] = useState({
     email: '',
     password: ''
-  })
+  });
 
   const [loginData, setLoginData] = useState({
     email: '',
     password: ''
-  })
+  });
 
   const handleRegisterChange = (e) => {
     setRegisterData({
@@ -30,78 +32,79 @@ const IdentityModal = ({ closeModal }) => {
   }
 
   const handleRegisterSubmit = async (e) => {
-    e.preventDefault()
+    const minpasswordLength = 8
+    e.preventDefault();
 
     if (!registerData.email || !registerData.password) {
-      alert('Please fill in all fields')
+      alert('Please fill in all fields');
       return
     }
 
-    if (registerData.password.length < 8) {
-      alert('Password must be at least 8 characters long')
+    if (registerData.password.length < minpasswordLength) {
+      alert('Password must be at least 8 characters long');
       return
     }
     
-    const response = await fetch('https://congenial-doodle-wrgj95gr6756fg4jj-3001.app.github.dev/api/signup', {
+    const response = await fetch(`${baseURL}/api/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(registerData)
-    })
+      body: JSON.stringify(registerData);
+    });
 
-    const data = await response.json()
+    const data = await response.json();
     if (!response.ok) {
-      alert('Something went wrong')
+      alert('Something went wrong');
     }
 
     if (response.ok) {
-      setUser(data.user)
-      setIsLogged(true)
-      setToken(data.access_token)
-      localStorage.setItem('token', data.access_token)
-      closeModal()
+      setUser(data.user);
+      setIsLogged(true);
+      setToken(data.access_token);
+      localStorage.setItem('token', data.access_token);
+      closeModal();
     }
 
     setRegisterData({
       email: '',
       password: ''
-    })
+    });
   }
 
   const handleLoginSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!loginData.email || !loginData.password) {
-      alert('Please fill in all fields')
+      alert('Please fill in all fields');
       return
     }
     
-    const response = await fetch('https://congenial-doodle-wrgj95gr6756fg4jj-3001.app.github.dev/api/login', {
+    const response = await fetch(`${baseURL}/api/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(loginData)
-    })
+    });
 
     const data = await response.json()
     if (!response.ok) {
-      alert('Something went wrong')
+      alert('Something went wrong');
     }
 
     if (response.ok) {
-      setUser(data.user)
-      setIsLogged(true)
-      setToken(data.access_token)
-      localStorage.setItem('token', data.access_token)
-      closeModal()
+      setUser(data.user);
+      setIsLogged(true);
+      setToken(data.access_token);
+      localStorage.setItem('token', data.access_token);
+      closeModal();
     }
     
     setLoginData({
       email: '',
       password: ''
-    })
+    });
   }
 
   return (
