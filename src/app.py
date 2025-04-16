@@ -18,9 +18,6 @@ static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
-
-# Setup the Flask-JWT-Extended extension
-app.config["JWT_SECRET_KEY"] = "98a7b6c5d4e3f2g1h0i9j8k7l6m5n4o3p2q1r0s9t8u7v6w5x4y3z2a1b0c9d8e7f6"
 jwt = JWTManager(app)
 
 # Configuración de SQLite
