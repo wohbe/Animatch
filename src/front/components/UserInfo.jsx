@@ -1,50 +1,135 @@
-//pretty straight forward... 
-import React from "react";
+import React, { useState } from "react";
 
 const UserInfo = () => {
+    const [editProfile, setEditProfile] = useState(false);
+    const [editAboutMe, setEditAboutMe] = useState(false);
+    const [username, setUsername] = useState("example@gmail.com");
+    const [gender, setGender] = useState("Name");
+    const [imageUrl, setImageUrl] = useState("https://digitalhealthskills.com/wp-content/uploads/2022/11/3da39-no-user-image-icon-27.png");
+    const [aboutMe, setAboutMe] = useState(``);
+
+    // Temp values
+    const [tempUsername, setTempUsername] = useState(username);
+    const [tempGender, setTempGender] = useState(gender);
+    const [tempAboutMe, setTempAboutMe] = useState(aboutMe);
+
+    const handleSaveProfile = () => {
+        setUsername(tempUsername);
+        setGender(tempGender);
+        setEditProfile(false);
+    };
+
+    const handleCancelProfile = () => {
+        setTempUsername(username);
+        setTempGender(gender);
+        setEditProfile(false);
+    };
+
     return (
         <section className="userInfo container-fluid">
             <div className="todo">
                 <div className="row">
-                    {/* Primera tarjeta (2 columnas) */}
-                    <div className="col-xxl-2 col-xl-3 col-lg-4 col-md-5 col-sm-12 col-12">
+                    {/* First Card (perfil) */}
+                    <div className="offset-xxl-4 offset-xl-3 offset-lg-3 offset-md-1 offset-sm-1 col-xxl-4 col-xl-6 col-lg-6 col-md-10 col-sm-10 col-12 custom-wide-fix">
                         <div className="card profile-card">
-                            <img src="https://digitalhealthskills.com/wp-content/uploads/2022/11/3da39-no-user-image-icon-27.png"
-                                className="card-img-top" alt="..." />
+                            <div className="position-relative">
+                                <img
+                                    src={imageUrl}
+                                    alt="profile"
+                                    className="card-img-top"
+                                    style={{ objectFit: "cover", height: "auto" }}
+                                />
+                            </div>
                             <div className="card-body">
-                                <h5 className="card-title">Username</h5>
-                                <h5 className="Gender">he/him</h5>
-                                <a href="#" className="btn btn-secondary">Edit Profile</a>
+                                {editProfile ? (
+                                    <>
+                                        <input
+                                            type="text"
+                                            className="form-control mb-2"
+                                            value={tempUsername}
+                                            onChange={(e) => setTempUsername(e.target.value)}
+                                        />
+                                        <input
+                                            type="text"
+                                            className="form-control mb-3"
+                                            value={tempGender}
+                                            onChange={(e) => setTempGender(e.target.value)}
+                                        />
+                                        <button className="btn btn-primary me-2" onClick={handleSaveProfile}>Save</button>
+                                        <button className="btn btn-secondary" onClick={handleCancelProfile}>Cancel</button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <h5 className="card-title">{username}</h5>
+                                        <h5 className="Gender">{gender}</h5>
+                                        <div className="editEraseLogOut">
+                                            <button className="btn btn-primary edit" onClick={() => setEditProfile(true)}>
+                                                Edit Profile
+                                            </button>
+                                            <button className="btn btn-danger logOut">
+                                                Log Out
+                                            </button>
+                                            <button className="btn btn-warning delete">
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
-                    {/* Segunda tarjeta (6 columnas) */}
-                    <div className="col-xxl-8 col-xl-6 col-lg-8 col-md-6 col-sm-12">
+
+                    {/* Second Card (hidden because is not part of the mvp and we don't know if we gonna have time) */}
+                    {/* 
+                    <div className="col-xxl-8 col-xl-7 col-lg-6 col-md-5 col-sm-12">
                         <div className="card abtMe">
-                            <h2 className="card-header">About me</h2>
-                            <h6>
-                                Soy un apasionado del anime, especialmente de aquellos que exploran los límites de la ciencia
-                                ficción. Me encanta sumergirme en mundos futuristas donde se cuestionan las realidades
-                                tecnológicas, la inteligencia artificial y los dilemas éticos que surgen en esos contextos.
-                                Series como Steins;Gate, Ghost in the Shell o Cowboy Bebop no solo me entretienen, sino que me
-                                invitan a reflexionar sobre el futuro de la humanidad y su relación con la tecnología. <br /><br />
-
-                                Soy de los que disfruta de las tramas complejas, los giros inesperados y los personajes
-                                multidimensionales. Creo que el anime tiene un poder único para explorar ideas filosóficas
-                                profundas, y me gusta debatir y teorizar sobre los aspectos más interesantes de las historias.
-                                Prefiero un buen análisis sobre la trama que un comentario superficial, y valoro las
-                                conversaciones que me permiten descubrir nuevas perspectivas. <br /><br />
-
-                                No me identifico con los estereotipos exagerados del fandom, sino que disfruto del anime con una
-                                mentalidad abierta y respetuosa. Si alguna vez quieres hablar sobre el impacto de la IA en la
-                                sociedad o cómo los viajes en el tiempo podrían alterar nuestra percepción de la vida, soy tu
-                                persona.
-                            </h6>
+                            <div className="card-header d-flex justify-content-between align-items-center">
+                                <h2>About me</h2>
+                                {!editAboutMe && (
+                                    <button className="btn btn-sm btn-outline-secondary" onClick={() => setEditAboutMe(true)}>
+                                        Edit
+                                    </button>
+                                )}
+                            </div>
+                            <div className="card-body">
+                                {!editAboutMe ? (
+                                    <h6 style={{ whiteSpace: "pre-line" }}>{aboutMe}</h6>
+                                ) : (
+                                    <>
+                                        <textarea
+                                            className="form-control mb-2"
+                                            rows="4"
+                                            value={tempAboutMe}
+                                            onChange={(e) => {
+                                                if (e.target.value.length <= 875) {
+                                                    setTempAboutMe(e.target.value);
+                                                }
+                                            }}
+                                        />
+                                        <div className="d-flex gap-2">
+                                            <button className="btn btn-success" onClick={() => {
+                                                setAboutMe(tempAboutMe);
+                                                setEditAboutMe(false);
+                                            }}>
+                                                Guardar
+                                            </button>
+                                            <button className="btn btn-secondary" onClick={() => {
+                                                setTempAboutMe(aboutMe);
+                                                setEditAboutMe(false);
+                                            }}>
+                                                Cancelar
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
                         </div>
+                    </div> 
+                    */}
 
-                    </div>
+                    {/*Trophies 
                     <div className="card archieve-container col-xxl-2 col-xl-3 col-lg-12 col-md-12 col-sm-12">
-                        <h2 className="card-header">Archievements</h2>
+                        <h2 className="card-header">Achievements</h2>
                         <ul className="archieve-list">
                             {[...Array(10)].map((_, index) => (
                                 <li key={index}>
@@ -54,6 +139,7 @@ const UserInfo = () => {
                             ))}
                         </ul>
                     </div>
+                    */}
                 </div>
             </div>
         </section>
