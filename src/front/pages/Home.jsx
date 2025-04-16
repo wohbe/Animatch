@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
 import rigoImageUrl from "../assets/img/rigo-baby.jpg";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import AnimeNews from "../components/animeapi.jsx";
 
 export const Home = () => {
 
@@ -35,7 +34,6 @@ export const Home = () => {
 
 	return (
 		<div>
-			<AnimeNews />
 		</div>
 	);
 }; 
