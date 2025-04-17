@@ -2,19 +2,27 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Anime, Favorites, On_Air, Genre
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from api.models import db, User, Anime, Favorites, On_Air, Favorites, On_Air, Genre
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
 import time
 import json
+import bcrypt
 
 api = Blueprint('api', __name__)
+CHARACTER_ENCODING = 'utf-8'
 # Permite todas las origenes en desarrollo
 CORS(api, resources={r"/api/*": {"origins": "*"}})
 
 # Rate limiting for Jikan API (60 requests per minute)
 
+# Rate limiting for Jikan API (60 requests per minute)
+
+
+def wait_for_rate_limit():
+    time.sleep(1)  # Wait 1 second between requests
 
 # endpoint para almacenar datos de api esterna
 
@@ -76,7 +84,7 @@ def sync_anime():
 
 
 @api.route('/anime/on-air', methods=['POST'])
-def get_on_air_anime():
+def create_on_air_anime():
     try:
         api_url = 'https://api.jikan.moe/v4/seasons/now'
         response = requests.get(api_url)
@@ -150,3 +158,79 @@ def delete_favorite(favorite_id):
     db.session.delete(favorite)
     db.session.commit()
     return jsonify({"message": "Favorite deleted successfully"}), 200
+
+## ESTA PARTE CORRESPONDE A LA PARTE DE LOGIN, SIGNUP, DELETEUSER Y TOKEN.
+
+@api.route('/signup', methods=['POST'])
+def register_user():
+    data = request.get_json()
+    if data is None:
+        return jsonify({"message": "Email and password are required"}), 400
+    email = data['email']
+    password = data['password']
+    if User.query.filter_by(email=email).first():
+        return jsonify({"message": "User already exists"}), 400
+    bytes = password.encode(CHARACTER_ENCODING) # Convertimos la contraseña en un array de bytes.
+    salt = bcrypt.gensalt() # Generamos la sal
+    hashed_password = bcrypt.hashpw(bytes, salt) # Sacamos la contraseña ya hasheada.
+    new_user = User( # Creamos al nuevo usuario con su email y la contraseña hasheada.
+        email = email,
+        password = hashed_password.decode(CHARACTER_ENCODING), # Era esto o guardarlo en el modelo como bytes, pero así es mas fácil de leer.
+        is_active = True
+    )
+    db.session.add(new_user) # Se prepara para añadir el nuevo usuario a la base de datos.
+    db.session.commit() # Se añade al usuario a la base de datos.
+    access_token = create_access_token(identity=new_user.id)
+    return jsonify({
+        "message": "User created successfully",
+        "access_token": access_token,
+        "user": {
+            "id": new_user.id,
+            "email": new_user.email,
+        }}), 201
+
+@api.route('/login', methods=['POST'])
+def login():
+    data=request.get_json()
+    if not data or 'email' not in data or 'password' not in data:
+        return jsonify({"message": "Email and password are required"}), 400
+    email = data['email']
+    password = data['password']
+    user = User.query.filter_by(email=email).first()
+    if not user or not bcrypt.checkpw(password.encode(CHARACTER_ENCODING), user.password.encode(CHARACTER_ENCODING)): # Esto compara la contraseña introducida con la del usuario
+        return jsonify({"message": "Invalid user or password"}), 401
+    access_token = create_access_token(identity=user.id) ## Aquí se crea el token.
+    return jsonify({
+        "message": "Login successful",
+        "access_token": access_token,
+        "user": {
+            "id": user.id,
+            "email": user.email,
+        }
+    }), 200
+
+@api.route("/protected", methods=["GET"])
+@jwt_required()
+def protected():
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    return jsonify(user.serialize()), 200
+
+@api.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    return jsonify([user.serialize() for user in users]), 200
+
+@api.route('/users/<int:user_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user(user_id):
+    current_user_id = get_jwt_identity()
+    current_user_id = User.query.get(current_user_id)
+    user_to_delete = User.query.get(user_id)
+    if not user_to_delete:
+        return jsonify({"message": "User not found"}), 404
+    if current_user_id != user_id:
+        return jsonify({"message": "You can only delete your own account"}), 403
+    db.session.delete(user_to_delete)
+    db.session.commit()
+    return jsonify({"message": "User deleted successfully"}), 200

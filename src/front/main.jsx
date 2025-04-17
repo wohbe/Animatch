@@ -1,30 +1,31 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import './FinalProject.css' // Estilos CSS personalizados desde index.js
-import './index.css' // Global styles for your application
-import { RouterProvider } from "react-router-dom"  // Import RouterProvider to use the router
-import { router } from '../services/routes'
-import { StoreProvider } from './hooks/useGlobalReducer'  // Import the StoreProvider for global state management
-import { BackendURL } from './components/BackendURL'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './FinalProject.css'; // Tus estilos personalizados
+import './index.css'; // Estilos globales
+import { RouterProvider } from "react-router-dom";
+import { router } from '../services/routes'; // Tu ruta personalizada
+import { StoreProvider } from './hooks/useGlobalReducer';
+import { BackendURL } from './components/BackendURL';
+import { UserContextProvider } from './context/UserContext';
 
 const Main = () => {
-    if (!import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_BACKEND_URL == "") {
+    if (!import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_BACKEND_URL === "") {
         return (
             <React.StrictMode>
                 <BackendURL />
             </React.StrictMode>
-        )
+        );
     }
 
     return (
         <React.StrictMode>
-            {/* Provide global state to all components */}
-            <StoreProvider>
-                {/* Set up routing for the application */}
-                <RouterProvider router={router} />
-            </StoreProvider>
+            <UserContextProvider>
+                <StoreProvider>
+                    <RouterProvider router={router} />
+                </StoreProvider>
+            </UserContextProvider>
         </React.StrictMode>
-    )
-}
+    );
+};
 
-ReactDOM.createRoot(document.getElementById('root')).render(<Main />)
+ReactDOM.createRoot(document.getElementById('root')).render(<Main />);

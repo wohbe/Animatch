@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import MediaScroller from '../components/MediaScroller';
-import NavBar from '../components/Navbar';
-import ImageList from '../components/ImageList';
+import React, { useEffect } from "react";
+import rigoImageUrl from "../assets/img/rigo-baby.jpg";
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 const Home = () => {
 
 	return (
 		<div>
-			<NavBar />
+			{/* Contenido de Home de la rama remota */}
 		</div>
 	);
 };
