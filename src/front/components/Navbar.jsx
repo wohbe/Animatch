@@ -40,12 +40,12 @@ const Navbar = () => {
 					</div>
 					<div className="d-flex align-items-center order-lg-3 ms-2">
 						<Link
-							className="user-menu rounded " title="Login/register"
+							className="user-menu rounded me-3" title="Login/register"
 							to="#"
-							aria-label="Ir al perfil"
+							aria-label="Register/Login"
 							onClick={handleShow}
 						>
-							<i className="fa fa-user-circle"></i>
+							    <img src="src/front/assets/img/profile-picture.png" alt="User profile" className="profile-icon" width="40" height="40"/>
 						</Link>
 					</div>
 				</nav>
