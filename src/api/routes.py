@@ -33,7 +33,8 @@ def sync_anime():
     anime_api = 'https://api.jikan.moe/v4/anime'
     try:
         page = 1
-        max_page = 200  
+        max_page = 50
+        
         while page <= max_page:
             print(f"Sincronizando página {page}...")  
             response = requests.get(anime_api, params={'page': page})
@@ -73,6 +74,9 @@ def sync_anime():
                         )
                         db.session.add(new_anime)
             page += 1
+            time.sleep(1)
+
+            print(f"{page}")
 
         db.session.commit() 
         return jsonify({"message": "animes sincronizados"}), 200
@@ -81,42 +85,43 @@ def sync_anime():
         db.session.rollback()
         print(f"Error durante la sincronización: {str(e)}") 
         return jsonify({"error": str(e)}), 500
-    
-@api.route('/anime/<int:mal_id>', methods=['GET']) #LLamada para cada anime de los detalles
-def get_anime_details(mal_id):
-    anime = Anime.query.filter_by(mal_id=mal_id).first()
-    if anime is None:
+ 
+
+@api.route('/anime/<int:anime_id>/recommendations/genres', methods=['GET'])
+def get_genre_recommendations_by_anime_id(anime_id):
+    anime = Anime.query.get(anime_id)
+    if not anime:
         return jsonify({"message": "Anime not found"}), 404
-    return jsonify(anime.serialize()), 200
 
-@api.route('/anime/recommendations/genres', methods=['POST'])
-def get_genre_recommendations():
-    data = request.get_json()
-    genre_names = data.get('genres', [])
-
-    if not genre_names:
-        return jsonify({"recommendations": []}), 200
-
-    genres = Genre.query.filter(Genre.name.in_(genre_names)).all()
+    genres = anime.genres  # Obtener los géneros del anime actual
     if not genres:
         return jsonify({"recommendations": []}), 200
 
     genre_ids = [genre.id for genre in genres]
 
-    # Buscar animes que tengan al menos uno de los géneros y ordenarlos por cuántos comparten
+    # Buscar animes que compartan al menos un género y no sean el anime actual
     recommended_animes = (
         db.session.query(Anime)
         .join(Anime.genres)
-        .filter(Genre.id.in_(genre_ids))
-        .group_by(Anime.mal_id)
-        .order_by(func.count(Anime.mal_id).desc())
+        .filter(Genre.id.in_(genre_ids), Anime.id != anime_id)
+        .group_by(Anime.id)
+        .order_by(func.count(Anime.id).desc())
         .limit(5)
         .all()
     )
 
-    serialized_recommendations = [anime.serialize() for anime in recommended_animes]
-
+    serialized_recommendations = [rec.serialize() for rec in recommended_animes]
     return jsonify({"recommendations": serialized_recommendations}), 200
+
+
+# Get anime by id - for individual page and searchbar
+
+@api.route('/anime/<int:id>', methods=['GET'])
+def get_animeId(id):
+    anime = Anime.query.get(id)
+    if not anime:
+        return jsonify({"error": "Anime no disponible"}), 404
+    return jsonify(anime.serialize()), 200
 
 
 @api.route('/anime/on-air', methods=['POST'])

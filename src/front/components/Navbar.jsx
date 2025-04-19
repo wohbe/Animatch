@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import SearchBar from "./SearchBar";
-const Navbar = ({isLoggedIn}) => {
+import { SearchContainer } from "./SearchContainer";
+const Navbar = () => {
 	return (
 		<section>
 			<div className="NavBar">
@@ -30,20 +30,20 @@ const Navbar = ({isLoggedIn}) => {
 								<Link className="nav-link active Match" to="#">Match <i className="fa-regular fa-heart"></i></Link>
 								<Link className="nav-link active Profile" to="#">Profile</Link>
 							</div>
-							<SearchBar />
+							<SearchContainer />
 						</div>
 					</div>
 					<div className="d-flex align-items-center order-lg-3 ms-2">
 						<Link
 							className="user-menu rounded " title="Login/register"
 							to="/profile"
-							aria-label="Ir al perfil"
+							aria-label="Ir al perfil" 
 						>
-							{isLoggedIn ? (
-								<i className="fa-solid fa-user-plus "></i> /*icono para cuando está logueado */
+							{/* {isLoggedIn ? (
+								<i className="fa-solid fa-user-plus "></i> icono para cuando está logueado 
 							) : (
-								<i className="fa-solid fa-user-circle"></i> /*icono antes del login */
-							)}
+								<i className="fa-solid fa-user-circle"></i> icono antes del login 
+							)} */}
 						</Link>
 					</div>
 				</nav>
