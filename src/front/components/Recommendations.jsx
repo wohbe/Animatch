@@ -61,4 +61,5 @@ const Recommendations = ({ genres, currentAnimeId }) => {
     );
 };
 
+
 export default Recommendations;

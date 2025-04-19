@@ -39,6 +39,7 @@ def sync_anime():
             print(f"Sincronizando página {page}...")  
             response = requests.get(anime_api, params={'page': page})
             if response.status_code != 200:
+                
                 print(f"Error al obtener la página {page}: {response.status_code}")
                 break
 

@@ -16,6 +16,7 @@ export const router = createBrowserRouter(
           <Route path="/animatch" element={<AniPage />} />
           
           <Route path="/anime/:id" element={<AnimeCard />} />
+          
       </Route>
   )
 );

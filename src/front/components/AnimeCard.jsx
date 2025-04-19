@@ -148,6 +148,7 @@ function AnimeCard() {
             {console.log("AnimeCard - Passing currentAnimeId to Recommendations:", parseInt(id))}
             {animeDetails.genres && <Recommendations genres={animeDetails.genres} currentAnimeId={parseInt(id)} />} 
         </div>
+        
     );
 }
 
