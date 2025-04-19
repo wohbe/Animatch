@@ -159,6 +159,33 @@ def delete_favorite(favorite_id):
     db.session.commit()
     return jsonify({"message": "Favorite deleted successfully"}), 200
 
+## Watching
+
+@api.route('/watching', methods=['GET'])
+def get_watching():
+    watching_list = Watching.query.all()
+    return jsonify([watching.serialize() for watching in watching_list]), 200
+
+@api.route('/watching', methods=['POST'])
+def add_watching():
+    data = request.json
+    watching = Watching(
+        user_id=data['user_id'],
+        anime_id=data['anime_id']
+    )
+    db.session.add(watching)
+    db.session.commit()
+    return jsonify({"message": "Anime added to watching list successfully"}), 200
+
+@api.route('/watching/<int:watching_id>', methods=['DELETE'])
+def delete_watching(watching_id):
+    watching = Watching.query.get(watching_id)
+    if not watching:
+        return jsonify({"message": "Watching entry not found"}), 404
+    db.session.delete(watching)
+    db.session.commit()
+    return jsonify({"message": "Anime removed from watching list successfully"}), 200
+
 ## ESTA PARTE CORRESPONDE A LA PARTE DE LOGIN, SIGNUP, DELETEUSER Y TOKEN.
 
 @api.route('/signup', methods=['POST'])

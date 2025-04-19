@@ -5,10 +5,12 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import { Layout } from "./pages/Layout";
-import { Home } from "./pages/Home";
-import { Single } from "./pages/Single";
-import { Demo } from "./pages/Demo";
+import { Layout } from "../front/pages/Layout";
+import Home from "../front/pages/Home";
+import { Single } from "../front/pages/Single";
+import { Demo } from "../front/pages/Demo";
+import Userview from "../front/pages/UserView";
+import Categories from "../front/pages/Categories";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +27,8 @@ export const router = createBrowserRouter(
       <Route path="/" element={<Home />} />
       <Route path="/single/:theId" element={<Single />} />  {/* Dynamic route for single items */}
       <Route path="/demo" element={<Demo />} />
+      <Route path="/userview" element={<Userview />} />
+      <Route path="/categories" element={<Categories />} />
     </Route>
   )
 );

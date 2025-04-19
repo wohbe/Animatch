@@ -1,10 +1,9 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import IdentityModal from "./IdentityModal";
 
-const Navbar = () => {
-
-	const [showModal, setShowModal] = useState(false)
+const NavBar = () => {
+    const [showModal, setShowModal] = useState(false);
 
 	const handleShow = () => setShowModal(true);
 	const handleClose = () => setShowModal(false);
@@ -55,4 +54,4 @@ const Navbar = () => {
 	);
 };
 
-export default Navbar;
+export default NavBar;
