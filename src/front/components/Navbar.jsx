@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import IdentityModal from "./IdentityModal";
+import UserModal from "./UserModal";
+import { UserContext } from '../context/UserContext';
 
 const NavBar = () => {
     const [showModal, setShowModal] = useState(false);
+	const { isLogged } = useContext(UserContext);
 
 	const handleShow = () => setShowModal(true);
 	const handleClose = () => setShowModal(false);
@@ -13,7 +16,7 @@ const NavBar = () => {
 				<nav className="navbar navbar-expand-lg">
 					<div className="container-fluid">
 						<Link className="navbar-brand order-lg-0" to="#">
-							<img src="/src/front/assets/img/logo.jpg" width="30" height="30" className="d-inline-block align-top" alt="" />
+							<img src="/src/front/assets/img/animatch.png" width="40" height="40" className="d-inline-block align-top" alt="" />
 						</Link>
 						<Link className="navbar-brand Home order-lg-0" to="/">Animatch</Link>
 						<button
@@ -39,17 +42,17 @@ const NavBar = () => {
 					</div>
 					<div className="d-flex align-items-center order-lg-3 ms-2">
 						<Link
-							className="user-menu rounded me-3" title="Login/register"
+							className="user-menu rounded me-3" title={isLogged ? "User options" : "Login/register"}
 							to="#"
-							aria-label="Register/Login"
+							aria-label={isLogged ? "User options" : "Register/Login"}
 							onClick={handleShow}
 						>
-							    <img src="src/front/assets/img/profile-picture.png" alt="User profile" className="profile-icon" width="40" height="40"/>
+							    <img src={isLogged ? "src/front/assets/img/loged-picture.png" : "src/front/assets/img/profile-picture.png"} alt="User profile" className="profile-icon" width="40" height="40"/>
 						</Link>
 					</div>
 				</nav>
 			</div>
-			{showModal && <IdentityModal closeModal={handleClose} />}
+			{showModal && (isLogged ? <UserModal closeModal={handleClose} /> : <IdentityModal closeModal={handleClose} /> )}
 		</section>
 	);
 };
