@@ -44,13 +44,13 @@ const IdentityModal = ({ closeModal }) => {
       alert('Password must be at least 8 characters long');
       return
     }
-    
+
     const response = await fetch(`${baseURL}/api/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(registerData);
+      body: JSON.stringify(registerData),
     });
 
     const data = await response.json();
@@ -79,7 +79,7 @@ const IdentityModal = ({ closeModal }) => {
       alert('Please fill in all fields');
       return
     }
-    
+
     const response = await fetch(`${baseURL}/api/login`, {
       method: 'POST',
       headers: {
@@ -100,7 +100,7 @@ const IdentityModal = ({ closeModal }) => {
       localStorage.setItem('token', data.access_token);
       closeModal();
     }
-    
+
     setLoginData({
       email: '',
       password: ''
@@ -127,8 +127,8 @@ const IdentityModal = ({ closeModal }) => {
             </form>
           </div>
           <div className="col-md-6">
-          <h5 className="mb-3">Login</h5>
-          <form onSubmit={handleLoginSubmit}>
+            <h5 className="mb-3">Login</h5>
+            <form onSubmit={handleLoginSubmit}>
               <div className="mb-3">
                 <label htmlFor="InputEmailLogin" className="form-label">Email address</label>
                 <input type="email" className="form-control" name="email" id="InputEmailLogin" value={loginData.email} onChange={handleLoginChange} />

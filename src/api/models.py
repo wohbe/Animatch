@@ -9,7 +9,6 @@ db = SQLAlchemy()
 
 # MODELOS
 
-
 class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
@@ -25,7 +24,6 @@ class User(db.Model):
             "favorites": [fav.anime.serialize() for fav in self.favorites],
             "watching": [watch.anime.serialize() for watch in self.watching],
         }
-
 
 class UserPreference(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -46,7 +44,6 @@ class UserPreference(db.Model):
             "tone": self.tone,
             "created_at": self.created_at
         }
-
 
 class Anime(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -73,7 +70,6 @@ class Anime(db.Model):
             "airing": self.airing
         }
 
-
 class On_Air(db.Model):
     __tablename__ = 'on_air'
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -96,7 +92,6 @@ class On_Air(db.Model):
             "airing": self.airing
         }
 
-
 class Genre(db.Model):
     __tablename__ = 'genre'
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -107,7 +102,6 @@ class Genre(db.Model):
             "id": self.id,
             "name": self.name
         }
-
 
 class Favorites(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -123,7 +117,6 @@ class Favorites(db.Model):
             "user_id": self.user_id,
             "anime_id": self.anime_id
         }
-
 
 class Watching(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -142,8 +135,7 @@ class Watching(db.Model):
 
 # TABLAS INTERMEDIAS
 
-
-anime_genre = Table(
+anime_genre = db.Table (
     'anime_genre',
     db.metadata,
     Column('anime_id', Integer, ForeignKey(
