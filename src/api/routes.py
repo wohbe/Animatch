@@ -40,7 +40,7 @@ def sync_anime():
     anime_api = 'https://api.jikan.moe/v4/anime'
     try:
         page = 1
-        max_page = 100
+        max_page = 15
         while page <= max_page:
             response = requests.get(anime_api, params={'page': page})
             if response.status_code != 200:
@@ -74,13 +74,27 @@ def sync_anime():
                         )
                         db.session.add(new_anime)
             db.session.commit()
+
             page += 1
+            time.sleep(1)
+
+            print(f"{page}")
 
         return jsonify({"message": "animes sincronizados"}), 200
 
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+
+# Get anime by id - for individual page and searchbar
+
+@api.route('/anime/<int:id>', methods=['GET'])
+def get_animeId(id):
+    anime = Anime.query.get(id)
+    if not anime:
+        return jsonify({"error": "Anime no disponible"}), 404
+    return jsonify(anime.serialize()), 200
 
 
 @api.route('/anime/on-air', methods=['POST'])
