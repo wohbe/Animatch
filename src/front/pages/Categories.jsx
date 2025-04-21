@@ -1,106 +1,110 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import MediaScroller from '../components/MediaScroller';
 import NavBar from '../components/Navbar';
 import ImageList from '../components/ImageList';
+import { UserContext } from '../context/UserContext';
 
 const Categories = () => {
+    const { user, token } = useContext(UserContext);
+    const baseURL = import.meta.env.VITE_BACKEND_URL;
     const [animes, setAnimes] = useState([]);
     const [topRated, setTopRated] = useState([]);
     const [moviesAndOvas, setMoviesAndOvas] = useState([]);
     const [genres, setGenres] = useState({});
     const [loading, setLoading] = useState(true);
+    const [animeStatus, setAnimeStatus] = useState({});
 
+    // Carga todos los datos necesarios
     useEffect(() => {
-        fetchAnimes();
-    }, []);
+        const fetchAllData = async () => {
+            try {
+                const animeResponse = await fetch(`${baseURL}/api/anime`);
+                if (!animeResponse.ok) throw new Error('Error al cargar animes');
+                const animeData = await animeResponse.json();
 
-    const fetchAnimes = async () => {
-        try {
-            const response = await fetch('https://fvlxkfz7-3001.uks1.devtunnels.ms/api/anime');
-            const data = await response.json();
-            const processedAnimes = data.map(anime => ({
-                id: anime._id || anime.id,
-                title: anime.title,
-                score: anime.score,
-                episodes: anime.episodes,
-                airing: anime.airing,
-                genres: anime.genres || [],
-                image_url: anime.image_url
-            }));
+                filterAnimes(animeData);
 
-            setAnimes(processedAnimes);
-            filterAnimes(processedAnimes);
-        } catch (error) {
-            console.error("Error fetching animes:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+                if (user && token) {
+                    const statusResponse = await fetch(`${baseURL}/api/anime/status/all`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    setAnimeStatus(await statusResponse.json());
+                }
 
-    //Filter Function 
+            } catch (error) {
+                console.error("Error:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAllData();
+    }, [user, token, baseURL]);
+
     const filterAnimes = (animeList) => {
-        // Top Rated (score > 8)
         const top = animeList.filter(anime => anime.score > 8);
         setTopRated(top);
 
-        // Movies and OVAs (episodes < 5 and is not on air)
-        const movies = animeList.filter(anime =>
-            anime.episodes < 5 && !anime.airing
-        );
+        const movies = animeList.filter(anime => anime.episodes < 5 && !anime.airing);
         setMoviesAndOvas(movies);
 
-        // Filters anime by Genre
         const genresMap = {};
-
         animeList.forEach(anime => {
-            const isMovieOrOVA = anime.episodes < 5 && !anime.airing;
-
-            if (!isMovieOrOVA) {
-                if (anime.genres.length > 0) {
-                    anime.genres.forEach(genre => {
-                        if (!genresMap[genre.name]) {
-                            genresMap[genre.name] = [];
-                        }
-                        genresMap[genre.name].push(anime);
-                    });
-                } else {
-                    console.log(`"${anime.title}" doesn't have any genre D:`);
-                }
+            if (!(anime.episodes < 5 && !anime.airing)) {
+                anime.genres?.forEach(genre => {
+                    genresMap[genre.name] = [...(genresMap[genre.name] || []), anime];
+                });
             }
         });
-
         setGenres(genresMap);
     };
+
+    const handleStatusUpdate = async () => {
+        if (!user || !token) return;
+        const res = await fetch(`${baseURL}/api/anime/status/all`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        setAnimeStatus(await res.json());
+    };
+
+    if (loading) return;
 
     return (
         <div>
             <NavBar />
 
-            {topRated.length <= 0 && console.log("No hay animes disponibles con buena puntuación")}
-
             {topRated.length > 0 && (
                 <div className="category-section">
                     <ImageList title={"TOP RATED"} />
-                    <MediaScroller animes={topRated} />
+                    <MediaScroller
+                        animes={topRated}
+                        animeStatus={animeStatus}
+                        onUpdate={handleStatusUpdate}
+                    />
                 </div>
             )}
-
-            {moviesAndOvas.length <= 0 && console.log("No hay Peliculas, OVAs o Especiales... https://www.youtube.com/watch?v=saGYMhApaH8 min 2:06")}
 
             {moviesAndOvas.length > 0 && (
                 <div className="category-section">
                     <ImageList title={"MOVIES, OVAs & SPECIALS"} />
-                    <MediaScroller animes={moviesAndOvas} />
+                    <MediaScroller
+                        animes={moviesAndOvas}
+                        animeStatus={animeStatus}
+                        onUpdate={handleStatusUpdate}
+                    />
                 </div>
             )}
 
-            {/* Sections by Genre */}
             {Object.keys(genres).length > 0 && (
                 <div className="genres-section">
                     {Object.entries(genres).map(([genreName, genreAnimes]) => (
                         <div key={genreName} className="category-section">
                             <ImageList title={`${genreName.toUpperCase()}`} />
-                            <MediaScroller animes={genreAnimes} />
+                            <MediaScroller
+                                animes={genreAnimes}
+                                animeStatus={animeStatus}
+                                onUpdate={handleStatusUpdate}
+                            />
                         </div>
                     ))}
                 </div>

@@ -3,13 +3,13 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import Home from "./pages/Home";
-import { AniPage } from "./pages/AnimatchPage";
-import AnimeCard from "./components/AnimeCard";
-import { Layout } from "./pages/Layout";
-
-import Userview from "./pages/UserView";
-import Categories from "./pages/Categories";
+import { Layout } from "../front/pages/Layout";
+import Home from "../front/pages/Home";
+import { Single } from "../front/pages/Single";
+import { Demo } from "../front/pages/Demo";
+import Userview from "../front/pages/UserView";
+import Categories from "../front/pages/Categories";
+import Login from "../front/pages/Login";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,22 +20,17 @@ export const router = createBrowserRouter(
     // Note: The child paths of the Layout element replace the Outlet component with the elements contained in the "element" attribute of these child paths.
 
     // Root Route: All navigation will start from here.
-    <>
-      {/* Ruta principal / */}
+    <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
+
+      {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
       <Route path="/" element={<Home />} />
-
-
-      {/* Ruta independiente /animatch */}
-      <Route path="/animatch" element={<AniPage />} />
-
-
-      <Route path="*" element={<h1>Not found!</h1>} />
-      <Route path="/anime/:id" element={<AnimeCard />} />
-    </>
-
       <Route path="/single/:theId" element={<Single />} />  {/* Dynamic route for single items */}
+      <Route path="/demo" element={<Demo />} />
+      <Route path="/anime/:id" element={<AnimeCard />} />
       <Route path="/userview" element={<Userview />} />
       <Route path="/categories" element={<Categories />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="*" element={<h1>Not found!</h1>} />
     </Route>
   )
 );
