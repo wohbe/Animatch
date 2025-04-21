@@ -1,11 +1,7 @@
-"""
-This module takes care of starting the API Server, Loading the DB and Adding the endpoints
-"""
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from api.models import db, User, Anime, Favorites, On_Air, Genre, Watching
 from api.utils import generate_sitemap, APIException
-from flask_cors import CORS
 import requests
 import time
 import json
@@ -21,8 +17,7 @@ CORS(api, resources={r"/api/*": {"origins": "*"}})
 def wait_for_rate_limit():
     time.sleep(1)  # Wait 1 second between requests
 
-# endpoint para almacenar datos de api esterna
-
+# endpoint para almacenar datos de api externa
 # anime
 @api.route('/anime', methods=['GET'])
 def get_animes():
@@ -78,16 +73,21 @@ def sync_anime():
     anime_api = 'https://api.jikan.moe/v4/anime'
     try:
         page = 1
-        max_page = 100
+        max_page = 15
         while page <= max_page:
+            print(f"Sincronizando página {page}...")  
             response = requests.get(anime_api, params={'page': page})
             if response.status_code != 200:
+                print(f"Error al obtener la página {page}: {response.status_code}")
                 break
 
             anime_list = response.json().get('data', [])
+            print(f"Número de animes en la página {page}: {len(anime_list)}")  
             for anime in anime_list:
                 if anime.get('score') and anime['score'] >= 7:
                     exists = Anime.query.filter_by(mal_id=anime['mal_id']).first()
+                    trailer_data = anime.get('trailer')
+                    trailer_url = trailer_data.get('url') if trailer_data else None
                     if not exists:
                         genre_names = [g['name'] for g in anime.get('genres', [])]
                         genre_objs = []
@@ -106,17 +106,102 @@ def sync_anime():
                             episodes=anime.get('episodes'),
                             score=anime['score'],
                             airing=anime.get('airing', False),
-                            genres=genre_objs
+                            genres=genre_objs,
+                            trailer_url=trailer_url
                         )
                         db.session.add(new_anime)
-            db.session.commit()
-            page += 1
 
-        return jsonify({"message": "Animes sincronizados"}), 200
+            db.session.commit() # Revisar en fix
+
+            page += 1
+            time.sleep(1)
+
+            print(f"{page}")
+ 
+        return jsonify({"message": "animes sincronizados"}), 200
 
     except Exception as e:
         db.session.rollback()
+        print(f"Error durante la sincronización: {str(e)}") 
         return jsonify({"error": str(e)}), 500
+ 
+
+@api.route('/anime/<int:anime_id>/recommendations/genres', methods=['GET'])
+def get_genre_recommendations_by_anime_id(anime_id):
+    anime = Anime.query.get(anime_id)
+    if not anime:
+        return jsonify({"message": "Anime not found"}), 404
+
+    genres = anime.genres  # Obtener los géneros del anime actual
+    if not genres:
+        return jsonify({"recommendations": []}), 200
+
+    genre_ids = [genre.id for genre in genres]
+
+    # Buscar animes que compartan al menos un género y no sean el anime actual
+    recommended_animes = (
+        db.session.query(Anime)
+        .join(Anime.genres)
+        .filter(Genre.id.in_(genre_ids), Anime.id != anime_id)
+        .group_by(Anime.id)
+        .order_by(func.count(Anime.id).desc())
+        .limit(5)
+        .all()
+    )
+
+    serialized_recommendations = [rec.serialize() for rec in recommended_animes]
+    return jsonify({"recommendations": serialized_recommendations}), 200
+
+
+# Get anime by id - for individual page and searchbar
+
+@api.route('/anime/<int:id>', methods=['GET'])
+def get_animeId(id):
+    anime = Anime.query.get(id)
+    if not anime:
+        return jsonify({"error": "Anime no disponible"}), 404
+    return jsonify(anime.serialize()), 200
+
+
+@api.route('/anime/on-air', methods=['POST'])
+def create_on_air_anime():
+    try:
+        api_url = 'https://api.jikan.moe/v4/seasons/now'
+        response = requests.get(api_url)
+        season_now = response.json()
+
+        for data in season_now['data']:
+            check_exist = On_Air.query.filter_by(mal_id=data['mal_id']).first()
+            if not check_exist:
+                genre_names = [genre['name']
+                               for genre in data.get('genres', [])]
+
+                genre_objs = []
+                for name in genre_names:
+                    genre = Genre.query.filter_by(name=name).first()
+                    if not genre:
+                        genre = Genre(name=name)
+                        db.session.add(genre)
+                    genre_objs.append(genre)
+
+                new_on_air = On_Air(
+                    mal_id=data['mal_id'],
+                    title=data['title'],
+                    synopsis=data.get('synopsis'),
+                    image_url=data['images']['jpg']['image_url'],
+                    score=data.get('score'),
+                    airing=data.get('airing', False),
+                    genres=genre_objs  
+                )
+                db.session.add(new_on_air)
+
+        db.session.commit()
+        return jsonify({"message": "perfecto"}), 200
+
+    except Exception as er:
+        db.session.rollback()
+        return jsonify({'error': f'ha habido un error: {str(er)}'}), 500
+
 
 @api.route('/anime/on-air/list', methods=['GET'])
 def get_on_air_list():
@@ -254,6 +339,14 @@ def register_user():
     
     if User.query.filter_by(email=data['email']).first():
         return jsonify({"message": "User already exists"}), 400
+      
+    bytes = password.encode(CHARACTER_ENCODING) # Convertimos la contraseña en un array de bytes.
+    salt = bcrypt.gensalt() # Generamos la sal
+    hashed_password = bcrypt.hashpw(bytes, salt) # Sacamos la contraseña ya hasheada.
+    new_user = User( # Creamos al nuevo usuario con su email y la contraseña hasheada.
+        email = email,
+        password = hashed_password.decode(CHARACTER_ENCODING), # Era esto o guardarlo en el modelo como bytes, pero así es mas fácil de leer.
+        is_active = True
     
     hashed_password = bcrypt.hashpw(
         data['password'].encode(CHARACTER_ENCODING),
@@ -276,15 +369,24 @@ def register_user():
         "access_token": access_token,
         "user": {
             "id": new_user.id,
-            "email": new_user.email
-        }
-    }), 201
+            "email": new_user.email,
+        }}), 201
 
 @api.route('/login', methods=['POST'])
 def login():
+
     data = request.get_json()
     if not data or 'email' not in data or 'password' not in data:
         return jsonify({"message": "Email and password are required"}), 400
+    email = data['email']
+    password = data['password']
+    user = User.query.filter_by(email=email).first()
+
+    if not user or not bcrypt.checkpw(password.encode(CHARACTER_ENCODING), user.password.encode(CHARACTER_ENCODING)): # Esto compara la contraseña introducida con la del usuario
+
+        return jsonify({"message": "Invalid user or password"}), 401
+    # Aquí se crea el token.
+    access_token = create_access_token(identity=user.id)
     
     user = User.query.filter_by(email=data['email']).first()
     if not user or not bcrypt.checkpw(

@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../context/UserContext';
+import '../css/IdentityModal.css'; 
 
 const IdentityModal = ({ closeModal }) => {
-
   const { user, setUser, isLogged, setIsLogged, token, setToken } = useContext(UserContext);
 
-  const baseURL = process.env.APP_URL;
+  const baseURL = import.meta.env.VITE_BACKEND_URL;
 
   const [registerData, setRegisterData] = useState({
     email: '',
@@ -45,7 +45,7 @@ const IdentityModal = ({ closeModal }) => {
       return
     }
 
-    const response = await fetch(`${baseURL}/api/signup`, {
+    const response = await fetch(`${baseURL}api/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -80,7 +80,7 @@ const IdentityModal = ({ closeModal }) => {
       return
     }
 
-    const response = await fetch(`${baseURL}/api/login`, {
+    const response = await fetch(`${baseURL}api/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -109,36 +109,47 @@ const IdentityModal = ({ closeModal }) => {
 
   return (
     <div className="modal-container position-fixed d-flex justify-content-center align-items-center">
-      <div className="container position-relative">
-        <button type="button" className="btn-close position-absolute top-0 end-0 m-3" onClick={closeModal}></button>
-        <div className="row">
-          <div className="col-md-6">
-            <h5 className="mb-3">Register</h5>
-            <form onSubmit={handleRegisterSubmit}>
-              <div className="mb-3">
-                <label htmlFor="InputEmailRegister" className="form-label">Email address</label>
-                <input type="email" className="form-control" name="email" id="InputEmailRegister" value={registerData.email} onChange={handleRegisterChange} />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="InputPasswordRegister" className="form-label">Password</label>
-                <input type="password" className="form-control" name="password" id="InputPasswordRegister" value={registerData.password} placeholder='Password must be at least 8 characters long.' onChange={handleRegisterChange} />
-              </div>
-              <button type="submit" className="btn btn-primary">Submit</button>
-            </form>
+      <div className="modal-dialog modal-dialog-centered identity-modal-size">
+        <div className="modal-content identity-modal">
+          <div className="modal-header identity-header d-flex justify-content-between align-items-center">
+            <h5 className="modal-title text-center flex-grow-1">WELCOME TO ANIMATCH</h5>
+            <button type="button" className="btn-close" onClick={closeModal}></button>
           </div>
-          <div className="col-md-6">
-            <h5 className="mb-3">Login</h5>
-            <form onSubmit={handleLoginSubmit}>
-              <div className="mb-3">
-                <label htmlFor="InputEmailLogin" className="form-label">Email address</label>
-                <input type="email" className="form-control" name="email" id="InputEmailLogin" value={loginData.email} onChange={handleLoginChange} />
+          <div className="modal-body p-4">
+            <div className="row">
+              <div className="col-md-6">
+                <h5 className="mb-3">Register</h5>
+                <form onSubmit={handleRegisterSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="InputEmailRegister" className="form-label">Email address</label>
+                    <input type="email" className="form-control identity-input" name="email" id="InputEmailRegister" value={registerData.email} onChange={handleRegisterChange} />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="InputPasswordRegister" className="form-label">Password</label>
+                    <input type="password" className="form-control identity-input" name="password" id="InputPasswordRegister" value={registerData.password} placeholder='Password must be at least 8 characters long.' onChange={handleRegisterChange} />
+                  </div>
+                  <div className="d-grid gap-2">
+                    <button type="submit" className="btn btn-primary identity-btn">REGISTER</button>
+                  </div>
+                </form>
               </div>
-              <div className="mb-3">
-                <label htmlFor="InputPasswordLogin" className="form-label">Password</label>
-                <input type="password" className="form-control" name="password" id="InputPasswordLogin" value={loginData.password} onChange={handleLoginChange} />
+              <div className="col-md-6">
+                <h5 className="mb-3">Login</h5>
+                <form onSubmit={handleLoginSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="InputEmailLogin" className="form-label">Email address</label>
+                    <input type="email" className="form-control identity-input" name="email" id="InputEmailLogin" value={loginData.email} onChange={handleLoginChange} />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="InputPasswordLogin" className="form-label">Password</label>
+                    <input type="password" className="form-control identity-input" name="password" id="InputPasswordLogin" value={loginData.password} onChange={handleLoginChange} />
+                  </div>
+                  <div className="d-grid gap-2">
+                    <button type="submit" className="btn btn-primary identity-btn">LOGIN</button>
+                  </div>
+                </form>
               </div>
-              <button type="submit" className="btn btn-primary">Submit</button>
-            </form>
+            </div>
           </div>
         </div>
       </div>

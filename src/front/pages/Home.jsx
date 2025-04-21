@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import React from "react";
 
 const Home = () => {
 
 	return (
-		<div>
-			{/* Contenido de Home de la rama remota */}
-		</div>
+        <div className="d-flex justify-content-center align-items-center vh-100">
+            <h1 className="text-center text-white fw-bold display-1">
+                Ready to <span className="text-danger">match</span>?
+            </h1>
+        </div>
 	);
 };
 

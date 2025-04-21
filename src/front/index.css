@@ -1,0 +1,242 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} 
+
+
+.likes-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  background: #d35c51;
+}
+
+.like-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
+  margin-right: 5px;
+  color: #aaa; /* Color por defecto */
+}
+
+.like-button.liked {
+  color: #007bff; /* Color cuando se ha dado like */
+}
+
+.like-button:focus {
+  outline: none;
+}
+
+.like-count {
+  font-size: 1em;
+  color: #555;
+}
+.anime-card div{
+  margin-top: 2rem;  
+}
+.genres-list-item{
+  margin-bottom: 1rem;
+}
+.estado-list-item{
+  margin-bottom: 1rem;
+}
+.puntuacion-list-item{
+  margin-bottom: 1rem;
+}
+
+.recommendations-container {
+  /* Otros estilos que ya tengas */
+  margin-top: 40px; /* Puedes mantener o ajustar este margen superior */
+  margin-bottom: 3rem; /* Puedes mantener o ajustar este margen inferior */
+
+  /* Nuevos estilos para centrar horizontalmente */
+  display: flex; /* Usamos flexbox para centrar el contenido */
+  flex-direction: column; /* Alineamos los elementos internos verticalmente */
+  align-items: center; /* Centra los elementos hijos horizontalmente */
+}
+
+.recommendations-list {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  background: #1a1a1a;
+  /* Elimina o ajusta los márgenes laterales si los tenías */
+  /* margin-left: auto;
+  margin-right: auto; */
+  padding: 1.5rem; /* Ajusta el relleno si es necesario */
+  border-radius: 8px; /* Opcional: para darle un borde redondeado al fondo */
+}
+
+.recommendation-card {
+  width: 200px;
+  margin: 35px; /* Reducir el margen general */
+  text-align: center;
+  display: inline-block;
+  padding: 5px; /*  relleno */
+}
+  
+.recommendation-card img {
+  max-width: 100%;
+  height: auto; /* Para mantener la proporción */
+  border-radius: 8px; /* bordes redondeados para las imágenes */
+}
+
+.recommendations-container h2 {
+  color: #ff6f61;
+  text-decoration: underline;
+  margin-bottom: 20px; /* Añade un poco de espacio entre el título y la lista */
+  text-align: center; /* Centra el título también */
+}
+.recommendation-card {
+  width: 200px;
+  margin-right: 10px;
+  text-align: center;
+  display: inline-block;
+}
+.recommendation-card:last-child {
+  margin-right: 0; /* Elimina el margen derecho del último elemento */
+}
+
+.title-anime {
+  font-size: 12px;
+  margin: 10px 0; /* Ajusta el margen superior e inferior */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* .buttons-card div{
+  border-radius: 25px;
+} */
+anime-buttons button,
+.watching-button,
+.favorite-button,
+.trailer-button{ 
+  background-color:#121212; 
+  color: #0a95c0bb; 
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  /* border-bottom-right-radius: 10px; */
+  cursor: pointer;
+  font-size:2rem;
+  margin-left:8px;
+}
+.watching-button::after:active{
+  background-color: purple ;
+}
+.card-body{
+  background: #1a1a1a;
+  border-radius: 2%;
+  padding-top: 10px;
+  margin-bottom: 20px;
+}
+.container-image{
+  background: #1a1a1a;
+  margin: 20px;
+  padding: 10px;
+  justify-items: center;
+  border-radius: 2%;
+  
+
+}
+#imagen_anime{
+  height: 25rem;
+  
+ }
+
+@media (max-width: 768px) {
+  .anime-card {
+    flex-direction: column;
+    
+    
+    
+  }
+  .cover-image {
+    width: 100%;
+    
+  }
+  .card-body {
+    width: 100%;
+    
+  }
+
+}
+
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 1rem;
+  color: white;
+  background: #121212;
+}
+
+
+
+/* Barra de navegación */
+.NavBar {
+  background-color: rgba(46, 99, 121, 0.103);
+  padding: 1rem;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+/* Navbar text color */
+.NavBar .navbar-brand.Home,
+.NavBar .navbar-nav .nav-link {
+  color: #ff6f61;
+}
+
+.navbar-brand.Home {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #d35c51;
+}
+
+.navbar-nav .nav-link {
+  background-color: rgba(46, 99, 121, 0.103);
+    padding: 10px; 
+    border-radius: 15px; 
+    text-align: center; 
+    display: inline-block;  
+    margin: 0.5rem;
+   font-size: 1rem;
+  transition: transform 0.2s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+/*     color: #e92c1b;
+ */    transform: scale(1.2);
+ 
+}
+.navbar-toggler-icon {
+  background-color: white;
+}
+
+#buscar{
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background: rgba(31, 30, 30, 0.705);
+  color: white;
+  }
+#buscar::placeholder{
+  color: #f8f6f6b0;
+}
+.user-menu{
+  background:none;
+  border: none;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  display: block;
+  transition: transform 0.2s ease-in-out;
+}
+.user-menu:hover{
+  transform: scale(1.1);
+}
+.user-menu i{
+  font-size: 3rem;
+  color: #ff6f61;
+}
