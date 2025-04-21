@@ -5,7 +5,6 @@ import Recommendations from './Recommendations';
 
 function AnimeCard() {
     const { id } = useParams();
-    console.log("AnimeCard - animeId from URL:", id);
     const [animeDetails, setAnimeDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -27,7 +26,6 @@ function AnimeCard() {
                     throw new Error(`HTTP error! status: ${response.status} - ${errorData?.message || 'Error al cargar los detalles del anime'}`);
                 }
                 const data = await response.json();
-                console.log("Datos de animes recibidos:", data);
                 setAnimeDetails(data);
                 setLoading(false);
             } catch (e) {
