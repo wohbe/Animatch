@@ -1,3 +1,4 @@
+
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import IdentityModal from "./IdentityModal";
@@ -10,6 +11,7 @@ const NavBar = () => {
 
 	const handleShow = () => setShowModal(true);
 	const handleClose = () => setShowModal(false);
+  
 	return (
 		<section>
 			<div className="NavBar">

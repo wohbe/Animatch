@@ -1,14 +1,13 @@
-// Import necessary components and functions from react-router-dom.
-
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import { Layout } from "./pages/Layout";
 import Home from "./pages/Home";
-import { Single } from "./pages/Single";
-import { Demo } from "./pages/Demo";
+import { AniPage } from "./pages/AnimatchPage";
+import AnimeCard from "./components/AnimeCard";
+import { Layout } from "./pages/Layout";
+
 import Userview from "./pages/UserView";
 import Categories from "./pages/Categories";
 
@@ -24,7 +23,6 @@ export const router = createBrowserRouter(
     <>
       {/* Ruta principal / */}
       <Route path="/" element={<Home />} />
-<<<<<<< HEAD:src/front/routes.jsx
 
 
       {/* Ruta independiente /animatch */}
@@ -34,12 +32,10 @@ export const router = createBrowserRouter(
       <Route path="*" element={<h1>Not found!</h1>} />
       <Route path="/anime/:id" element={<AnimeCard />} />
     </>
-=======
+
       <Route path="/single/:theId" element={<Single />} />  {/* Dynamic route for single items */}
-      <Route path="/demo" element={<Demo />} />
       <Route path="/userview" element={<Userview />} />
       <Route path="/categories" element={<Categories />} />
     </Route>
->>>>>>> develop:src/services/routes.jsx
   )
 );

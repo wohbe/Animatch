@@ -53,3 +53,4 @@ export const SearchBar = ({ setResult, searchResultsList }) => {
 
     )
 }
+

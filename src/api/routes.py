@@ -1,11 +1,8 @@
-"""
-This module takes care of starting the API Server, Loading the DB and Adding the endpoints
-"""
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from api.models import db, User, Anime, Favorites, On_Air, Favorites, On_Air, Genre
+from sqlalchemy import func
+from api.models import db, User, Anime, Favorites, On_Air, Genre
 from api.utils import generate_sitemap, APIException
-from flask_cors import CORS
 import requests
 import time
 import json
@@ -14,9 +11,7 @@ import bcrypt
 api = Blueprint('api', __name__)
 CHARACTER_ENCODING = 'utf-8'
 # Permite todas las origenes en desarrollo
-CORS(api, resources={r"/api/*": {"origins": "*"}})
-
-# Rate limiting for Jikan API (60 requests per minute)
+# La configuración de CORS se realizará en app.py
 
 # Rate limiting for Jikan API (60 requests per minute)
 
@@ -24,8 +19,7 @@ CORS(api, resources={r"/api/*": {"origins": "*"}})
 def wait_for_rate_limit():
     time.sleep(1)  # Wait 1 second between requests
 
-# endpoint para almacenar datos de api esterna
-
+# endpoint para almacenar datos de api externa
 # anime
 
 
@@ -42,15 +36,20 @@ def sync_anime():
         page = 1
         max_page = 15
         while page <= max_page:
+            print(f"Sincronizando página {page}...")  
             response = requests.get(anime_api, params={'page': page})
             if response.status_code != 200:
+                print(f"Error al obtener la página {page}: {response.status_code}")
                 break
 
             anime_list = response.json().get('data', [])
+            print(f"Número de animes en la página {page}: {len(anime_list)}")  
             for anime in anime_list:
                 if anime.get('score') and anime['score'] >= 7:
                     exists = Anime.query.filter_by(
                         mal_id=anime['mal_id']).first()
+                    trailer_data = anime.get('trailer')
+                    trailer_url = trailer_data.get('url') if trailer_data else None
                     if not exists:
                         genre_names = [g['name']
                                        for g in anime.get('genres', [])]
@@ -70,21 +69,51 @@ def sync_anime():
                             episodes=anime.get('episodes'),
                             score=anime['score'],
                             airing=anime.get('airing', False),
-                            genres=genre_objs
+                            genres=genre_objs,
+                            trailer_url=trailer_url
                         )
                         db.session.add(new_anime)
-            db.session.commit()
+
+            db.session.commit() # Revisar en fix
 
             page += 1
             time.sleep(1)
 
             print(f"{page}")
-
+ 
         return jsonify({"message": "animes sincronizados"}), 200
 
     except Exception as e:
         db.session.rollback()
+        print(f"Error durante la sincronización: {str(e)}") 
         return jsonify({"error": str(e)}), 500
+ 
+
+@api.route('/anime/<int:anime_id>/recommendations/genres', methods=['GET'])
+def get_genre_recommendations_by_anime_id(anime_id):
+    anime = Anime.query.get(anime_id)
+    if not anime:
+        return jsonify({"message": "Anime not found"}), 404
+
+    genres = anime.genres  # Obtener los géneros del anime actual
+    if not genres:
+        return jsonify({"recommendations": []}), 200
+
+    genre_ids = [genre.id for genre in genres]
+
+    # Buscar animes que compartan al menos un género y no sean el anime actual
+    recommended_animes = (
+        db.session.query(Anime)
+        .join(Anime.genres)
+        .filter(Genre.id.in_(genre_ids), Anime.id != anime_id)
+        .group_by(Anime.id)
+        .order_by(func.count(Anime.id).desc())
+        .limit(5)
+        .all()
+    )
+
+    serialized_recommendations = [rec.serialize() for rec in recommended_animes]
+    return jsonify({"recommendations": serialized_recommendations}), 200
 
 
 # Get anime by id - for individual page and searchbar
@@ -125,9 +154,8 @@ def create_on_air_anime():
                     image_url=data['images']['jpg']['image_url'],
                     score=data.get('score'),
                     airing=data.get('airing', False),
-                    genres=genre_objs  # relación real
+                    genres=genre_objs  
                 )
-
                 db.session.add(new_on_air)
 
         db.session.commit()
@@ -172,7 +200,7 @@ def delete_favorite(favorite_id):
     db.session.delete(favorite)
     db.session.commit()
     return jsonify({"message": "Favorite deleted successfully"}), 200
-
+  
 ## Watching
 
 @api.route('/watching', methods=['GET'])
@@ -211,6 +239,7 @@ def register_user():
     password = data['password']
     if User.query.filter_by(email=email).first():
         return jsonify({"message": "User already exists"}), 400
+      
     bytes = password.encode(CHARACTER_ENCODING) # Convertimos la contraseña en un array de bytes.
     salt = bcrypt.gensalt() # Generamos la sal
     hashed_password = bcrypt.hashpw(bytes, salt) # Sacamos la contraseña ya hasheada.
@@ -230,17 +259,21 @@ def register_user():
             "email": new_user.email,
         }}), 201
 
+
 @api.route('/login', methods=['POST'])
 def login():
-    data=request.get_json()
+    data = request.get_json()
     if not data or 'email' not in data or 'password' not in data:
         return jsonify({"message": "Email and password are required"}), 400
     email = data['email']
     password = data['password']
     user = User.query.filter_by(email=email).first()
+
     if not user or not bcrypt.checkpw(password.encode(CHARACTER_ENCODING), user.password.encode(CHARACTER_ENCODING)): # Esto compara la contraseña introducida con la del usuario
+
         return jsonify({"message": "Invalid user or password"}), 401
-    access_token = create_access_token(identity=user.id) ## Aquí se crea el token.
+    # Aquí se crea el token.
+    access_token = create_access_token(identity=user.id)
     return jsonify({
         "message": "Login successful",
         "access_token": access_token,
@@ -249,6 +282,7 @@ def login():
             "email": user.email,
         }
     }), 200
+
 
 @api.route("/protected", methods=["GET"])
 @jwt_required()
