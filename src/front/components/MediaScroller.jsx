@@ -1,11 +1,100 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ActionButtons from './ActionButtons';
 
-const MediaScroller = ({ images }) => {
+const MediaScroller = ({ animes }) => {
     const [sliderIndex, setSliderIndex] = useState(0);
     const [showLeftArrow, setShowLeftArrow] = useState(false);
     const [showRightArrow, setShowRightArrow] = useState(true);
     const sliderRef = useRef(null);
+    const [animeStates, setAnimeStates] = useState(() => {
+        const saved = localStorage.getItem('animeStates');
+        return saved ? JSON.parse(saved) : {};
+    });
 
+    // Save states when they change
+    useEffect(() => {
+        localStorage.setItem('animeStates', JSON.stringify(animeStates));
+    }, [animeStates]);
+
+    // Unified handler to change states
+    const handleWatching = (anime) => {
+        setAnimeStates(prev => {
+            const isWatching = prev[anime.id]?.status === 'watching';
+            const newState = { ...prev };
+
+            if (isWatching) {
+                if (prev[anime.id]?.isFavorite) {
+                    newState[anime.id] = {
+                        isFavorite: true,
+                        animeData: {
+                            id: anime.id,
+                            title: anime.title,
+                            image_url: anime.image_url
+                        }
+                    };
+                } else {
+                    delete newState[anime.id];
+                }
+            } else {
+                newState[anime.id] = {
+                    ...prev[anime.id],
+                    status: 'watching',
+                    animeData: {
+                        id: anime.id,
+                        title: anime.title,
+                        image_url: anime.image_url
+                    }
+                };
+            }
+
+            return newState;
+        });
+    };
+
+    // Favorites
+    const handleFavorite = (anime) => {
+        setAnimeStates(prev => {
+            const isFav = !(prev[anime.id]?.isFavorite || false);
+            const newState = { ...prev };
+
+            if (isFav) {
+                newState[anime.id] = {
+                    ...prev[anime.id],
+                    isFavorite: true,
+                    animeData: {
+                        id: anime.id,
+                        title: anime.title,
+                        image_url: anime.image_url
+                    }
+                };
+            } else {
+                if (prev[anime.id]?.status) {
+                    newState[anime.id] = {
+                        status: prev[anime.id].status,
+                        animeData: {
+                            id: anime.id,
+                            title: anime.title,
+                            image_url: anime.image_url
+                        }
+                    };
+                } else {
+                    delete newState[anime.id];
+                }
+            }
+
+            return newState;
+        });
+    };
+
+    const getAnimeState = (anime) => {
+        return animeStates[anime.id]?.status || null;
+    };
+
+    const isFavorite = (anime) => {
+        return animeStates[anime.id]?.isFavorite || false;
+    };
+
+    // Slider Logic
     const handleArrowClick = (direction) => {
         const slider = sliderRef.current;
         if (!slider) return;
@@ -38,7 +127,7 @@ const MediaScroller = ({ images }) => {
 
         setShowLeftArrow(sliderIndex > 0);
         setShowRightArrow(sliderIndex < maxIndex);
-    }, [sliderIndex]);
+    }, [sliderIndex, animes]);
 
     return (
         <div className="scroller-container">
@@ -53,37 +142,31 @@ const MediaScroller = ({ images }) => {
                 )}
 
                 <div className="slider" ref={sliderRef}>
-                    {images.map((imgSrc, index) => (
-                        <div key={index} className="slide-item">
+                    {animes.map((anime) => (
+                        <div key={anime.id} className="slide-item">
                             <div className="image-container">
-                                <img
-                                    src={imgSrc}
-                                    alt={`Slide ${index}`}
-                                    className="slide-image"
+                                <a href={`https://www.youtube.com/results?search_query=${anime.title}`}>
+                                    <img
+                                        src={anime.image_url}
+                                        alt={anime.title}
+                                        className="slide-image"
+                                        onError={(e) => {
+                                            e.target.src = 'https://via.placeholder.com/300x400?text=Imagen+no+disponible';
+                                        }}
+                                    />
+                                </a>
+                                <ActionButtons
+                                    anime={anime}
+                                    isFavorite={isFavorite}
+                                    getAnimeState={getAnimeState}
+                                    handleFavorite={handleFavorite}
+                                    handleWatching={handleWatching}
                                 />
-                                <div className="button-overlay">
-                                    <button className="boton" id="favoritos" aria-label="Añadir a favoritos">
-                                        <svg className="icono" viewBox="0 0 24 24" fill="white">
-                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                                        </svg>
-                                    </button>
-                                    <button className="boton" id="ver-mas-tarde" aria-label="Ver más tarde">
-                                        <svg className="icono" viewBox="0 0 24 24" fill="white">
-                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-                                        </svg>
-                                    </button>
-                                    <button className="boton" id="viendo" aria-label="Actualmente viendo">
-                                        <svg className="icono" viewBox="0 0 24 24" fill="white">
-                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" />
-                                        </svg>
-                                    </button>
-                                    <button className="boton" id="terminado" aria-label="Marcar como terminado">
-                                        <svg className="icono" viewBox="0 0 24 24" fill="white">
-                                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                                        </svg>
-                                    </button>
-                                </div>
+                                <a className="titleLink" href={`https://www.youtube.com/results?search_query=${anime.title}`} >
+                                    <p className="anime-title" >{anime.title}</p>
+                                </a>
                             </div>
+
                         </div>
                     ))}
                 </div>
@@ -97,15 +180,6 @@ const MediaScroller = ({ images }) => {
                     </div>
                 )}
             </div>
-
-            <svg style={{ display: "none" }}>
-                <symbol id="next" viewBox="0 0 256 512">
-                    <path fill="white" d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z" />
-                </symbol>
-                <symbol id="previous" viewBox="0 0 256 512">
-                    <path fill="white" d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z" />
-                </symbol>
-            </svg>
         </div>
     );
 };
