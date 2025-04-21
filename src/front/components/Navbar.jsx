@@ -40,7 +40,7 @@ const NavBar = () => {
 							</div>
 						</div>
 					</div>
-					<div className="d-flex align-items-center order-lg-3 ms-2">
+					<div className="d-flex align-items-center order-lg-3 ms-auto">
 						<Link
 							className="user-menu rounded me-3" title={isLogged ? "User options" : "Login/register"}
 							to="#"

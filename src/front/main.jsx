@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './FinalProject.css'; // Tus estilos personalizados
 import './index.css'; // Estilos globales
 import { RouterProvider } from "react-router-dom";
-import { router } from '../services/routes'; // Tu ruta personalizada
+import { router } from './routes'; // Tu ruta personalizada
 import { StoreProvider } from './hooks/useGlobalReducer';
 import { BackendURL } from './components/BackendURL';
 import { UserContextProvider } from './context/UserContext';
