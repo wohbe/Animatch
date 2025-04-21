@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import '/workspaces/spain-fs-pt-95-g1/src/css/SearchBar.css';
+import { useNavigate } from "react-router-dom";
 
 
-export const SearchBar = ({ setResult }) => {
+export const SearchBar = ({ setResult, searchResultsList }) => {
     const API_URL = import.meta.env.VITE_API_URL;
     const [input, setInput] = useState("")
+    const navigate = useNavigate();
 
     const fetchData = (value) => {
         fetch(`${API_URL}/api/anime`).then((response) => response.json()).then((json) => {
@@ -17,13 +19,18 @@ export const SearchBar = ({ setResult }) => {
     }
 
     const handleChanges = (value) => {
-        setInput(value)
-        fetchData(value)
+        setInput(value);
+        fetchData(value);
 
     }
 
+    const handleSubmit = (value) => {
+        value.preventDefault();
+        navigate(`/anime/${searchResultsList[0].id}`);
+    }
+
     return (
-        <form className="d-flex ms-lg-auto position-relative" role="search" onSubmit={handleChanges}>
+        <form className="d-flex ms-lg-auto position-relative" role="search" onSubmit={handleSubmit}>
             <input
                 className="form-control me-2 rounded-pill ps-5"
                 id="buscar"

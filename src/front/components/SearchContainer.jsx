@@ -8,7 +8,7 @@ export const SearchContainer = () => {
 
     return (
         <div className="search-wrapper">
-            <SearchBar setResult={setResult} />
+            <SearchBar setResult={setResult} searchResultsList={result} />
             {result.length > 0 && <SearchResultList result={result} />}
 
         </div>
