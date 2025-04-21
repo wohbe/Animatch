@@ -9,7 +9,6 @@ db = SQLAlchemy()
 
 # MODELOS
 
-
 class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
@@ -26,7 +25,6 @@ class User(db.Model):
             "watching": [watch.anime.serialize() for watch in self.watching],
         }
 
-
 class UserPreference(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable=False)
@@ -34,7 +32,7 @@ class UserPreference(db.Model):
     duration: Mapped[str] = mapped_column(String(100))
     theme: Mapped[str] = mapped_column(String(50))
     tone: Mapped[str] = mapped_column(String(50))
-    created_at: Mapped[DateTime] = mapped_column(DateTime, default=func.current_timestamp())
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=func.current_timestamp())
 
     def serialize(self):
         return {
@@ -46,7 +44,6 @@ class UserPreference(db.Model):
             "tone": self.tone,
             "created_at": self.created_at
         }
-
 
 class Anime(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -75,7 +72,6 @@ class Anime(db.Model):
             "trailer": {"url": self.trailer_url} if self.trailer_url else None
         }
 
-
 class On_Air(db.Model):
     __tablename__ = 'on_air'
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -98,7 +94,7 @@ class On_Air(db.Model):
             "genres": [genre.serialize() for genre in self.genres],
             "airing": self.airing
         }
-    
+
 class Genre(db.Model):
     __tablename__ = 'genre'
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -111,7 +107,6 @@ class Genre(db.Model):
             "id": self.id,
             "name": self.name
         }
-
 
 class Favorites(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -127,7 +122,6 @@ class Favorites(db.Model):
             "user_id": self.user_id,
             "anime_id": self.anime_id
         }
-
 
 class Watching(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -146,17 +140,33 @@ class Watching(db.Model):
 
 # TABLAS INTERMEDIAS
 
-
-anime_genre = Table(
+anime_genre = db.Table (
     'anime_genre',
     db.metadata,
-    Column('anime_id', Integer, ForeignKey('anime.id'), primary_key=True),
-    Column('genre_id', Integer, ForeignKey('genre.id'), primary_key=True)
+    Column('anime_id', Integer, ForeignKey(
+        'anime.id'), primary_key=True),
+    Column('genre_id', Integer, ForeignKey(
+        'genre.id'), primary_key=True)
 )
 
 onair_genre = Table(
     'onair_genre',
     db.metadata,
-    Column('onair_id', Integer, ForeignKey('on_air.id'), primary_key=True),
-    Column('genre_id', Integer, ForeignKey('genre.id'), primary_key=True)
+
+    Column('onair_id', Integer, ForeignKey(
+        'on_air.id'), primary_key=True),
+    Column('genre_id', Integer, ForeignKey(
+        'genre.id'), primary_key=True)
 )
+
+# RELACIONES MANY-TO-MANY
+
+Anime.genres = relationship(
+    'Genre', secondary=anime_genre, back_populates='animes')
+Genre.animes = relationship(
+    'Anime', secondary=anime_genre, back_populates='genres')
+
+On_Air.genres = relationship(
+    'Genre', secondary=onair_genre, back_populates='on_airs')
+Genre.on_airs = relationship(
+    'On_Air', secondary=onair_genre, back_populates='genres')

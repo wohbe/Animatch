@@ -15,4 +15,3 @@ export const SearchResult = ({ result }) => {
         </div>
     );
 };
-

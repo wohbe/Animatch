@@ -1,57 +1,56 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import '/workspaces/spain-fs-pt-95-g1/src/css/SearchBar.css';
+import { useNavigate } from "react-router-dom";
 
-const SearchBar = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
-  const searchInputRef = useRef(null);
 
-  const handleSearch = (event) => {
-    event.preventDefault();
-    const query = searchInputRef.current?.value;
+export const SearchBar = ({ setResult, searchResultsList }) => {
+    const API_URL = import.meta.env.VITE_API_URL;
+    const [input, setInput] = useState("")
+    const navigate = useNavigate();
 
-    if (!query?.trim()) {
-      navigate('/search-results?q=', { state: { results: [] } });
-      return;
+    const fetchData = (value) => {
+        fetch(`${API_URL}/api/anime`).then((response) => response.json()).then((json) => {
+            const result = json.filter((anime) => {
+                return value && anime && anime.title && anime.title.toLowerCase().includes(value.toLowerCase());
+            });
+            setResult(result);
+        });
+
     }
 
-    fetch(`/api/anime/search?q=${query}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        navigate(`/search-results?q=${query}`, { state: { results: data.results } });
-      })
-      .catch(error => {
-        console.error('Error en la búsqueda:', error);
-      });
-  };
+    const handleChanges = (value) => {
+        setInput(value);
+        fetchData(value);
 
-  return (
-    <form className="d-flex ms-lg-auto position-relative" role="search" onSubmit={handleSearch}>
-      <input
-        className="form-control me-2 rounded-pill ps-5"
-        id="buscar"
-        type="search"
-        placeholder="Buscar..."
-        aria-label="Buscar"
-        ref={searchInputRef}
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <button
-        className="btn btn-outline-light rounded-circle position-absolute top-50 start-0 translate-middle-y ms-2"
-        title="Buscar"
-        type="submit"
-        style={{ border: 'none', background: 'none' }}
-      >
-        <i className="fa fa-search"></i>
-      </button>
-    </form>
-  );
-};
+    }
 
-export default SearchBar;
+    const handleSubmit = (value) => {
+        value.preventDefault();
+        navigate(`/anime/${searchResultsList[0].id}`);
+    }
+
+    return (
+        <form className="d-flex ms-lg-auto position-relative" role="search" onSubmit={handleSubmit}>
+            <input
+                className="form-control me-2 rounded-pill ps-5"
+                id="buscar"
+                type="search"
+                placeholder="Buscar..."
+                aria-label="Buscar"
+                value={input}
+                onChange={(e) => handleChanges(e.target.value)}
+            />
+            <button
+                className="btn btn-outline-light rounded-circle position-absolute top-50 start-0 translate-middle-y ms-2"
+                title="Buscar"
+                type="submit"
+                style={{ border: 'none', background: 'none' }}
+            >
+                <i className="fa fa-search"></i>
+            </button>
+        </form>
+
+
+    )
+}
+

@@ -1,14 +1,24 @@
-import React from "react";
+
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { SearchContainer } from "./SearchContainer";
-const Navbar = () => {
+import IdentityModal from "./IdentityModal";
+import UserModal from "./UserModal";
+import { UserContext } from '../context/UserContext';
+
+const NavBar = () => {
+    const [showModal, setShowModal] = useState(false);
+	const { isLogged } = useContext(UserContext);
+
+	const handleShow = () => setShowModal(true);
+	const handleClose = () => setShowModal(false);
+  
 	return (
 		<section>
 			<div className="NavBar">
 				<nav className="navbar navbar-expand-lg">
 					<div className="container-fluid">
 						<Link className="navbar-brand order-lg-0" to="#">
-							<img src="/src/front/assets/img/logo.jpg" width="30" height="30" className="d-inline-block align-top" alt="" />
+							<img src="/src/front/assets/img/animatch.png" width="40" height="40" className="d-inline-block align-top" alt="" />
 						</Link>
 						<Link className="navbar-brand Home order-lg-0" to="/">Animatch</Link>
 						<button
@@ -30,29 +40,23 @@ const Navbar = () => {
 								<Link className="nav-link active Match" to="#">Match <i className="fa-regular fa-heart"></i></Link>
 								<Link className="nav-link active Profile" to="#">Profile</Link>
 							</div>
-							<SearchContainer />
 						</div>
 					</div>
-					<div className="d-flex align-items-center order-lg-3 ms-2">
+					<div className="d-flex align-items-center order-lg-3 ms-auto">
 						<Link
-							className="user-menu rounded " title="Login/register"
-							to="/profile"
-							aria-label="Ir al perfil" 
+							className="user-menu rounded me-3" title={isLogged ? "User options" : "Login/register"}
+							to="#"
+							aria-label={isLogged ? "User options" : "Register/Login"}
+							onClick={handleShow}
 						>
-							{/* {isLoggedIn ? (
-								<i className="fa-solid fa-user-plus "></i> icono para cuando está logueado 
-							) : (
-								<i className="fa-solid fa-user-circle"></i> icono antes del login 
-							)} */}
+							    <img src={isLogged ? "src/front/assets/img/loged-picture.png" : "src/front/assets/img/profile-picture.png"} alt="User profile" className="profile-icon" width="40" height="40"/>
 						</Link>
 					</div>
 				</nav>
-				
 			</div>
+			{showModal && (isLogged ? <UserModal closeModal={handleClose} /> : <IdentityModal closeModal={handleClose} /> )}
 		</section>
 	);
 };
 
-export default Navbar;
-
-
+export default NavBar;
