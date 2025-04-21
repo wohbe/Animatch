@@ -20,7 +20,7 @@ const IdentityModal = ({ closeModal }) => {
   const handleRegisterChange = (e) => {
     setRegisterData({
       ...registerData,
-      [e.target.name]: e.target.value // Actualizamos el estado con lo que el usuario escribe en el input
+      [e.target.name]: e.target.value
     });
   }
 
