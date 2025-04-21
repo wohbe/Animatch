@@ -11,6 +11,7 @@ import { Single } from "../front/pages/Single";
 import { Demo } from "../front/pages/Demo";
 import Userview from "../front/pages/UserView";
 import Categories from "../front/pages/Categories";
+import Login from "../front/pages/Login";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,6 +30,7 @@ export const router = createBrowserRouter(
       <Route path="/demo" element={<Demo />} />
       <Route path="/userview" element={<Userview />} />
       <Route path="/categories" element={<Categories />} />
+      <Route path="/login" element={<Login />} />
     </Route>
   )
 );
