@@ -5,19 +5,12 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-<<<<<<< HEAD:src/front/routes.jsx
+import { Layout } from "./pages/Layout";
 import Home from "./pages/Home";
-import { AniPage } from "./pages/AnimatchPage";
-import AnimeCard from "./components/AnimeCard";
-
-=======
-import { Layout } from "../front/pages/Layout";
-import Home from "../front/pages/Home";
-import { Single } from "../front/pages/Single";
-import { Demo } from "../front/pages/Demo";
-import Userview from "../front/pages/UserView";
-import Categories from "../front/pages/Categories";
->>>>>>> develop:src/services/routes.jsx
+import { Single } from "./pages/Single";
+import { Demo } from "./pages/Demo";
+import Userview from "./pages/UserView";
+import Categories from "./pages/Categories";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
