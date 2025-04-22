@@ -10,7 +10,7 @@ import { SearchResultList } from "./SearchResultList";
 
 const Animatch = ({ userId }) => {
     const [result, setResult] = useState([]);
-    const API_URL = import.meta.env.VITE_API_URL;
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
     const [answers, setAnswers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [animeList, setAnimeList] = useState([]);
@@ -228,6 +228,7 @@ const Animatch = ({ userId }) => {
 
                 </div>
             )}
+            
 
             {!loading && !generating && recommendation && (
                 <AnimatchCard

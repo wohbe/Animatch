@@ -4,14 +4,15 @@ import { Link } from "react-router-dom";
 import IdentityModal from "./IdentityModal";
 import UserModal from "./UserModal";
 import { UserContext } from '../context/UserContext';
+import SearchContainer from "./SearchContainer";
 
 const NavBar = () => {
-    const [showModal, setShowModal] = useState(false);
+	const [showModal, setShowModal] = useState(false);
 	const { isLogged } = useContext(UserContext);
 
 	const handleShow = () => setShowModal(true);
 	const handleClose = () => setShowModal(false);
-  
+
 	return (
 		<section>
 			<div className="NavBar">
@@ -40,6 +41,7 @@ const NavBar = () => {
 								<Link className="nav-link active Match" to="/animatch">Match <i className="fa-regular fa-heart"></i></Link>
 								<Link className="nav-link active Profile" to="#">Profile</Link>
 							</div>
+							<SearchContainer />
 						</div>
 					</div>
 					<div className="d-flex align-items-center order-lg-3 ms-auto">
@@ -49,12 +51,12 @@ const NavBar = () => {
 							aria-label={isLogged ? "User options" : "Register/Login"}
 							onClick={handleShow}
 						>
-							    <img src={isLogged ? "src/front/assets/img/loged-picture.png" : "src/front/assets/img/profile-picture.png"} alt="User profile" className="profile-icon" width="40" height="40"/>
+							<img src={isLogged ? "src/front/assets/img/loged-picture.png" : "src/front/assets/img/profile-picture.png"} alt="User profile" className="profile-icon" width="40" height="40" />
 						</Link>
 					</div>
 				</nav>
 			</div>
-			{showModal && (isLogged ? <UserModal closeModal={handleClose} /> : <IdentityModal closeModal={handleClose} /> )}
+			{showModal && (isLogged ? <UserModal closeModal={handleClose} /> : <IdentityModal closeModal={handleClose} />)}
 		</section>
 	);
 };
