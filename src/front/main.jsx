@@ -29,4 +29,3 @@ const Main = () => {
 };
 
 ReactDOM.createRoot(document.getElementById('root')).render(<Main />);
-

@@ -1,12 +1,11 @@
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from sqlalchemy import func
-from api.models import db, User, Anime, Favorites, On_Air, Genre, Watching
+from api.models import db, User, Anime, Favorites, On_Air, Genre, Watching, UserPreference
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import requests
 import time
-import json
 import bcrypt
 
 api = Blueprint('api', __name__)
@@ -14,7 +13,6 @@ CHARACTER_ENCODING = 'utf-8'
 # Permite todas las origenes en desarrollo
 CORS(api, resources={r"/api/*": {"origins": "*"}})
 # La configuración de CORS se realizará en app.py
-
 # Rate limiting for Jikan API (60 requests per minute)
 
 def wait_for_rate_limit():
@@ -478,7 +476,7 @@ def delete_user(user_id):
         return jsonify({"message": "User not found"}), 404
     if current_user_id != user_id:
         return jsonify({"message": "You can only delete your own account"}), 403
-    db.session.delete(user_to_delete)
+    db.session.delete(user)
     db.session.commit()
     return jsonify({"message": "User deleted successfully"}), 200
 

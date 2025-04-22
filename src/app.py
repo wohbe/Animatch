@@ -31,10 +31,21 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
 
+def initialize_animes():
+    from api.models import Anime
+    from api.anime_sync import sync_animes
+
+    anime_count = Anime.query.count()
+    
+    if anime_count == 0:
+            sync_animes(max_pages=5)
+            
 # Lo siguiente es para inicialización de la base de datos.
 with app.app_context():
     db.create_all()
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+    initialize_animes()
+
+CORS(app, resources={r"/api/*": {"origins":"*"}})
 
 # add the admin
 setup_admin(app)
