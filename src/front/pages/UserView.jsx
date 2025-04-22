@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import NavBar from "../components/Navbar";
 import UserInfo from "../components/UserInfo";
 import MediaScroller from "../components/MediaScroller";
 import ImageList from "../components/ImageList";
@@ -28,7 +27,6 @@ const Userview = () => {
 
     return (
         <div className="user-view-container">
-            <NavBar />
             <UserInfo />
 
             <div className="user-lists">
