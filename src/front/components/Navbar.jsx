@@ -39,7 +39,6 @@ const NavBar = () => {
 								<Link className="nav-link active Popular" aria-current="page" to="#">Popular</Link>
 								<Link className="nav-link active Categories" aria-current="page" to="#">Categories</Link>
 								<Link className="nav-link active Match" to="/animatch">Match <i className="fa-regular fa-heart"></i></Link>
-								<Link className="nav-link active Profile" to="#">Profile</Link>
 							</div>
 							<SearchContainer />
 						</div>
@@ -50,7 +49,6 @@ const NavBar = () => {
 							to="#"
 							aria-label={isLogged ? "User options" : "Register/Login"}
 							onClick={handleShow}
-							onBlur={handleClose}
 						>
 							<img src={isLogged ? "src/front/assets/img/loged-picture.png" : "src/front/assets/img/profile-picture.png"} alt="User profile" className="profile-icon" width="40" height="40" />
 						</Link>
