@@ -1,8 +1,9 @@
 import React from "react";
 import '../css/AnimatchCard.css'
+import { Link } from 'react-router-dom';
 
 const AnimatchCard = ({ title, synopsis, url, image }) => {
-    
+
 
     return (
         <div className="animatch-card">
@@ -19,14 +20,9 @@ const AnimatchCard = ({ title, synopsis, url, image }) => {
                 <p className="animatch-summary-title">SINOPSIS</p>
                 <p className="animatch-synopsis">{synopsis.length > 150 ? `${synopsis.slice(0, 150)}...` : synopsis}</p>
 
-                <a
-                    href={url}
-                    className="button-anime"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
+                <Link to={`/${url}`} className="button-anime">
                     ▶ VER MÁS
-                </a>
+                </Link>
             </div>
         </div>
     );
