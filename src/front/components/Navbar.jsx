@@ -10,7 +10,7 @@ const NavBar = () => {
 	const [showModal, setShowModal] = useState(false);
 	const { isLogged } = useContext(UserContext);
 
-	const handleShow = () => setShowModal(true);
+	const handleShow = () => setShowModal(!showModal);
 	const handleClose = () => setShowModal(false);
 
 	return (
@@ -50,6 +50,7 @@ const NavBar = () => {
 							to="#"
 							aria-label={isLogged ? "User options" : "Register/Login"}
 							onClick={handleShow}
+							onBlur={handleClose}
 						>
 							<img src={isLogged ? "src/front/assets/img/loged-picture.png" : "src/front/assets/img/profile-picture.png"} alt="User profile" className="profile-icon" width="40" height="40" />
 						</Link>
