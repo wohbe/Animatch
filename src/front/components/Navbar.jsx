@@ -1,4 +1,3 @@
-
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import IdentityModal from "./IdentityModal";
@@ -37,7 +36,7 @@ const NavBar = () => {
 							<div className="navbar-nav me-auto">
 								<Link className="nav-link active News" aria-current="page" to="#">New</Link>
 								<Link className="nav-link active Popular" aria-current="page" to="#">Popular</Link>
-								<Link className="nav-link active Categories" aria-current="page" to="#">Categories</Link>
+								<Link className="nav-link active Categories" aria-current="page" to="/categories">Categories</Link>
 								<Link className="nav-link active Match" to="/animatch">Match <i className="fa-regular fa-heart"></i></Link>
 							</div>
 							<SearchContainer />

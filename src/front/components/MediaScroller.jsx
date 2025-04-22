@@ -1,11 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import ActionButtons from './ActionButtons';
+import { useNavigate } from 'react-router-dom';
 
 const MediaScroller = ({ animes, animeStatus = {}, onUpdate }) => {
     const [sliderIndex, setSliderIndex] = useState(0);
     const [showLeftArrow, setShowLeftArrow] = useState(false);
     const [showRightArrow, setShowRightArrow] = useState(true);
     const sliderRef = useRef(null);
+    const navigate = useNavigate();
 
     const handleArrowClick = (direction) => {
         const slider = sliderRef.current;
@@ -34,6 +36,10 @@ const MediaScroller = ({ animes, animeStatus = {}, onUpdate }) => {
         setShowRightArrow(sliderIndex < maxIndex);
     }, [sliderIndex, animes]);
 
+    const goToAnimeDetails = (animeId) => {
+        navigate(`/anime/${animeId}`);
+    };
+
     return (
         <div className="scroller-container">
             <div className="slider-container">
@@ -47,10 +53,8 @@ const MediaScroller = ({ animes, animeStatus = {}, onUpdate }) => {
                     {animes.map((anime) => (
                         <div key={anime.id} className="slide-item">
                             <div className="image-container">
-                                <a
-                                    href={`https://www.youtube.com/results?search_query=${encodeURIComponent(anime.title)}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                <div
+                                    onClick={() => goToAnimeDetails(anime.id)}
                                 >
                                     <img
                                         src={anime.image_url || 'https://via.placeholder.com/300x400?text=Imagen+no+disponible'}
@@ -61,7 +65,7 @@ const MediaScroller = ({ animes, animeStatus = {}, onUpdate }) => {
                                             e.target.src = 'https://via.placeholder.com/300x400?text=Imagen+no+disponible';
                                         }}
                                     />
-                                </a>
+                                </div>
 
                                 <ActionButtons
                                     anime={anime}

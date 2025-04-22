@@ -15,7 +15,6 @@ export const SearchBar = ({ setResult, searchResultsList }) => {
             });
             setResult(result);
         });
-
     }
 
     const handleChanges = (value) => {
@@ -51,8 +50,6 @@ export const SearchBar = ({ setResult, searchResultsList }) => {
                 <i className="fa fa-search"></i>
             </button>
         </form>
-
-
     )
 }
 
