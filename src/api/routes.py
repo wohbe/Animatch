@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from sqlalchemy import func
-from api.models import db, User, Anime, Favorites, On_Air, Genre
+from api.models import db, User, Anime, Favorites, On_Air, Genre, Watching
 from api.utils import generate_sitemap, APIException
+from flask_cors import CORS
 import requests
 import time
 import json
@@ -11,6 +11,7 @@ import bcrypt
 api = Blueprint('api', __name__)
 CHARACTER_ENCODING = 'utf-8'
 # Permite todas las origenes en desarrollo
+CORS(api, resources={r"/api/*": {"origins": "*"}})
 # La configuración de CORS se realizará en app.py
 
 # Rate limiting for Jikan API (60 requests per minute)
@@ -173,60 +174,107 @@ def get_on_air_list():
 
 # favorites
 
+@api.route('/favorites/<int:anime_id>', methods=['POST', 'DELETE'])
+@jwt_required()
+def handle_favorites(anime_id):
+    current_user_id = get_jwt_identity()
+    
+    if request.method == 'POST':
+        existing = Favorites.query.filter_by(
+            user_id=current_user_id,
+            anime_id=anime_id
+        ).first()
+        
+        if existing:
+            return jsonify({"message": "Already in favorites"}), 200
+            
+        new_fav = Favorites(
+            user_id=current_user_id,
+            anime_id=anime_id
+        )
+        db.session.add(new_fav)
+        db.session.commit()
+        
+        anime = Anime.query.get(anime_id)
+        return jsonify({
+            "id": new_fav.id,
+            "anime": anime.serialize(),
+            "user_id": new_fav.user_id
+        }), 201
 
-@api.route('/favorites', methods=['GET'])
-def get_favorites():
-    favorites = Favorites.query.all()
-    return jsonify([favorite.serialize() for favorite in favorites]), 200
-
-
-@api.route('/favorites', methods=['POST'])
-def add_favorite():
-    data = request.json
-    favorite = Favorites(
-        user_id=data['user_id'],
-        anime_id=data['anime_id']
-    )
-    db.session.add(favorite)
-    db.session.commit()
-    return jsonify({"message": "Favorite added successfully"}), 200
-
-
-@api.route('/favorites/<int:favorite_id>', methods=['DELETE'])
-def delete_favorite(favorite_id):
-    favorite = Favorites.query.get(favorite_id)
-    if not favorite:
-        return jsonify({"message": "Favorite not found"}), 404
-    db.session.delete(favorite)
-    db.session.commit()
-    return jsonify({"message": "Favorite deleted successfully"}), 200
+    elif request.method == 'DELETE':
+        favorite = Favorites.query.filter_by(
+            user_id=current_user_id,
+            anime_id=anime_id
+        ).first()
+        
+        if not favorite:
+            return jsonify({"message": "Not found in favorites"}), 404
+            
+        db.session.delete(favorite)
+        db.session.commit()
+        return jsonify({"message": "Removed from favorites"}), 200
   
 ## Watching
-
 @api.route('/watching', methods=['GET'])
-def get_watching():
-    watching_list = Watching.query.all()
-    return jsonify([watching.serialize() for watching in watching_list]), 200
+@jwt_required()
+def get_all_watching():
+    current_user_id = get_jwt_identity()
+    
+    watching_items = db.session.query(Watching, Anime).join(
+        Anime, Watching.anime_id == Anime.id
+    ).filter(
+        Watching.user_id == current_user_id
+    ).all()
+    
+    watching_list = [{
+        "id": item.Watching.id,
+        "anime": item.Anime.serialize(),
+        "user_id": item.Watching.user_id
+    } for item in watching_items]
+    
+    return jsonify(watching_list), 200
 
-@api.route('/watching', methods=['POST'])
-def add_watching():
-    data = request.json
-    watching = Watching(
-        user_id=data['user_id'],
-        anime_id=data['anime_id']
-    )
-    db.session.add(watching)
-    db.session.commit()
-    return jsonify({"message": "Anime added to watching list successfully"}), 200
+@api.route('/watching/<int:anime_id>', methods=['POST', 'DELETE'])
+@jwt_required()
+def handle_watching(anime_id):
+    current_user_id = get_jwt_identity()
+    
+    if request.method == 'POST':
+        existing = Watching.query.filter_by(
+            user_id=current_user_id,
+            anime_id=anime_id
+        ).first()
+        
+        if existing:
+            return jsonify({"message": "Already in watching list"}), 200
+            
+        new_watching = Watching(
+            user_id=current_user_id,
+            anime_id=anime_id
+        )
+        db.session.add(new_watching)
+        db.session.commit()
+        
+        anime = Anime.query.get(anime_id)
+        return jsonify({
+            "id": new_watching.id,
+            "anime": anime.serialize(),
+            "user_id": new_watching.user_id
+        }), 201
 
-@api.route('/watching/<int:watching_id>', methods=['DELETE'])
-def delete_watching(watching_id):
-    watching = Watching.query.get(watching_id)
-    if not watching:
-        return jsonify({"message": "Watching entry not found"}), 404
-    db.session.delete(watching)
-    db.session.commit()
-    return jsonify({"message": "Anime removed from watching list successfully"}), 200
+    elif request.method == 'DELETE':
+        watching = Watching.query.filter_by(
+            user_id=current_user_id,
+            anime_id=anime_id
+        ).first()
+        
+        if not watching:
+            return jsonify({"message": "Not found in watching list"}), 404
+        
+        db.session.delete(watching)
+        db.session.commit()
+        return jsonify({"message": "Removed from watching list"}), 200
 
 ## ESTA PARTE CORRESPONDE A LA PARTE DE LOGIN, SIGNUP, DELETEUSER Y TOKEN.
 
@@ -265,24 +313,24 @@ def login():
     data = request.get_json()
     if not data or 'email' not in data or 'password' not in data:
         return jsonify({"message": "Email and password are required"}), 400
-    email = data['email']
-    password = data['password']
-    user = User.query.filter_by(email=email).first()
-
-    if not user or not bcrypt.checkpw(password.encode(CHARACTER_ENCODING), user.password.encode(CHARACTER_ENCODING)): # Esto compara la contraseña introducida con la del usuario
-
-        return jsonify({"message": "Invalid user or password"}), 401
-    # Aquí se crea el token.
-    access_token = create_access_token(identity=user.id)
+    
+    user = User.query.filter_by(email=data['email']).first()
+    if not user or not bcrypt.checkpw(
+        data['password'].encode(CHARACTER_ENCODING),
+        user.password.encode(CHARACTER_ENCODING)
+    ):
+        return jsonify({"message": "Invalid credentials"}), 401
+    
+    access_token = create_access_token(identity=str(user.id))
+    
     return jsonify({
         "message": "Login successful",
         "access_token": access_token,
         "user": {
             "id": user.id,
-            "email": user.email,
+            "email": user.email
         }
     }), 200
-
 
 @api.route("/protected", methods=["GET"])
 @jwt_required()
@@ -309,3 +357,25 @@ def delete_user(user_id):
     db.session.delete(user_to_delete)
     db.session.commit()
     return jsonify({"message": "User deleted successfully"}), 200
+
+@api.route('/anime/status/all', methods=['GET'])
+@jwt_required()
+def get_all_anime_status():
+    current_user_id = get_jwt_identity()
+    
+    favorites = Favorites.query.filter_by(user_id=current_user_id).all()
+    favorites_dict = {fav.anime_id: True for fav in favorites}
+    
+    watching = Watching.query.filter_by(user_id=current_user_id).all()
+    watching_dict = {watch.anime_id: True for watch in watching}
+
+    all_animes = Anime.query.with_entities(Anime.id).all()
+
+    status_dict = {}
+    for anime_id in [anime.id for anime in all_animes]:
+        status_dict[str(anime_id)] = {
+            'isFavorite': favorites_dict.get(anime_id, False),
+            'isWatching': watching_dict.get(anime_id, False)
+        }
+    
+    return jsonify(status_dict), 200
