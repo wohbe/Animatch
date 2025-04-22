@@ -38,10 +38,10 @@ const NavBar = () => {
 								<Link className="nav-link active News" aria-current="page" to="#">New</Link>
 								<Link className="nav-link active Popular" aria-current="page" to="#">Popular</Link>
 								<Link className="nav-link active Categories" aria-current="page" to="#">Categories</Link>
-								<Link className="nav-link active Match" to="#">Match <i className="fa-regular fa-heart"></i></Link>
+								<Link className="nav-link active Match" to="/animatch">Match <i className="fa-regular fa-heart"></i></Link>
 								<Link className="nav-link active Profile" to="#">Profile</Link>
-								<SearchContainer />
 							</div>
+							<SearchContainer />
 						</div>
 					</div>
 					<div className="d-flex align-items-center order-lg-3 ms-auto">

@@ -2,9 +2,10 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String, Boolean, Integer, Text, ForeignKey, Float, func, Table, Column, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
-import datetime
+from datetime import datetime
+from sqlalchemy.types import DateTime
 
-
+ 
 # Inicializar la DB
 db = SQLAlchemy()
 
@@ -154,7 +155,6 @@ class Watching(db.Model):
         }
 
 # TABLAS INTERMEDIAS
-
 
 anime_genre = db.Table(
     'anime_genre',

@@ -44,7 +44,7 @@ const IdentityModal = ({ closeModal }) => {
       alert('Password must be at least 8 characters long');
       return
     }
-
+    console.log("Hasta aquí bien");
     const response = await fetch(`${baseURL}api/signup`, {
       method: 'POST',
       headers: {

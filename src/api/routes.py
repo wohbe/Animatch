@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from sqlalchemy import func
 from api.models import db, User, Anime, Favorites, On_Air, Genre, Watching, UserPreference
 from api.utils import generate_sitemap, APIException
 import requests
@@ -10,18 +11,14 @@ import bcrypt
 api = Blueprint('api', __name__)
 CHARACTER_ENCODING = 'utf-8'
 # Permite todas las origenes en desarrollo
-CORS(api, resources={r"/api/*": {"origins": "*"}})
-
+# La configuración de CORS se realizará en app.py
 # Rate limiting for Jikan API (60 requests per minute)
-
 
 def wait_for_rate_limit():
     time.sleep(1)  # Wait 1 second between requests
 
 # endpoint para almacenar datos de api externa
 # anime
-
-
 @api.route('/anime', methods=['GET'])
 def get_animes():
     animes = Anime.query.all()
@@ -353,10 +350,11 @@ def handle_watching(anime_id):
 @api.route('/signup', methods=['POST'])
 def register_user():
     data = request.get_json()
-    if not data or 'email' not in data or 'password' not in data:
+    if data is None:
         return jsonify({"message": "Email and password are required"}), 400
-
-    if User.query.filter_by(email=data['email']).first():
+    email = data['email']
+    password = data['password']
+    if User.query.filter_by(email=email).first():
         return jsonify({"message": "User already exists"}), 400
 
     # Convertimos la contraseña en un array de bytes.
@@ -398,7 +396,6 @@ def register_user():
 
 @api.route('/login', methods=['POST'])
 def login():
-
     data = request.get_json()
     if not data or 'email' not in data or 'password' not in data:
         return jsonify({"message": "Email and password are required"}), 400
@@ -427,12 +424,12 @@ def login():
         "access_token": access_token,
         "user": {
             "id": user.id,
-            "email": user.email
+            "email": user.email,
         }
     }), 200
 
 
-@api.route('/protected', methods=['GET'])
+@api.route("/protected", methods=["GET"])
 @jwt_required()
 def protected():
     try:
@@ -463,7 +460,7 @@ def get_users():
 
 @api.route('/users/<int:user_id>', methods=['DELETE'])
 @jwt_required()
-def handle_user(user_id):
+def delete_user(user_id):
     current_user_id = get_jwt_identity()
 
     try:
@@ -477,8 +474,9 @@ def handle_user(user_id):
     user = User.query.get(user_id)
     if not user:
         return jsonify({"message": "User not found"}), 404
-
-    db.session.delete(user)
+    if current_user_id != user_id:
+        return jsonify({"message": "You can only delete your own account"}), 403
+    db.session.delete(user_to_delete)
     db.session.commit()
     return jsonify({"message": "User deleted successfully"}), 200
 

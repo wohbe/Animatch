@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import '/workspaces/spain-fs-pt-95-g1/src/css/SearchBar.css';
+import '/workspaces/spain-fs-pt-95-g1/src/front/css/SearchBar.css';
 import { useNavigate } from "react-router-dom";
 
 

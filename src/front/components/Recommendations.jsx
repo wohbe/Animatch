@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../index.css';
+import '../css/FinalProject.css';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -7,7 +7,7 @@ const Recommendations = ({ genres, currentAnimeId }) => {
     const [recommendedAnimes, setRecommendedAnimes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const API_URL = import.meta.env.VITE_API_URL;
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
     const navigate = useNavigate();
 
     useEffect(() => {

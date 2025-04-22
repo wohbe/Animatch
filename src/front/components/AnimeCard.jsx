@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../index.css';
+import '../css/FinalProject.css';
 import { useParams } from 'react-router-dom';
 import Recommendations from './Recommendations';
 
@@ -88,7 +88,7 @@ function AnimeCard() {
 
     return (
         <div className='container'>
-            <div className="anime-card d-flex ">
+            <div className="anime-card ">
                 <div className='container-image'>
                     <img src={animeDetails.image_url} alt={animeDetails.title} id='imagen_anime' className="cover-image w-auto" />
                     <div className='buttons-card'>
