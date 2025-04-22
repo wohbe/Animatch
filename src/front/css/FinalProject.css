@@ -13,6 +13,7 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    padding-top: 100px;
 }
 
 img {
@@ -22,6 +23,11 @@ img {
 
 /* Navbar */
 .NavBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
   background-color: #1A1A1A;
   padding: 1rem;
   border-bottom: 3px solid #FF9800;
