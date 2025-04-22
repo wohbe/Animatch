@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from sqlalchemy import func
-from api.models import db, User, Anime, Favorites, On_Air, Genre
+from api.models import db, User, Anime, Favorites, On_Air, Genre, Watching
 from api.utils import generate_sitemap, APIException
 import requests
 import time
