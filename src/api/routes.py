@@ -475,7 +475,7 @@ def delete_user(user_id):
         return jsonify({"message": "User not found"}), 404
     if current_user_id != user_id:
         return jsonify({"message": "You can only delete your own account"}), 403
-    db.session.delete(user_to_delete)
+    db.session.delete(user)
     db.session.commit()
     return jsonify({"message": "User deleted successfully"}), 200
 
