@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../index.css';
 import { useParams } from 'react-router-dom';
-import Recommendations from './Recommendations'; 
+import Recommendations from './Recommendations';
 
 function AnimeCard() {
     const { id } = useParams();
@@ -12,7 +12,7 @@ function AnimeCard() {
     const [isWatching, setIsWatching] = useState(false);
     const [likes, setLikes] = useState(0);
     const [hasLiked, setHasLiked] = useState(false);
-    const API_URL = import.meta.env.VITE_API_URL;
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
     useEffect(() => {
         const fetchAnimeDetails = async () => {
             setLoading(true);
@@ -70,7 +70,7 @@ function AnimeCard() {
         } else {
             setLikes(likes - 1);
             setHasLiked(false);
-            
+
         }
     };
 
@@ -126,7 +126,7 @@ function AnimeCard() {
                                 <strong>Género: </strong>
                                 {animeDetails.genres && animeDetails.genres.map((genre) => (
                                     <span key={genre.id} className="genre">
-                                       {genre.name} {animeDetails.genres.indexOf(genre) < animeDetails.genres.length - 1 ?', ' : ''}
+                                        {genre.name} {animeDetails.genres.indexOf(genre) < animeDetails.genres.length - 1 ? ', ' : ''}
                                     </span>
                                 ))}
                             </li>
@@ -144,9 +144,9 @@ function AnimeCard() {
                 </div>
             </div>
             {console.log("AnimeCard - Passing currentAnimeId to Recommendations:", parseInt(id))}
-            {animeDetails.genres && <Recommendations genres={animeDetails.genres} currentAnimeId={parseInt(id)} />} 
+            {animeDetails.genres && <Recommendations genres={animeDetails.genres} currentAnimeId={parseInt(id)} />}
         </div>
-        
+
     );
 }
 
