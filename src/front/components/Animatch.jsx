@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import React from "react";
 import ButtonAnimatch from "./AniMatchButton";
 import AnimatchCard from "./AnimatchCard";
-import '/workspaces/spain-fs-pt-95-g1/src/css/Animatch.css'
+import '../css/Animatch.css'
 import { useParams } from 'react-router-dom';
 import { SearchResultList } from "./SearchResultList";
 

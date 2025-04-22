@@ -1,5 +1,5 @@
 import React from "react";
-import '/workspaces/spain-fs-pt-95-g1/src/css/AnimatchCard.css'
+import '../css/AnimatchCard.css'
 
 const AnimatchCard = ({ title, synopsis, url, image }) => {
     

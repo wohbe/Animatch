@@ -1,5 +1,5 @@
 import React from "react";
-import '/workspaces/spain-fs-pt-95-g1/src/css/Animatch.css'
+import '../css/Animatch.css'
 
 const ButtonAnimatch = ({ text, onClick }) => {
     return (

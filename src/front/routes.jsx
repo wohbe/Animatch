@@ -27,7 +27,6 @@ export const router = createBrowserRouter(
       <Route path="/animatch" element={<AniPage />} />
       <Route path="*" element={<h1>Not found!</h1>} />
       <Route path="/anime/:id" element={<AnimeCard />} />
-      <Route path="/single/:theId" element={<Single />} />  {/* Dynamic route for single items */}
       <Route path="/userview" element={<Userview />} />
       <Route path="/categories" element={<Categories />} />
     </Route>
