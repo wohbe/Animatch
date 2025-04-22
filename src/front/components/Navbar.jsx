@@ -1,10 +1,11 @@
-
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import IdentityModal from "./IdentityModal";
 import UserModal from "./UserModal";
 import { UserContext } from '../context/UserContext';
 import SearchContainer from "./SearchContainer";
+import loggedPicture from "../assets/img/loged-picture.png";
+import profilePicture from "../assets/img/profile-picture.png";
 
 const NavBar = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -50,7 +51,7 @@ const NavBar = () => {
 							aria-label={isLogged ? "User options" : "Register/Login"}
 							onClick={handleShow}
 						>
-							<img src={isLogged ? "src/front/assets/img/loged-picture.png" : "src/front/assets/img/profile-picture.png"} alt="User profile" className="profile-icon" width="40" height="40" />
+							<img src={isLogged ? loggedPicture : profilePicture} alt="User profile" className="profile-icon" width="40" height="40" />
 						</Link>
 					</div>
 				</nav>
