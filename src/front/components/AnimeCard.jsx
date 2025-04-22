@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import '../css/FinalProject.css';
 import { useParams } from 'react-router-dom';
 import Recommendations from './Recommendations';
+import { UserContext } from '../context/UserContext'; 
 
 function AnimeCard() {
     const { id } = useParams();
@@ -13,6 +14,9 @@ function AnimeCard() {
     const [likes, setLikes] = useState(0);
     const [hasLiked, setHasLiked] = useState(false);
     const API_URL = import.meta.env.VITE_BACKEND_URL;
+    const { isLogged, token } = useContext(UserContext); 
+
+
     useEffect(() => {
         const fetchAnimeDetails = async () => {
             setLoading(true);
@@ -20,7 +24,7 @@ function AnimeCard() {
             setAnimeDetails(null);
 
             try {
-                const response = await fetch(`${API_URL}/api/anime/${id}`);
+                const response = await fetch(`${API_URL}api/anime/${id}`);
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(`HTTP error! status: ${response.status} - ${errorData?.message || 'Error al cargar los detalles del anime'}`);
@@ -28,6 +32,11 @@ function AnimeCard() {
                 const data = await response.json();
                 setAnimeDetails(data);
                 setLoading(false);
+
+                if (isLogged) {
+                    fetchUserPreferences();
+                }
+
             } catch (e) {
                 setError(e);
                 setLoading(false);
@@ -35,25 +44,82 @@ function AnimeCard() {
         };
 
         fetchAnimeDetails();
-    }, [id]);
+    }, [id, isLogged, API_URL]);
 
-    const handleFavoriteClick = () => {
-        setIsFavorite(!isFavorite);
-        // lógica para añadir/eliminar de favoritos en el backend
-        if (isFavorite) {
-            console.log('Eliminado de favoritos:', animeDetails?.title);
-        } else {
-            console.log('Añadido a favoritos:', animeDetails?.title);
+    const fetchUserPreferences = async () => {
+        try {
+            const favoriteResponse = await fetch(`${API_URL}api/favorites/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const watchingResponse = await fetch(`${API_URL}api/watching/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (favoriteResponse.ok) {
+                const favoriteData = await favoriteResponse.json();
+                setIsFavorite(favoriteData.isFavorite);
+            }
+            if (watchingResponse.ok) {
+                const watchingData = await watchingResponse.json();
+                setIsWatching(watchingData.isWatching);
+            }
+
+        } catch (error) {
+            console.error("Error fetching user preferences:", error);
         }
     };
 
-    const handleWatchingClick = () => {
-        setIsWatching(!isWatching);
-        // lógica para añadir/eliminar de viendo en el backend
-        if (isWatching) {
-            console.log('Eliminado de ver más tarde:', animeDetails?.title);
-        } else {
-            console.log('Añadido a ver más tarde:', animeDetails?.title);
+    const handleFavoriteClick = async () => {
+        if (!isLogged) {
+            alert("Debes estar logueado para añadir a favoritos.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}api/favorites/${id}`, {
+                method: isFavorite ? 'DELETE' : 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Failed to update favorites: ${response.status} - ${errorData?.message || 'Error al actualizar favoritos'}`);
+            }
+
+            setIsFavorite(!isFavorite);
+        } catch (error) {
+            console.error("Error updating favorites:", error);
+        }
+    };
+
+    const handleWatchingClick = async () => {
+        if (!isLogged) {
+            alert("Debes estar logueado para añadir a tu lista de viendo.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}api/watching/${id}`, {
+                method: isWatching ? 'DELETE' : 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Failed to update watching: ${response.status} - ${errorData?.message || 'Error al actualizar la lista de viendo'}`);
+            }
+
+            setIsWatching(!isWatching);
+        } catch (error) {
+            console.error("Error updating watching:", error);
         }
     };
 
@@ -63,15 +129,12 @@ function AnimeCard() {
     };
 
     const handleLikeClick = () => {
-        if (!hasLiked) {
-            setLikes(likes + 1);
-            setHasLiked(true);
-            // Integrar con el backend para registrar el like del usuario si se quiere si no borrar!!!
-        } else {
-            setLikes(likes - 1);
-            setHasLiked(false);
-
+        if (!isLogged) {
+            alert("Debes estar logueado para dar me gusta.");
+            return;
         }
+        setLikes(hasLiked ? likes - 1 : likes + 1);
+        setHasLiked(!hasLiked);
     };
 
     if (loading) {
@@ -102,7 +165,6 @@ function AnimeCard() {
                             <i className={`fa-solid ${isWatching ? 'fa-eye-slash' : 'fa-eye'}`}
                                 style={{ color: isWatching ? 'purple' : '' }}></i>
                         </button>
-                        {console.log("URL del tráiler:", animeDetails?.trailer?.url)}
                         {animeDetails?.trailer?.url && (
                             <button className="trailer-button" onClick={handleTrailerClick} title='Trailer'>
                                 <i className="fa-solid fa-clapperboard"></i>
@@ -143,7 +205,6 @@ function AnimeCard() {
                     </div>
                 </div>
             </div>
-            {console.log("AnimeCard - Passing currentAnimeId to Recommendations:", parseInt(id))}
             {animeDetails.genres && <Recommendations genres={animeDetails.genres} currentAnimeId={parseInt(id)} />}
         </div>
 

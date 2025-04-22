@@ -39,7 +39,6 @@ const NavBar = () => {
 								<Link className="nav-link active Popular" aria-current="page" to="#">Popular</Link>
 								<Link className="nav-link active Categories" aria-current="page" to="#">Categories</Link>
 								<Link className="nav-link active Match" to="/animatch">Match <i className="fa-regular fa-heart"></i></Link>
-								<Link className="nav-link active Profile" to="#">Profile</Link>
 							</div>
 							<SearchContainer />
 						</div>
