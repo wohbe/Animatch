@@ -23,6 +23,7 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 jwt = JWTManager(app)
 
+
 # Configuración de SQLite
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -33,6 +34,7 @@ db.init_app(app)
 # Lo siguiente es para inicialización de la base de datos.
 with app.app_context():
     db.create_all()
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # add the admin
 setup_admin(app)

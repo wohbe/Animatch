@@ -6,6 +6,7 @@ import { router } from './routes'; // Tu ruta personalizada
 import { StoreProvider } from './hooks/useGlobalReducer';
 import { BackendURL } from './components/BackendURL';
 import { UserContextProvider } from './context/UserContext';
+import NavBar from './components/Navbar';
 
 const Main = () => {
     if (!import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_BACKEND_URL === "") {
