@@ -10,6 +10,6 @@ export const Layout = () => {
             <NavBar />
             <Outlet />
         </ScrollToTop>
+        </>
     );
 };
-
