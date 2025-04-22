@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import React from "react";
 import ButtonAnimatch from "./AniMatchButton";
 import AnimatchCard from "./AnimatchCard";
-import '/workspaces/spain-fs-pt-95-g1/src/css/Animatch.css'
+import '/workspaces/spain-fs-pt-95-g1/src/css/Animatch.css';
 import { useParams } from 'react-router-dom';
-import { SearchResultList } from "./SearchResultList";
-
-
+import { UserContext } from '../context/UserContext';
 
 const Animatch = ({ userId }) => {
     const [result, setResult] = useState([]);
@@ -18,30 +16,35 @@ const Animatch = ({ userId }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [generating, setGenerating] = useState(false);
     const { id } = useParams();
+    const [showModal, setShowModal] = useState(false);
+    const { isLogged } = useContext(UserContext);
+
+    const handleShow = () => setShowModal(true);
+    const handleClose = () => setShowModal(false);
 
     const questions = [
         {
-            pregunta: "¿Qué género te interesa más?",
-            opciones: ["Acción", "Romance", "Comedia", "Drama", "Fantasía"],
+            pregunta: "What genre interests you the most?",
+            opciones: ["Action", "Romance", "Comedy", "Drama", "Fantasy"],
             clave: "genre",
         },
         {
-            pregunta: "¿Prefieres un anime corto o largo?",
-            opciones: ["Corto", "Largo"],
+            pregunta: "Do you prefer a short or long anime?",
+            opciones: ["Short", "Long"],
             clave: "duration",
         },
         {
-            pregunta: "¿Te gustan más las historias reales o fantásticas?",
-            opciones: ["real", "fantasy"],
+            pregunta: "Do you prefer realistic or fantastical stories?",
+            opciones: ["Realistic", "Fantasy"],
             clave: "theme",
         },
         {
-            pregunta: "¿Prefieres protagonistas jóvenes o adultos?",
+            pregunta: "Do you prefer young or adult protagonists?",
             opciones: ["Young", "Adult"],
             clave: "character",
         },
         {
-            pregunta: "¿Buscas algo divertido o emotivo?",
+            pregunta: "Are you looking for something funny or emotional?",
             opciones: ["Funny", "Emotional"],
             clave: "tone",
         },
@@ -72,6 +75,10 @@ const Animatch = ({ userId }) => {
                 setGenerating(false);
             }, 300);
         }
+
+        if (answers.length === 1) {
+            handleShow();
+        }
     }, [answers]);
 
     const getRecommendation = (finalAnswers = answers) => {
@@ -84,24 +91,25 @@ const Animatch = ({ userId }) => {
 
             filteredAnime = filteredAnime.filter((anime) => {
                 const genreNames = anime.genres.map(g => g.name);
+
                 switch (question.clave) {
                     case "genre": {
                         const map = {
-                            "Acción": ["Action", "Adventure"],
+                            "Action": ["Action", "Adventure"],
                             "Romance": ["Romance"],
-                            "Comedia": ["Comedy"],
+                            "Comedy": ["Comedy"],
                             "Drama": ["Drama"],
-                            "Fantasía": ["Fantasy", "Supernatural", "Sci-Fi"]
+                            "Fantasy": ["Fantasy", "Supernatural", "Sci-Fi"]
                         };
                         const genreToSelect = map[answer.respuesta] || [];
                         return genreNames.some((g) => genreToSelect.includes(g));
                     }
                     case "duration":
-                        return answer.respuesta === "Corto"
+                        return answer.respuesta === "Short"
                             ? anime.episodes && anime.episodes <= 24
                             : anime.episodes && (anime.episodes > 24 || anime.episodes === null);
                     case "theme":
-                        return answer.respuesta === "real"
+                        return answer.respuesta === "Realistic"
                             ? genreNames.some((g) => ["Drama", "Slice of Life", "Sports", "Music"].includes(g))
                             : genreNames.some((g) => ["Supernatural", "Sci-Fi", "Magic"].includes(g));
                     case "character": {
@@ -127,8 +135,8 @@ const Animatch = ({ userId }) => {
             if (userId) saveUserPreferences(userId);
         } else {
             setRecommendation({
-                title: "We couldn't find a perfect anime for you",
-                synopsis: "But maybe you'll like some of our latest additions."
+                title: "No perfect anime match found",
+                synopsis: "But maybe you'll enjoy one of our latest additions."
             });
         }
     };
@@ -156,6 +164,7 @@ const Animatch = ({ userId }) => {
         setRecommendation(null);
         setCurrentQuestion(0);
         setGenerating(false);
+        setShowModal(false);
     };
 
     const saveUserPreferences = async (userId) => {
@@ -184,15 +193,25 @@ const Animatch = ({ userId }) => {
         }
     };
 
+    if (!isLogged) {
+        return (
+            <div style={{ textAlign: "center", marginTop: "50px" }}>
+                <h2>🔒 Access restricted</h2>
+                <p>Please log in to use AniMatch.</p>
+            </div>
+        );
+    }
+
     return (
-
         <div style={{ maxWidth: "600px", margin: "auto", textAlign: "center" }}>
+            <h2>
+                <div className="split-text-container">
+                    <span className="text-part left">🎌 Ani</span>
+                    <span className="text-part right">Match</span>
+                </div>
+            </h2>
+            <p>Find your perfect anime match in 5 steps</p>
 
-            <h2><div className="split-text-container">
-                <span className="text-part left">🎌 Ani</span>
-                <span className="text-part right">Match</span>
-            </div></h2>
-            <p>Get your perfect Animatch in 5 Steps</p>
             {!recommendation && <img src="public/animatch-logo.png" className="image-logo-animatch" />}
             {loading && <p>Loading anime list...</p>}
 
@@ -225,10 +244,8 @@ const Animatch = ({ userId }) => {
                             />
                         ))}
                     </div>
-
                 </div>
             )}
-            
 
             {!loading && !generating && recommendation && (
                 <AnimatchCard
@@ -237,9 +254,20 @@ const Animatch = ({ userId }) => {
                     image={recommendation.image_url}
                     url={`anime/${recommendation.id}`} />
             )}
+
             <button onClick={restartTest} className="button-anime" style={{ marginTop: "20px" }}>
                 Start Over
             </button>
+
+            {showModal && (
+                <div className="custom-modal-backdrop">
+                    <div className="custom-modal">
+                        <h2>✨ Great choice!</h2>
+                        <p>Let's continue to refine your recommendation.</p>
+                        <button onClick={handleClose} className="button-anime">Continue</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

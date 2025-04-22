@@ -2,7 +2,7 @@ import React from "react";
 import '/workspaces/spain-fs-pt-95-g1/src/css/AnimatchCard.css'
 
 const AnimatchCard = ({ title, synopsis, url, image }) => {
-    
+
 
     return (
         <div className="animatch-card">
@@ -22,7 +22,6 @@ const AnimatchCard = ({ title, synopsis, url, image }) => {
                 <a
                     href={url}
                     className="button-anime"
-                    target="_blank"
                     rel="noopener noreferrer"
                 >
                     ▶ VER MÁS

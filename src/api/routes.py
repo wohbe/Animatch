@@ -1,11 +1,10 @@
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from api.models import db, User, Anime, Favorites, On_Air, Genre, Watching
+from api.models import db, User, Anime, Favorites, On_Air, Genre, Watching, UserPreference
 from api.utils import generate_sitemap, APIException
 import requests
 import time
-import json
 import bcrypt
 
 api = Blueprint('api', __name__)
