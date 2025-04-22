@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import React from "react";
 import ButtonAnimatch from "./AniMatchButton";
 import AnimatchCard from "./AnimatchCard";
-import '/workspaces/spain-fs-pt-95-g1/src/css/Animatch.css';
+import '/workspaces/spain-fs-pt-95-g1/src/front/css/Animatch.css';
 import { useParams } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
@@ -196,32 +196,32 @@ const Animatch = ({ userId }) => {
     if (!isLogged) {
         return (
             <div style={{ textAlign: "center", marginTop: "50px" }}>
-                <h2>🔒 Access restricted</h2>
-                <p>Please log in to use AniMatch.</p>
+                <h2 className="h2-animatch">🔒 Access restricted</h2>
+                <p className="panimatch">Please log in to use AniMatch.</p>
             </div>
         );
     }
 
     return (
-        <div style={{ maxWidth: "600px", margin: "auto", textAlign: "center" }}>
+        <div style={{ maxWidth: "600px", margin: "auto", textAlign: "center" }} className="anibackground">
             <h2>
                 <div className="split-text-container">
                     <span className="text-part left">🎌 Ani</span>
                     <span className="text-part right">Match</span>
                 </div>
             </h2>
-            <p>Find your perfect anime match in 5 steps</p>
+            <p className="panimatch">Find your perfect anime match in 5 steps</p>
 
             {!recommendation && <img src="public/animatch-logo.png" className="image-logo-animatch" />}
-            {loading && <p>Loading anime list...</p>}
+            {loading && <p className="panimatch">Loading anime list...</p>}
 
             {!loading && generating && (
-                <p>🔍 Calculating your recommendation...</p>
+                <p className="panimatch">🔍 Calculating your recommendation...</p>
             )}
 
             {!loading && !generating && recommendation === null && currentQuestion < questions.length && (
                 <div>
-                    <h3>{questions[currentQuestion].pregunta}</h3>
+                    <h3 className="h3-animatch">{questions[currentQuestion].pregunta}</h3>
                     {questions[currentQuestion].opciones.map((option, index) => (
                         <ButtonAnimatch
                             key={index}
@@ -262,9 +262,6 @@ const Animatch = ({ userId }) => {
             {showModal && (
                 <div className="custom-modal-backdrop">
                     <div className="custom-modal">
-                        <h2>✨ Great choice!</h2>
-                        <p>Let's continue to refine your recommendation.</p>
-                        <button onClick={handleClose} className="button-anime">Continue</button>
                     </div>
                 </div>
             )}
