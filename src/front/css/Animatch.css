@@ -91,6 +91,16 @@
   margin: 20px 0;
 }
 
+.anibackground {
+  background-color: rgba(26, 26, 26, 0.85);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-right: 3px solid #FF9800;
+  border-left: 3px solid #FF9800;
+  border-bottom: 3px solid #FF9800;
+}
+
 .dragonball-icon {
   width: 36px;
   height: 36px;

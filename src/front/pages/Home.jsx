@@ -5,7 +5,7 @@ const Home = () => {
 	return (
         <div className="d-flex justify-content-center align-items-center vh-100">
             <h1 className="text-center text-white fw-bold display-1">
-                Ready to <span className="text-danger">match</span>?
+                Ready to <span style={{color: "#6096BA"}}>match</span>?
             </h1>
         </div>
 	);
