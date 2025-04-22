@@ -228,6 +228,7 @@ const Animatch = ({ userId }) => {
 
                 </div>
             )}
+            
 
             {!loading && !generating && recommendation && (
                 <AnimatchCard

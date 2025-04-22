@@ -10,6 +10,8 @@ import { Demo } from "../front/pages/Demo";
 import Userview from "../front/pages/UserView";
 import Categories from "../front/pages/Categories";
 import Login from "../front/pages/Login";
+import AnimeCard from "./components/AnimeCard";
+import Animatch from "./components/Animatch";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +30,7 @@ export const router = createBrowserRouter(
       <Route path="/demo" element={<Demo />} />
       <Route path="/anime/:id" element={<AnimeCard />} />
       <Route path="/userview" element={<Userview />} />
+      <Route path="/animatch" element={<Animatch />} />
       <Route path="/categories" element={<Categories />} />
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<h1>Not found!</h1>} />

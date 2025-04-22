@@ -27,6 +27,8 @@ export const SearchBar = ({ setResult, searchResultsList }) => {
     const handleSubmit = (value) => {
         value.preventDefault();
         navigate(`/anime/${searchResultsList[0].id}`);
+        setInput("");
+        setResult("");
     }
 
     return (

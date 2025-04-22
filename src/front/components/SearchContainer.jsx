@@ -3,7 +3,7 @@ import { SearchBar } from "./SearchBar";
 import { SearchResultList } from "./SearchResultList";
 import '/workspaces/spain-fs-pt-95-g1/src/css/SearchBar.css';
 
-export const SearchContainer = () => {
+const SearchContainer = () => {
     const [result, setResult] = useState([]);
 
     return (
@@ -14,3 +14,5 @@ export const SearchContainer = () => {
         </div>
     )
 }
+
+export default SearchContainer;
