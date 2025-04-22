@@ -140,7 +140,7 @@ class Watching(db.Model):
 
 # TABLAS INTERMEDIAS
 
-anime_genre = db.Table(
+anime_genre = db.Table (
     'anime_genre',
     db.metadata,
     Column('anime_id', Integer, ForeignKey(
