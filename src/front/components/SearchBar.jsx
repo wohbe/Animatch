@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import '/workspaces/spain-fs-pt-95-g1/src/css/SearchBar.css';
+import '/workspaces/spain-fs-pt-95-g1/src/front/css/SearchBar.css';
 import { useNavigate } from "react-router-dom";
 
 
 export const SearchBar = ({ setResult, searchResultsList }) => {
-    const API_URL = import.meta.env.VITE_API_URL;
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
     const [input, setInput] = useState("")
     const navigate = useNavigate();
 
@@ -27,6 +27,8 @@ export const SearchBar = ({ setResult, searchResultsList }) => {
     const handleSubmit = (value) => {
         value.preventDefault();
         navigate(`/anime/${searchResultsList[0].id}`);
+        setInput("");
+        setResult([]);
     }
 
     return (
