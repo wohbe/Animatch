@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './css/FinalProject.css'; // Tus estilos personalizados
-import './index.css'; // Estilos globales
 import { RouterProvider } from "react-router-dom";
 import { router } from './routes'; // Tu ruta personalizada
 import { StoreProvider } from './hooks/useGlobalReducer';

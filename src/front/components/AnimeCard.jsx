@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../index.css';
+import '../css/FinalProject.css';
 import { useParams } from 'react-router-dom';
 import Recommendations from './Recommendations'; 
 
