@@ -7,10 +7,8 @@ import Home from "./pages/Home";
 import { AniPage } from "./pages/AnimatchPage";
 import AnimeCard from "./components/AnimeCard";
 import { Layout } from "./pages/Layout";
-
 import Userview from "./pages/UserView";
 import Categories from "./pages/Categories";
-
 export const router = createBrowserRouter(
   createRoutesFromElements(
     // CreateRoutesFromElements function allows you to build route elements declaratively.
@@ -22,20 +20,17 @@ export const router = createBrowserRouter(
     // Root Route: All navigation will start from here.
     <>
       {/* Ruta principal / */}
+      <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
       <Route path="/" element={<Home />} />
-
 
       {/* Ruta independiente /animatch */}
       <Route path="/animatch" element={<AniPage />} />
-
-
       <Route path="*" element={<h1>Not found!</h1>} />
       <Route path="/anime/:id" element={<AnimeCard />} />
-    </>
-
       <Route path="/single/:theId" element={<Single />} />  {/* Dynamic route for single items */}
       <Route path="/userview" element={<Userview />} />
       <Route path="/categories" element={<Categories />} />
     </Route>
+  </>
   )
 );
