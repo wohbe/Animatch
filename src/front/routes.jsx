@@ -3,13 +3,12 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import Home from "./pages/Home";
-import { AniPage } from "./pages/AnimatchPage";
+import { Layout } from "../front/pages/Layout";
+import Home from "../front/pages/Home";
+import Userview from "../front/pages/UserView";
+import Categories from "../front/pages/Categories";
 import AnimeCard from "./components/AnimeCard";
-import { Layout } from "./pages/Layout";
-
-import Userview from "./pages/UserView";
-import Categories from "./pages/Categories";
+import Animatch from "./components/Animatch";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,20 +21,16 @@ export const router = createBrowserRouter(
     // Root Route: All navigation will start from here.
     <>
       {/* Ruta principal / */}
+      <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
       <Route path="/" element={<Home />} />
 
-
       {/* Ruta independiente /animatch */}
-      <Route path="/animatch" element={<AniPage />} />
-
-
       <Route path="*" element={<h1>Not found!</h1>} />
       <Route path="/anime/:id" element={<AnimeCard />} />
-    </>
-
-      <Route path="/single/:theId" element={<Single />} />  {/* Dynamic route for single items */}
       <Route path="/userview" element={<Userview />} />
+      <Route path="/animatch" element={<Animatch />} />
       <Route path="/categories" element={<Categories />} />
     </Route>
+  </>
   )
 );

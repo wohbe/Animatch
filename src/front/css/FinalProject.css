@@ -8,7 +8,7 @@
 body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 1rem;
-    background-image: url('/src/front/assets/img/background.svg');
+    background-image: url('/src/front/assets/img/background1.svg');
     background-size: cover; 
     background-position: center;
     background-repeat: no-repeat;
@@ -22,35 +22,76 @@ img {
 
 /* Navbar */
 .NavBar {
-    background-color: #1A1A1A;
-    padding: 1rem;
-    border-bottom: 3px solid #FF9800;
+  background-color: #1A1A1A;
+  padding: 1rem;
+  border-bottom: 3px solid #FFB7C3;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
 .NavBar .navbar-brand.Home,
 .NavBar .navbar-nav .nav-link {
-    margin: 0 0.5rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #FF9800;
+  margin: 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #FFB7C3;
 }
 
-.NavBar .navbar-nav .nav-link {
+.navbar-nav .nav-link {
   font-size: 1rem;
+  transition: transform 0.2s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+  transform: scale(1.2);
+  color: #8C2E47;
 }
 
 .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%23ff6f61' stroke-width='3' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%23FF9800' stroke-width='3' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
-/* Profile Card */
+/* Barra de búsqueda */
+#buscar {
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #FF9800;
+  background: rgba(31, 30, 30, 0.705);
+  color: white;
+  border-radius: 15px;
+}
+
+#buscar::placeholder {
+  color: #f8f6f6b0;
+}
+
+/* Menú de usuario */
+.user-menu {
+  background: none;
+  border: none;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  display: block;
+  transition: transform 0.2s ease-in-out;
+}
+
+.user-menu:hover {
+  transform: scale(1.1);
+}
+
+.user-menu i {
+  font-size: 3rem;
+  color: #FF9800;
+}
+
+/* Profile Card VEEEEEEEEEEEEEEEEEEEEEEEER*/
 .profile-card {
-    background-color: #1a1a1a;
-    border-radius: 0.625rem;
-    padding: 1rem;
-    text-align: center;
-    margin-top: 1rem;
-    max-height: 20rem;
+  background-color: #1a1a1a;
+  border-radius: 0.625rem;
+  padding: 1rem;
+  text-align: center;
+  margin-top: 1rem;
+  max-height: 20rem;
 }
 
 .profile-card img {
@@ -59,6 +100,7 @@ img {
   height: 6.25rem;
   margin: 0 auto 1rem;
 }
+/* Profile Card VEEEEEEEEEEEEEEEEEEEEEEEER*/
 
 .profile-card .card-title {
   font-weight: bold;
@@ -384,6 +426,12 @@ img {
     opacity: 1;
 }
 
+.empty-list-message{
+  color: white;
+  font-weight: bold;
+  margin-left: 14.2rem;
+}
+
 .titleLink{
     text-decoration: none;
 }
@@ -449,3 +497,198 @@ img {
       width: 20.333%;  
     }
   }
+
+  .likes-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    background: #d35c51;
+    padding: 5px;
+  }
+  
+  .like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-right: 5px;
+    color: #aaa; /* Color por defecto */
+  }
+  
+  .like-button.liked {
+    color: #007bff; /* Color cuando se ha dado like */
+  }
+  
+  .like-button:focus {
+    outline: none;
+  }
+  
+  .like-count {
+    font-size: 1em;
+    color: #555;
+  }
+
+  .anime-card div{
+    margin-top: 2rem;  
+  }
+  .genres-list-item{
+    margin-bottom: 1rem;
+  }
+  .estado-list-item{
+    margin-bottom: 1rem;
+  }
+  .puntuacion-list-item{
+    margin-bottom: 1rem;
+  }
+  .episodios-list-item{
+    padding-bottom: 1rem;
+  }
+
+  .recommendations-container {
+    margin-top: 40px;
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .recommendations-list {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    background: #1a1a1a;
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+  
+  .recommendation-card {
+    width: 200px;
+    margin: 35px;
+    text-align: center;
+    display: inline-block;
+    padding: 5px;
+  }
+    
+  .recommendation-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .recommendations-container h2 {
+    color: #ff6f61;
+    text-decoration: underline;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .recommendation-card:last-child {
+    margin-right: 0;
+  }
+  
+  .title-anime {
+    font-size: 12px;
+    margin: 10px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color:white
+  }
+
+anime-buttons button,
+.watching-button,
+.favorite-button,
+.trailer-button{ 
+  background-color:#121212; 
+  color: #0a95c0bb; 
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size:2rem;
+  margin-left:8px;
+}
+.watching-button::after:active{
+  background-color: purple;
+}
+
+.card-body{
+  background: #1a1a1a;
+  border-radius: 2%;
+  padding-top: 10px;
+  margin-bottom: 20px;
+  color: white;
+  margin-left: 8rem;
+}
+.container-image{
+  background: #1a1a1a;
+ /*  margin-left: 20rem;
+  margin-right: 20rem; */
+  padding: 10px;
+  justify-items: center;
+  border-radius: 2%;
+}
+
+#imagen_anime{
+  height: 25rem;
+  
+}
+
+@media (max-width: 768px) {
+  .anime-card {
+    flex-direction: column;
+  }
+  .cover-image {
+    width: 100%;
+  }
+  .card-body {
+    width: 100%;
+  }
+}
+.anime-card {
+    display: flex; /* Enable flexbox for the main container */
+    flex-direction: row; /* Arrange items in a row */
+    align-items: flex-start; /* Align items to the start (top) */
+    margin-bottom: 20px; /* Add some margin below the card */
+}
+
+.container-image {
+    background: #1a1a1a;
+    padding: 10px;
+    border-radius: 2%;
+    margin-right: 10px; /* Add space between image and card body */
+    flex: 0 0 auto; /* Don't grow, don't shrink, use specified width */
+}
+
+#imagen_anime {
+    height: auto; /* Maintain aspect ratio */
+    max-width: 300px; /* Or whatever max width you want */
+    border-radius: 8px;
+}
+
+.card-body {
+    background: #1a1a1a;
+    border-radius: 2%;
+    padding-top: 10px;
+    color: white;
+    flex: 1; /* Allow the card body to take up remaining space */
+}
+
+@media (max-width: 768px) {
+    .anime-card {
+        flex-direction: column; /* Stack image and card body on small screens */
+    }
+
+    .container-image {
+        margin-right: 0; /* Remove right margin on small screens */
+        margin-bottom: 20px; /* Add bottom margin on small screens */
+        width: 100%;
+    }
+    #imagen_anime{
+        width: 100%;
+    }
+
+    .card-body {
+        width: 100%;
+    }
+}

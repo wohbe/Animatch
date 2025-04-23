@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './FinalProject.css'; // Tus estilos personalizados
-import './index.css'; // Estilos globales
+import './css/FinalProject.css'; // Tus estilos personalizados
 import { RouterProvider } from "react-router-dom";
 import { router } from './routes'; // Tu ruta personalizada
 import { StoreProvider } from './hooks/useGlobalReducer';
@@ -29,4 +28,3 @@ const Main = () => {
 };
 
 ReactDOM.createRoot(document.getElementById('root')).render(<Main />);
-

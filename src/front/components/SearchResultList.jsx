@@ -1,10 +1,10 @@
 import React from "react";
-import '/workspaces/spain-fs-pt-95-g1/src/css/SearchBar.css';
+import '../css/SearchBar.css';
 import { Navigate, useNavigate } from "react-router-dom";
 import { SearchResult } from "./SearchResult";
 
 
-export const SearchResultList = ({ result }) => {
+export const SearchResultList = ({ result, clearResults }) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -13,10 +13,9 @@ export const SearchResultList = ({ result }) => {
 
     return (
         <div className="result-list" >
-            {result.map((result, id) => {
-                return <SearchResult result={result} key={id} onClick={handleClick} />;
+            {result.map((resItem) => {
+                return <SearchResult result={resItem} key={resItem.id || resItem.title} clearResults={clearResults} onClick={handleClick} />;
             })}
         </div>
     );
-
 };
