@@ -426,6 +426,12 @@ img {
     opacity: 1;
 }
 
+.empty-list-message{
+  color: white;
+  font-weight: bold;
+  margin-left: 14.2rem;
+}
+
 .titleLink{
     text-decoration: none;
 }

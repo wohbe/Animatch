@@ -36,7 +36,7 @@ export const SearchBar = ({ setResult, searchResultsList }) => {
                 className="form-control me-2 rounded-pill ps-5"
                 id="buscar"
                 type="search"
-                placeholder="Buscar..."
+                placeholder="Search..."
                 aria-label="Buscar"
                 value={input}
                 onChange={(e) => handleChanges(e.target.value)}

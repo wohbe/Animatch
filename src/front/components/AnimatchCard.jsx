@@ -15,13 +15,13 @@ const AnimatchCard = ({ title, synopsis, url, image }) => {
             </div>
             <div className="animatch-content">
                 <h1 className="animatch-title">{title}</h1>
-                <p className="animatch-meta">Recomendado por Animatch</p>
+                <p className="animatch-meta">Recomended by Animatch</p>
 
                 <p className="animatch-summary-title">SINOPSIS</p>
                 <p className="animatch-synopsis">{synopsis.length > 150 ? `${synopsis.slice(0, 150)}...` : synopsis}</p>
 
                 <Link to={`/${url}`} className="button-anime">
-                    ▶ VER MÁS
+                    ▶ SEE MORE
                 </Link>
             </div>
         </div>

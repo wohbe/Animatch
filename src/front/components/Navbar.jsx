@@ -36,8 +36,6 @@ const NavBar = () => {
 						</button>
 						<div className="collapse navbar-collapse order-lg-1" id="navbarNavAltMarkup">
 							<div className="navbar-nav me-auto">
-								<Link className="nav-link active News" aria-current="page" to="#">New</Link>
-								<Link className="nav-link active Popular" aria-current="page" to="#">Popular</Link>
 								<Link className="nav-link active Categories" aria-current="page" to="/categories">Categories</Link>
 								<Link className="nav-link active Match" to="/animatch">Match <i className="fa-regular fa-heart"></i></Link>
 							</div>

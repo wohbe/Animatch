@@ -78,15 +78,15 @@ def sync_anime():
         page = 1
         max_page = 15
         while page <= max_page:
-            print(f"Sincronizando página {page}...")
+            print(f"Synchronizing page {page}...")
             response = requests.get(anime_api, params={'page': page})
             if response.status_code != 200:
                 print(
-                    f"Error al obtener la página {page}: {response.status_code}")
+                    f"Error getting the page {page}: {response.status_code}")
                 break
 
             anime_list = response.json().get('data', [])
-            print(f"Número de animes en la página {page}: {len(anime_list)}")
+            print(f"Number of animes on page {page}: {len(anime_list)}")
             for anime in anime_list:
                 if anime.get('score') and anime['score'] >= 7:
                     exists = Anime.query.filter_by(
@@ -125,11 +125,11 @@ def sync_anime():
 
             print(f"{page}")
 
-        return jsonify({"message": "animes sincronizados"}), 200
+        return jsonify({"message": "animes synchronized!"}), 200
 
     except Exception as e:
         db.session.rollback()
-        print(f"Error durante la sincronización: {str(e)}")
+        print(f"An error has occurred while syncing: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 
@@ -167,7 +167,7 @@ def get_genre_recommendations_by_anime_id(anime_id):
 def get_animeId(id):
     anime = Anime.query.get(id)
     if not anime:
-        return jsonify({"error": "Anime no disponible"}), 404
+        return jsonify({"error": "Anime not available"}), 404
     return jsonify(anime.serialize()), 200
 
 
@@ -204,11 +204,11 @@ def create_on_air_anime():
                 db.session.add(new_on_air)
 
         db.session.commit()
-        return jsonify({"message": "perfecto"}), 200
+        return jsonify({"message": "perfect"}), 200
 
     except Exception as er:
         db.session.rollback()
-        return jsonify({'error': f'ha habido un error: {str(er)}'}), 500
+        return jsonify({'error': f'there has been an error: {str(er)}'}), 500
 
 
 @api.route('/anime/on-air/list', methods=['GET'])
@@ -436,7 +436,7 @@ def protected():
         user = User.query.get(current_user_id)
 
         if not user:
-            return jsonify({"error": "Usuario no encontrado"}), 404
+            return jsonify({"error": "User not found"}), 404
 
         return jsonify({
             "id": user.id,
@@ -446,7 +446,7 @@ def protected():
 
     except Exception as e:
         print(f"Error en /protected: {str(e)}")
-        return jsonify({"error": "Token inválido o expirado"}), 401
+        return jsonify({"error": "Invalid or expired token"}), 401
 
 # Users
 
@@ -473,11 +473,18 @@ def delete_user(user_id):
     user = User.query.get(user_id)
     if not user:
         return jsonify({"message": "User not found"}), 404
-    if current_user_id != user_id:
-        return jsonify({"message": "You can only delete your own account"}), 403
-    db.session.delete(user)
-    db.session.commit()
-    return jsonify({"message": "User deleted successfully"}), 200
+        
+    try:
+        Favorites.query.filter_by(user_id=user_id).delete()
+        Watching.query.filter_by(user_id=user_id).delete()
+        UserPreference.query.filter_by(user_id=user_id).delete()
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"message": "User deleted successfully"}), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": f"Error deleting user: {str(e)}"}), 500
 
 # endpoint para userpreferences Animatch
 
@@ -490,7 +497,7 @@ def save_user_preferences():
 
     required_fields = ['genre', 'duration', 'theme', 'tone']
     if not all(field in data for field in required_fields):
-        return jsonify({"message": "Faltan campos obligatorios"}), 400
+        return jsonify({"message": "Required fields are missing"}), 400
 
     try:
         # Crear nueva preferencia
@@ -506,10 +513,10 @@ def save_user_preferences():
         db.session.commit()
 
         return jsonify({
-            "message": "Preferencias guardadas con éxito",
+            "message": "Preferences saved successfully!",
             "preference": new_pref.serialize()
         }), 201
 
     except Exception as e:
         db.session.rollback()
-        return jsonify({"error": f"Error al guardar preferencias: {str(e)}"}), 500
+        return jsonify({"error": f"Error saving preferences: {str(e)}"}), 500

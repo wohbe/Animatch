@@ -51,7 +51,7 @@ const Userview = () => {
     };
 
     if (loading) {
-        return <div className="loading-screen">Cargando...</div>;
+        return;
     }
 
     // Filtrar animes basados en el estado
@@ -73,7 +73,7 @@ const Userview = () => {
                             onUpdate={handleStatusUpdate}
                         />
                     ) : (
-                        <p className="empty-list-message">No tienes animes en favoritos</p>
+                        <p className="empty-list-message">You don't have any favorite anime added? (ò-ó)</p>
                     )}
                 </div>
 
@@ -87,7 +87,7 @@ const Userview = () => {
                             onUpdate={handleStatusUpdate}
                         />
                     ) : (
-                        <p className="empty-list-message">No estás viendo ningún anime actualmente</p>
+                        <p className="empty-list-message">You are not watching anything! (ò-ó) </p>
                     )}
                 </div>
             </div>

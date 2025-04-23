@@ -20,32 +20,32 @@ function AnimeCard() {
             return;
         }
 
-        console.log(`[AnimeCard ID: ${id}] fetchUserPreferences: Iniciando llamada a /api/anime/status/${id}`);
+        console.log(`[AnimeCard ID: ${id}] fetchUserPreferences: Initiating call to /api/anime/status/${id}`);
 
         try {
             const response = await fetch(`${API_URL}api/anime/status/${id}`, { 
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
-            console.log(`[AnimeCard ID: ${id}] fetchUserPreferences: Respuesta status ${response.status}`);
+            console.log(`[AnimeCard ID: ${id}] fetchUserPreferences: status response ${response.status}`);
 
             if (response.ok) {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json();
-                    console.log(`[AnimeCard ID: ${id}] fetchUserPreferences: Datos recibidos:`, data);
+                    console.log(`[AnimeCard ID: ${id}] fetchUserPreferences: Data received:`, data);
                     setIsFavorite(!!data.isFavorite); 
                     setIsWatching(!!data.isWatching); 
                 } else {
                     
                     const bodyText = await response.text();
-                    console.error(`[AnimeCard ID: ${id}] fetchUserPreferences: Error - Respuesta OK pero no es JSON (${contentType}). Cuerpo:`, bodyText);
+                    console.error(`[AnimeCard ID: ${id}] fetchUserPreferences: Error - Response OK but it is not JSON (${contentType}). Body:`, bodyText);
                     setIsFavorite(false); 
                     setIsWatching(false);
                 }
             } else {
                  const errorText = await response.clone().text(); 
-                 console.error(`[AnimeCard ID: ${id}] fetchUserPreferences: Error - Status ${response.status}. Cuerpo:`, errorText);
+                 console.error(`[AnimeCard ID: ${id}] fetchUserPreferences: Error - Status ${response.status}. Body:`, errorText);
                  setIsFavorite(false);
                  setIsWatching(false);
             }
@@ -54,7 +54,7 @@ function AnimeCard() {
             setIsFavorite(false);
             setIsWatching(false);
         }
-        console.log(`[AnimeCard ID: ${id}] fetchUserPreferences: FIN`);
+        console.log(`[AnimeCard ID: ${id}] fetchUserPreferences: End`);
     }, [id, isLogged, token, API_URL]); 
 
     useEffect(() => {
@@ -69,7 +69,7 @@ function AnimeCard() {
                     let errorMsg = `HTTP error! status: ${response.status}`;
                     try {
                         const errorData = await response.json();
-                        errorMsg += ` - ${errorData?.message || 'No se pudo leer el mensaje de error JSON'}`;
+                        errorMsg += ` - ${errorData?.message || "Could not read JSON's error message"}`;
                     } catch (jsonError) {
                         errorMsg += ` - ${await response.text()}`;
                     }
@@ -87,7 +87,7 @@ function AnimeCard() {
 
             } catch (e) {
                 console.error(`[AnimeCard ID: ${id}] fetchAnimeDetails: Error en catch:`, e);
-                setError(e.message || 'Ocurrió un error desconocido');
+                setError(e.message || 'An unknown error occurred');
                 setIsFavorite(false); 
                 setIsWatching(false);
             } finally {
@@ -108,23 +108,23 @@ function AnimeCard() {
             });
             if (!response.ok) {
                 stateSetter(previousStatus); 
-                const errorData = await response.json().catch(() => ({ message: `Error ${response.status}, sin cuerpo JSON.` }));
-                throw new Error(`Fallo al actualizar: ${response.status} - ${errorData?.message || response.statusText}`);
+                const errorData = await response.json().catch(() => ({ message: `Error ${response.status}, without JSON body.` }));
+                throw new Error(`Failed to update: ${response.status} - ${errorData?.message || response.statusText}`);
             }
             
         } catch (error) {
             console.error(`Error updating ${endpoint}:`, error);
-            alert(`Error al actualizar el estado: ${error.message}`);
+            alert(`Error updating status: ${error.message}`);
             stateSetter(previousStatus); 
     };
 }
     const handleFavoriteClick = () => {
-        if (!isLogged || !token) return alert("Debes estar logueado para añadir a favoritos.");
+        if (!isLogged || !token) return alert("You must be logged in to add to your fav list");
         handleApiUpdate(`${API_URL}api/favorites/${id}`, isFavorite, setIsFavorite, token);
     };
 
     const handleWatchingClick = () => {
-        if (!isLogged || !token) return alert("Debes estar logueado para añadir a tu lista de viendo.");
+        if (!isLogged || !token) return alert("You must be logged in to add to your watch list.");
          handleApiUpdate(`${API_URL}api/watching/${id}`, isWatching, setIsWatching, token);
     };
 
@@ -136,13 +136,13 @@ function AnimeCard() {
 
    
     if (loading) {
-        return <div className="container text-center p-5">Cargando detalles del anime...</div>;
+        return <div className="container text-center p-5">Loading anime details....</div>;
     }
     if (error) {
-        return <div className="container alert alert-danger">Error al cargar los detalles del anime: {error}</div>;
+        return <div className="container alert alert-danger">Error loading anime details: {error}</div>;
     }
     if (!animeDetails) {
-        return <div className="container text-center p-5">No se encontraron detalles para este anime.</div>;
+        return <div className="container text-center p-5">No details found for this anime.</div>;
     }
 
     return (
@@ -161,7 +161,7 @@ function AnimeCard() {
                                 type="button"
                                 className={`favorite-button ${isFavorite ? 'active' : ''}`}
                                 onClick={handleFavoriteClick}
-                                title={isFavorite ? 'Eliminar de favoritos' : 'Añadir a Favoritos'}
+                                title={isFavorite ? 'Eliminated from favorites' : 'Added to Favorites'}
                             >
                                 <i className={`fa-solid fa-heart ${isFavorite ? 'text-danger' : ''}`}></i>
                             </button>
@@ -169,7 +169,7 @@ function AnimeCard() {
                                 type="button"
                                 className={`watching-button ${isWatching ? 'active' : ''}`}
                                 onClick={handleWatchingClick}
-                                title={isWatching ? 'Dejar de ver' : 'Marcar como viendo'}
+                                title={isWatching ? 'Stopped watching' : 'Watching'}
                             >
                                 <i className={`fa-solid ${isWatching ? 'fa-eye-slash' : 'fa-eye'}`}
                                    style={{ color: isWatching ? 'purple' : '' }}></i>
@@ -191,11 +191,11 @@ function AnimeCard() {
 
                 <div className='card-body px-3'>
                     <h1>{animeDetails.title}</h1>
-                    <p className="synopsis">{animeDetails.synopsis || "Sin sinopsis disponible."}</p>
+                    <p className="synopsis">{animeDetails.synopsis || "No synopsis available"}</p>
                     <div className="anime-details-info">
                         <ul className="anime-details-list">
                             <li className="genres-list-item">
-                                <strong>Género: </strong>
+                                <strong>Genre: </strong>
                                 {animeDetails.genres?.length > 0
                                     ? animeDetails.genres.map((genre, index) => (
                                         <span key={genre.id || genre.name} className="genre">
@@ -205,13 +205,13 @@ function AnimeCard() {
                                     : 'No especificado'}
                             </li>
                             <li className="estado-list-item">
-                                <strong>Estado:</strong> {animeDetails.airing ? 'En emisión' : 'Finalizado'}
+                                <strong>Status:</strong> {animeDetails.airing ? 'Currently Airing' : 'Finished Airing'}
                             </li>
                             <li className="puntuacion-list-item">
-                                <strong>Puntuación:</strong> {animeDetails.score ?? 'N/A'}
+                                <strong>Score:</strong> {animeDetails.score ?? 'N/A'}
                             </li>
                             <li className="episodios-list-item">
-                                <strong>Episodios:</strong> {animeDetails.episodes ?? 'N/A'}
+                                <strong>Episodes:</strong> {animeDetails.episodes ?? 'N/A'}
                             </li>
                         </ul>
                     </div>
