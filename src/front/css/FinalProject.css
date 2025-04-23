@@ -8,7 +8,7 @@
 body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 1rem;
-    background-image: url('/src/front/assets/img/background.svg');
+    background-image: url('/src/front/assets/img/background1.svg');
     background-size: cover; 
     background-position: center;
     background-repeat: no-repeat;
@@ -24,7 +24,7 @@ img {
 .NavBar {
   background-color: #1A1A1A;
   padding: 1rem;
-  border-bottom: 3px solid #FF9800;
+  border-bottom: 3px solid #FFB7C3;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 }
@@ -34,7 +34,7 @@ img {
   margin: 0 0.5rem;
   font-size: 1.5rem;
   font-weight: bold;
-  color: #FF9800;
+  color: #FFB7C3;
 }
 
 .navbar-nav .nav-link {
@@ -44,7 +44,7 @@ img {
 
 .navbar-nav .nav-link:hover {
   transform: scale(1.2);
-  color: #ff6f61;
+  color: #8C2E47;
 }
 
 .navbar-toggler-icon {
