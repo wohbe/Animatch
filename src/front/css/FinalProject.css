@@ -384,6 +384,7 @@ img {
     width: 40px;
     height: 40px;
     pointer-events: auto;
+    background-color: #FFB7C3;
   }
   
   .boton:hover{
@@ -437,7 +438,7 @@ img {
 }
 
 .anime-title{
-    color:#ff6f61;
+    color:#FFB7C3;
     font-size: 1rem;
     font-weight: bold;
     margin: 1rem;
@@ -449,7 +450,7 @@ img {
 }
 
 .anime-title:hover{
-    color:#ff6f61;
+    color:#6096BA;
     z-index: 50;
 }
 

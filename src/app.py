@@ -37,8 +37,8 @@ def initialize_animes():
 
     anime_count = Anime.query.count()
     
-    if anime_count == 0:
-            sync_animes(max_pages=5)
+    if anime_count >150:
+            sync_animes(max_pages=20)
             
 # Lo siguiente es para inicialización de la base de datos.
 with app.app_context():
