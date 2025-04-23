@@ -10,7 +10,6 @@ const SearchContainer = () => {
         <div className="search-wrapper">
             <SearchBar setResult={setResult} searchResultsList={result} />
             {result.length > 0 && <SearchResultList result={result} />}
-
         </div>
     )
 }

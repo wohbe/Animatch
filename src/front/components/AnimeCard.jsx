@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import '../css/FinalProject.css';
+
 import { useParams } from 'react-router-dom';
 import Recommendations from './Recommendations';
 import { UserContext } from '../context/UserContext'; 

@@ -4,7 +4,7 @@ export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [isLogged, setIsLogged] = useState(false);
+    const [isLogged, setIsLogged] = useState(!!localStorage.getItem('token'));
     const [token, setToken] = useState(localStorage.getItem('token') || null);
 
     return (

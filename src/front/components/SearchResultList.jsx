@@ -18,5 +18,4 @@ export const SearchResultList = ({ result }) => {
             })}
         </div>
     );
-
 };

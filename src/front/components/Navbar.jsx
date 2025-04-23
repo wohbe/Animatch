@@ -1,16 +1,17 @@
-
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import IdentityModal from "./IdentityModal";
 import UserModal from "./UserModal";
 import { UserContext } from '../context/UserContext';
 import SearchContainer from "./SearchContainer";
+import loggedPicture from "../assets/img/loged-picture.png";
+import profilePicture from "../assets/img/profile-picture.png";
 
 const NavBar = () => {
 	const [showModal, setShowModal] = useState(false);
 	const { isLogged } = useContext(UserContext);
 
-	const handleShow = () => setShowModal(true);
+	const handleShow = () => setShowModal(!showModal);
 	const handleClose = () => setShowModal(false);
 
 	return (
@@ -37,7 +38,7 @@ const NavBar = () => {
 							<div className="navbar-nav me-auto">
 								<Link className="nav-link active News" aria-current="page" to="#">New</Link>
 								<Link className="nav-link active Popular" aria-current="page" to="#">Popular</Link>
-								<Link className="nav-link active Categories" aria-current="page" to="#">Categories</Link>
+								<Link className="nav-link active Categories" aria-current="page" to="/categories">Categories</Link>
 								<Link className="nav-link active Match" to="/animatch">Match <i className="fa-regular fa-heart"></i></Link>
 							</div>
 							<SearchContainer />
@@ -50,7 +51,7 @@ const NavBar = () => {
 							aria-label={isLogged ? "User options" : "Register/Login"}
 							onClick={handleShow}
 						>
-							<img src={isLogged ? "src/front/assets/img/loged-picture.png" : "src/front/assets/img/profile-picture.png"} alt="User profile" className="profile-icon" width="40" height="40" />
+							<img src={isLogged ? loggedPicture : profilePicture} alt="User profile" className="profile-icon" width="40" height="40" />
 						</Link>
 					</div>
 				</nav>

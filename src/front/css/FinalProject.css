@@ -13,7 +13,6 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    padding-top: 100px;
 }
 
 img {
@@ -23,11 +22,6 @@ img {
 
 /* Navbar */
 .NavBar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
   background-color: #1A1A1A;
   padding: 1rem;
   border-bottom: 3px solid #FF9800;
@@ -44,12 +38,6 @@ img {
 }
 
 .navbar-nav .nav-link {
-  background-color: rgba(26, 26, 26, 0.8);
-  padding: 10px; 
-  border-radius: 15px; 
-  text-align: center; 
-  display: inline-block;  
-  margin: 0.5rem;
   font-size: 1rem;
   transition: transform 0.2s ease-in-out;
 }
@@ -96,14 +84,14 @@ img {
   color: #FF9800;
 }
 
-/* Profile Card */
+/* Profile Card VEEEEEEEEEEEEEEEEEEEEEEEER*/
 .profile-card {
-    background-color: #1a1a1a;
-    border-radius: 0.625rem;
-    padding: 1rem;
-    text-align: center;
-    margin-top: 1rem;
-    max-height: 20rem;
+  background-color: #1a1a1a;
+  border-radius: 0.625rem;
+  padding: 1rem;
+  text-align: center;
+  margin-top: 1rem;
+  max-height: 20rem;
 }
 
 .profile-card img {
@@ -112,6 +100,7 @@ img {
   height: 6.25rem;
   margin: 0 auto 1rem;
 }
+/* Profile Card VEEEEEEEEEEEEEEEEEEEEEEEER*/
 
 .profile-card .card-title {
   font-weight: bold;
@@ -632,8 +621,8 @@ anime-buttons button,
   padding: 10px;
   justify-items: center;
   border-radius: 2%;
-  
 }
+
 #imagen_anime{
   height: 25rem;
   

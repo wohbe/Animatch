@@ -15,7 +15,7 @@ const UserModal = ({ closeModal }) => {
   
   return (
     <div className="dropdown-menu dropdown-menu-end show" style={{ position: 'absolute', top: '60px', right: '20px', zIndex: 1000, boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)' }}>
-      <Link to="/profile" className="dropdown-item" onClick={closeModal}>
+      <Link to="/userview" className="dropdown-item" onClick={closeModal}>
         Profile
       </Link>
       <div className="dropdown-divider"></div>

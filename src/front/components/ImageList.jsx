@@ -1,5 +1,5 @@
 import React from "react";
-import MediaScroller from "./MediaScroller";
+
 
 const ImageList = ({ title, images }) => {
     return (
