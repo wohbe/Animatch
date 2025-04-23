@@ -1,9 +1,8 @@
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from sqlalchemy import func
+from sqlalchemy import func, exists
 from api.models import db, User, Anime, Favorites, On_Air, Genre, Watching, UserPreference
 from api.utils import generate_sitemap, APIException
-from flask_cors import CORS
 import requests
 import time
 import bcrypt
@@ -11,7 +10,7 @@ import bcrypt
 api = Blueprint('api', __name__)
 CHARACTER_ENCODING = 'utf-8'
 # Permite todas las origenes en desarrollo
-CORS(api, resources={r"/api/*": {"origins": "*"}})
+#CORS(api, resources={r"/api/*": {"origins": "*"}})
 # La configuración de CORS se realizará en app.py
 # Rate limiting for Jikan API (60 requests per minute)
 

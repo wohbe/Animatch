@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import { useNavigate } from "react-router-dom";
 import '/workspaces/spain-fs-pt-95-g1/src/css/SearchBar.css';
 
@@ -15,3 +15,4 @@ export const SearchResult = ({ result }) => {
         </div>
     );
 };
+ */
