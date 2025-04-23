@@ -1,0 +1,80 @@
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    z-index: 1050; /* Asegúrate de que esté por encima de otros elementos */
+}
+
+.identity-modal {
+    background-color: #CDD6D0;
+    color:#2F4858;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.identity-modal-size {
+    width: 90%;
+    max-width: 1200px;
+    height: 80vh;
+}
+
+.identity-header {
+    background-color: #4b1926;
+    color: #ffffff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 1rem;
+}
+
+.modal-title {
+    font-family: 'Geoform', sans-serif;
+    font-size: 2.5rem;
+    font-weight: normal;
+    text-align: center;
+    color: #FFF;
+    text-shadow: 2px 2px 3px #2F4858;
+}
+
+.identity-btn {
+    background-color: #4b1926;
+    border: none;
+    width: 100%;
+    margin-top: 1rem;
+    font-family: 'Geoform', sans-serif;
+    font-size: 1rem;
+    font-weight: normal;
+    text-align: center;
+    color: #FFF;
+}
+
+.identity-btn:hover {
+    background-color: #e68900;
+    font-family: 'Geoform', sans-serif;
+    font-size: 1rem;
+    font-weight: normal;
+    text-align: center;
+    color: #2F4858;
+}
+
+.identity-input {
+    border: 1px solid #2F4858;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.identity-input:focus {
+    border-color: #8C2E47;
+    box-shadow: 0 0 0 0.25rem #FFB7C3;
+}
+
+@font-face {
+    font-family: 'Geoform';
+    src: url('../fonts/Geoform-ExtraBold.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

@@ -10,6 +10,9 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from flask_cors import CORS
+from flask_jwt_extended import JWTManager
+import bcrypt
 
 # from models import Person
 
@@ -18,18 +21,33 @@ static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+jwt = JWTManager(app)
 
-# database condiguration
-db_url = os.getenv("DATABASE_URL")
-if db_url is not None:
-    app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace(
-        "postgres://", "postgresql://")
-else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test.db"
 
+# Configuración de SQLite
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
+
+
+def initialize_animes():
+    from api.models import Anime
+    from api.anime_sync import sync_animes
+
+    anime_count = Anime.query.count()
+
+    if anime_count < 150:
+        sync_animes(max_pages=20)
+
+
+# Lo siguiente es para inicialización de la base de datos.
+with app.app_context():
+    db.create_all()
+    initialize_animes()
+
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # add the admin
 setup_admin(app)
@@ -57,6 +75,8 @@ def sitemap():
     return send_from_directory(static_file_dir, 'index.html')
 
 # any other endpoint will try to serve it like a static file
+
+
 @app.route('/<path:path>', methods=['GET'])
 def serve_any_other_file(path):
     if not os.path.isfile(os.path.join(static_file_dir, path)):

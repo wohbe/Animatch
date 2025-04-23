@@ -1,0 +1,211 @@
+* {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+.button-anime {
+  --b: 3px; /* border thickness */
+  --s: 0.45em; /* size of the corner */
+  --color: white;
+  margin: 5px;
+  text-decoration: none;
+
+  padding: calc(0.5em + var(--s)) calc(0.9em + var(--s));
+  color: var(--color);
+  --_p: var(--s);
+  background: conic-gradient(
+      from 90deg at var(--b) var(--b),
+      #0000 90deg,
+      var(--color) 0
+    )
+    var(--_p) var(--_p) / calc(100% - var(--b) - 2 * var(--_p))
+    calc(100% - var(--b) - 2 * var(--_p));
+  transition: 0.3s linear, color 0s, background-color 0s;
+  outline: var(--b) solid #0000;
+  outline-offset: 0.6em;
+  font-size: 16px;
+
+  border: 0;
+
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-anime:hover,
+.button-anime:focus-visible {
+  --_p: 0px;
+  outline-color: var(--color);
+  outline-offset: 0.05em;
+}
+
+.button-anime:active {
+  background: var(--color);
+  color: #fff;
+}
+
+.button-anime-info {
+  text-decoration: none;
+  --b: 3px; /* border thickness */
+  --s: 0.45em; /* size of the corner */
+  --color: black;
+  margin: 5px;
+
+  padding: calc(0.5em + var(--s)) calc(0.9em + var(--s));
+  color: var(--color);
+  --_p: var(--s);
+  background: conic-gradient(
+      from 90deg at var(--b) var(--b),
+      #0000 90deg,
+      var(--color) 0
+    )
+    var(--_p) var(--_p) / calc(100% - var(--b) - 2 * var(--_p))
+    calc(100% - var(--b) - 2 * var(--_p));
+  transition: 0.3s linear, color 0s, background-color 0s;
+  outline: var(--b) solid #0000;
+  outline-offset: 0.6em;
+  font-size: 16px;
+
+  border: 0;
+
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-anime-info:hover,
+.button-anime-info:focus-visible {
+  --_p: 0px;
+  outline-color: var(--color);
+  outline-offset: 0.05em;
+}
+
+.button-anime-info:active {
+  background: var(--color);
+  color: #fff;
+}
+
+.progress-dragonballs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.anibackground {
+  background-color: rgba(26, 26, 26, 0.85);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-top: 30px!important;
+}
+
+.dragonball-icon {
+  width: 36px;
+  height: 36px;
+  opacity: 0.4;
+  filter: grayscale(100%);
+  transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+}
+
+/* Ya respondidas */
+.db-completed {
+  opacity: 1;
+  filter: none;
+}
+
+/* Actual */
+.db-current {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.2);
+  animation: pulse 1.5s infinite;
+}
+
+/* Futuras */
+.db-pending {
+  opacity: 0.3;
+  filter: grayscale(80%);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Image */
+.image-logo-animatch {
+  width: 30%;
+  display: inline-block;
+}
+.image-logo-animatch:hover {
+  transform: scale(1.2);
+  animation: pulse 1.5s infinite;
+}
+
+.split-text-container {
+  font-size: 5rem;
+  font-weight: bold;
+  color: #fff;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.text-part {
+  display: inline-block;
+  position: relative;
+  transform: translateX(0);
+  animation-duration: 2s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+.text-part.left {
+  transform: translateX(-200%);
+  animation-name: slide-in-left;
+}
+
+.text-part.right {
+  transform: translateX(200%);
+  animation-name: slide-in-right;
+}
+
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-200%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(200%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.panimatch {
+  color: white;
+}
+
+.h2-animatch {
+  color: white;
+}
+
+.h3-animatch {
+  color: white;
+}
