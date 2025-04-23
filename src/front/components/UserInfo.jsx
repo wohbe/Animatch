@@ -60,7 +60,7 @@ const UserInfo = () => {
                                     style={{ objectFit: "cover", height: "auto" }}
                                 />
                             </div>
-                            <div className="card-body">
+                            <div className="user-card-body">
                                 <h5 className="card-title">{user?.email || "Usuario no identificado"}</h5>
                                 <div className="editEraseLogOut">
                                     <button className="btn btn-danger logOut" onClick={handleLogout}>

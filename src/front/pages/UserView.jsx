@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-import NavBar from "../components/Navbar";
 import UserInfo from "../components/UserInfo";
 import MediaScroller from "../components/MediaScroller";
 import ImageList from "../components/ImageList";
