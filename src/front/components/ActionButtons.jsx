@@ -35,7 +35,6 @@ const ActionButtons = ({ anime, initialStatus, onUpdate = { isFavorite: false, i
             }
 
             setLocalIsFavorite(!localIsFavorite);
-            alert(localIsFavorite ? "✗ Erased from favorites!" : "✓ Added to Favorites!");
             onUpdate?.();
 
         } catch (error) {
@@ -70,7 +69,6 @@ const ActionButtons = ({ anime, initialStatus, onUpdate = { isFavorite: false, i
             }
 
             setLocalIsWatching(!localIsWatching);
-            alert(localIsWatching ? "✗ Erased from 'Watching'" : "✓ Added to 'Watching'");
             onUpdate?.();
 
         } catch (error) {

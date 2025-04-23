@@ -3,7 +3,7 @@ import time
 from sqlalchemy import func
 from api.models import db, Anime, Genre
 
-def sync_animes(max_pages=5):
+def sync_animes(max_pages=20):
     
     anime_api = 'https://api.jikan.moe/v4/anime'
     try:

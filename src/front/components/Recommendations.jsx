@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MediaScroller from './MediaScroller';
+import ImageList from './ImageList';
 
 const Recommendations = ({ genres, currentAnimeId }) => {
     const [recommendedAnimes, setRecommendedAnimes] = useState([]);
@@ -45,17 +47,13 @@ const Recommendations = ({ genres, currentAnimeId }) => {
     }
 
     return (
-        <div className="recommendations-container justify-content-center ">
-            <h2 className='recomendations-title d-flex justify-content-center '>Recommendations Based on Genres</h2>
-            <div className="recommendations-list d-flex justify-content-center ">
-                {recommendedAnimes.map((anime) => (
-                    <div key={anime.id} className="recommendation-card" onClick={() => goToAnimeDetails(anime.id)}
-                         style={{cursor: 'pointer'}}>
-                        <img className='rounded' src={anime.image_url} alt={anime.title} />
-                        <h3 className="title-anime">{anime.title}</h3>
-                    </div>
-                ))}
-            </div>
+        <div className="">
+            <ImageList title={`RECOMENDATIONS BASED ON GENRES`} />
+            <MediaScroller 
+                animes={recommendedAnimes} 
+                animeStatus={{}} 
+                onUpdate={() => {}} 
+            />
         </div>
     );
 };

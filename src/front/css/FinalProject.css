@@ -384,6 +384,7 @@ img {
     width: 40px;
     height: 40px;
     pointer-events: auto;
+    background-color: #FFB7C3;
   }
   
   .boton:hover{
@@ -437,7 +438,7 @@ img {
 }
 
 .anime-title{
-    color:#ff6f61;
+    color:#FFB7C3;
     font-size: 1rem;
     font-weight: bold;
     margin: 1rem;
@@ -449,7 +450,7 @@ img {
 }
 
 .anime-title:hover{
-    color:#ff6f61;
+    color:#6096BA;
     z-index: 50;
 }
 
@@ -615,23 +616,13 @@ anime-buttons button,
 .card-body{
   background: #1a1a1a;
   border-radius: 2%;
+  height: 30rem;
   padding-top: 10px;
   margin-bottom: 20px;
+  margin-left: 2rem;
+  margin-right: 10rem;
   color: white;
-  margin-left: 8rem;
-}
-.container-image{
-  background: #1a1a1a;
- /*  margin-left: 20rem;
-  margin-right: 20rem; */
-  padding: 10px;
-  justify-items: center;
-  border-radius: 2%;
-}
-
-#imagen_anime{
-  height: 25rem;
-  
+  overflow: hidden;
 }
 
 @media (max-width: 768px) {
@@ -652,20 +643,6 @@ anime-buttons button,
     margin-bottom: 20px; /* Add some margin below the card */
 }
 
-.container-image {
-    background: #1a1a1a;
-    padding: 10px;
-    border-radius: 2%;
-    margin-right: 10px; /* Add space between image and card body */
-    flex: 0 0 auto; /* Don't grow, don't shrink, use specified width */
-}
-
-#imagen_anime {
-    height: auto; /* Maintain aspect ratio */
-    max-width: 300px; /* Or whatever max width you want */
-    border-radius: 8px;
-}
-
 .card-body {
     background: #1a1a1a;
     border-radius: 2%;
@@ -680,10 +657,9 @@ anime-buttons button,
     }
 
     .container-image {
-        margin-right: 0; /* Remove right margin on small screens */
-        margin-bottom: 20px; /* Add bottom margin on small screens */
-        width: 100%;
+     width: 40rem;
     }
+    
     #imagen_anime{
         width: 100%;
     }
@@ -692,3 +668,23 @@ anime-buttons button,
         width: 100%;
     }
 }
+
+.animeInfo{
+  margin-left: 10rem;
+}
+
+#imagen_anime {
+  width: 20rem;
+  height: 30rem; /* o lo que prefieras */
+  object-fit: cover; /* o 'contain', según lo que prefieras */
+  border-radius: 8px;
+}
+
+.buttons-card {
+  display: flex;
+  justify-content: center;
+}
+
+.container-image {
+  margin-left: 10rem;
+ }

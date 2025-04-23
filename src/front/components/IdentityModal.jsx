@@ -44,7 +44,7 @@ const IdentityModal = ({ closeModal }) => {
       alert('Password must be at least 8 characters long');
       return
     }
-    console.log("Hasta aquí bien");
+
     const response = await fetch(`${baseURL}api/signup`, {
       method: 'POST',
       headers: {
@@ -55,7 +55,7 @@ const IdentityModal = ({ closeModal }) => {
 
     const data = await response.json();
     if (!response.ok) {
-      alert('Something went wrong');
+      alert('Invalid email or password. Please try again.');
     }
 
     if (response.ok) {
@@ -90,7 +90,7 @@ const IdentityModal = ({ closeModal }) => {
 
     const data = await response.json()
     if (!response.ok) {
-      alert('Something went wrong');
+      alert('Invalid email or password. Please try again.');
     }
 
     if (response.ok) {
