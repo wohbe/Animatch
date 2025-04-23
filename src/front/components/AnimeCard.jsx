@@ -146,7 +146,7 @@ function AnimeCard() {
     }
 
     return (
-        <div className='container'>
+        <div className=''>
              <div className="anime-card ">
                 <div className='container-image'>
                     <img
