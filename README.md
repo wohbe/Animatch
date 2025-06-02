@@ -127,8 +127,6 @@ La aplicación se abrirá en `http://localhost:3000`
 
 **Roberto Cantalejo** - [@wohbe](https://github.com/wohbe), **Domenico Puzone** - [@domeseo](https://github.com/domeseo), **David Lizarte** [@deividliz](https://github.com/deividliz) y **Juan Pinto** [@BowserZ](https://github.com/BowserZ).
 
-[LinkedIn](https://www.linkedin.com/in/roberto-cantalejo/)
-
 ## 🙏 Agradecimientos
 
 - APIs de anime por proporcionar los datos
