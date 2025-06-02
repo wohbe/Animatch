@@ -1,81 +1,136 @@
-# WebApp boilerplate with React JS and Flask API
+# 🎌 Animatch
 
-Build web applications using React.js for the front end and python/flask for your backend API.
+<div align="center">
+  <img src="https://github.com/4GeeksAcademy/spain-fs-pt-95-g1/blob/main/src/front/assets/img/animatch.png?raw=true" alt="Animatch Logo" width="200"/>
+  
+  **Tu asistente personal para descubrir el anime perfecto**
+  
+  [![React](https://img.shields.io/badge/React-18.2-blue.svg)](https://reactjs.org/)
+  [![Flask](https://img.shields.io/badge/Flask-2.3-green.svg)](https://flask.palletsprojects.com/)
+  [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
+</div>
 
-- Documentation can be found here: https://4geeks.com/docs/start/react-flask-template
-- Here is a video on [how to use this template](https://www.loom.com/share/f37c6838b3f1496c95111e515e83dd9b)
-- Integrated with Pipenv for package managing.
-- Fast deployment to Render [in just a few steps here](https://4geeks.com/docs/start/deploy-to-render-com).
-- Use of .env file.
-- SQLAlchemy integration for database abstraction.
+## 📖 ¿Qué es Animatch?
 
-### 1) Installation:
+Animatch es una aplicación web que te ayuda a encontrar tu próximo anime favorito a través de un sistema inteligente de preguntas y respuestas. Con una extensa base de datos de anime de alta calidad, Animatch filtra y recomienda series basándose en tus preferencias personales.
 
-> If you use Github Codespaces (recommended) or Gitpod this template will already come with Python, Node and the Posgres Database installed. If you are working locally make sure to install Python 3.10, Node 
+## ✨ Características Principales
 
-It is recomended to install the backend first, make sure you have Python 3.10, Pipenv and a database engine (Posgress recomended)
+- 🎯 **Sistema de Recomendación Inteligente**: Preguntas diseñadas para entender tus gustos
+- ⭐ **Solo Calidad Premium**: Únicamente recomendamos animes con puntuaciones altas
+- 📊 **Base de Datos Extensa**: Miles de animes catalogados y clasificados
+- ❤️ **Lista de Favoritos**: Guarda tus animes preferidos
+- ✅ **Seguimiento de Visualización**: Marca los animes que ya has visto
 
-1. Install the python packages: `$ pipenv install`
-2. Create a .env file based on the .env.example: `$ cp .env.example .env`
-3. Install your database engine and create your database, depending on your database you have to create a DATABASE_URL variable with one of the possible values, make sure you replace the valudes with your database information:
+## 🛠️ Stack Tecnológico
 
-| Engine    | DATABASE_URL                                        |
-| --------- | --------------------------------------------------- |
-| SQLite    | sqlite:////test.db                                  |
-| MySQL     | mysql://username:password@localhost:port/example    |
-| Postgress | postgres://username:password@localhost:5432/example |
+### Frontend
+- **React.js** - Framework principal
+- **React Router** - Navegación SPA
+- **Context API/Redux** - Gestión de estado
+- **CSS Modules/Styled Components** - Estilos
+- **React Query** - Cache y sincronización de datos
 
-4. Migrate the migrations: `$ pipenv run migrate` (skip if you have not made changes to the models on the `./src/api/models.py`)
-5. Run the migrations: `$ pipenv run upgrade`
-6. Run the application: `$ pipenv run start`
+### Backend
+- **Flask** - Framework web Python
+- **Flask-RESTful** - API REST
+- **SQLAlchemy** - ORM
+- **PostgreSQL** - Base de datos principal
+- **Flask-JWT-Extended** - Autenticación JWT
+- **Flask-CORS** - Gestión de CORS
 
-> Note: Codespaces users can connect to psql by typing: `psql -h localhost -U gitpod example`
+### APIs Externas
+- **MyAnimeList API** / **AniList API** - Datos de anime
+- **Jikan API** - Información adicional
 
-### Undo a migration
+## 🚀 Instalación Rápida
 
-You are also able to undo a migration by running
+### Prerrequisitos
 
-```sh
-$ pipenv run downgrade
+- Python 3.10+
+- Node.js 16+
+- PostgreSQL 13+
+- Git
+
+### Configuración del Proyecto
+
+1. **Clonar el repositorio**:
+```bash
+git clone https://github.com/wohbe/Animatch.git
+cd Animatch
 ```
 
-### Backend Populate Table Users
-
-To insert test users in the database execute the following command:
-
-```sh
-$ flask insert-test-users 5
+2. **Configurar el archivo .env**:
+```bash
+cp .env.example .env
 ```
 
-And you will see the following message:
-
-```
-  Creating test users
-  test_user1@test.com created.
-  test_user2@test.com created.
-  test_user3@test.com created.
-  test_user4@test.com created.
-  test_user5@test.com created.
-  Users created successfully!
+⚠️ **IMPORTANTE**: Edita el archivo `.env` y configura la `JWT_SECRET_KEY`:
+```env
+JWT_SECRET_KEY=cualquier-clave-secreta-que-quieras
 ```
 
-### **Important note for the database and the data inside it**
+3. **Instalar dependencias del Backend**:
+```bash
+pipenv install
+```
 
-Every Github codespace environment will have **its own database**, so if you're working with more people eveyone will have a different database and different records inside it. This data **will be lost**, so don't spend too much time manually creating records for testing, instead, you can automate adding records to your database by editing ```commands.py``` file inside ```/src/api``` folder. Edit line 32 function ```insert_test_data``` to insert the data according to your model (use the function ```insert_test_users``` above as an example). Then, all you need to do is run ```pipenv run insert-test-data```.
+4. **Instalar dependencias del Frontend**:
+```bash
+cd src/front
+npm install
+cd ..
+```
 
-### Front-End Manual Installation:
+### ▶️ Ejecutar la Aplicación
 
--   Make sure you are using node version 20 and that you have already successfully installed and runned the backend.
+Necesitarás **dos terminales** activas:
 
-1. Install the packages: `$ npm install`
-2. Start coding! start the webpack dev server `$ npm run start`
+**Terminal 1 - Backend:**
+```bash
+pipenv run start
+```
+El backend correrá en `http://localhost:3001`
 
-## Publish your website!
+**Terminal 2 - Frontend:**
+```bash
+npm run start
+```
+La aplicación se abrirá en `http://localhost:3000`
 
-This boilerplate it's 100% read to deploy with Render.com and Heroku in a matter of minutes. Please read the [official documentation about it](https://4geeks.com/docs/start/deploy-to-render-com).
+¡Listo! 🎉 La aplicación ya debería estar funcionando.
 
-### Contributors
+## 🎮 Cómo Funciona
 
-This template was built as part of the 4Geeks Academy [Coding Bootcamp](https://4geeksacademy.com/us/coding-bootcamp) by [Alejandro Sanchez](https://twitter.com/alesanchezr) and many other contributors. Find out more about our [Full Stack Developer Course](https://4geeksacademy.com/us/coding-bootcamps/part-time-full-stack-developer), and [Data Science Bootcamp](https://4geeksacademy.com/us/coding-bootcamps/datascience-machine-learning).
+1. **Registro/Login**: Crea tu cuenta o inicia sesión
+2. **Cuestionario Inicial**: Responde preguntas sobre tus preferencias
+   - Géneros favoritos
+   - Duración preferida
+   - Temas que te interesan
+3. **Recomendaciones**: Recibe sugerencias personalizadas
+4. **Gestión**: 
+   - ❤️ Añade a favoritos
+   - ✅ Marca como visto
+   - 🔄 Obtén nuevas recomendaciones
 
-You can find other templates and resources like this at the [school github page](https://github.com/4geeksacademy/).
+## 📝 Roadmap
+
+- [ ] Ampliación de la base de datos de anime
+- [ ] Sistema de recomendación colaborativo
+- [ ] App móvil nativa
+- [ ] Recomendaciones de manga
+- [ ] Sistema de amigos y compartir listas
+- [ ] Notificaciones de nuevos episodios
+- [ ] Modo oscuro
+
+## 👨‍💻 Autores
+
+**Roberto Cantalejo** - [@wohbe](https://github.com/wohbe), **Domenico Puzone** - [@domeseo](https://github.com/domeseo), **David Lizarte** [@deividliz](https://github.com/deividliz) y **Juan Pinto** [@BowserZ](https://github.com/BowserZ).
+
+[LinkedIn](https://www.linkedin.com/in/roberto-cantalejo/)
+
+## 🙏 Agradecimientos
+
+- APIs de anime por proporcionar los datos
+- Comunidad open source
+- [4Geeks Academy](https://4geeksacademy.com/) por el template base
